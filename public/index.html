@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EXTRIME — Jas Hujan Premium PVC Rubber</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a0a0a;--bg:#f5f3ef;--yellow:#ffd60a;--red:#e63946;--green:#1d7a4f;--line:2px solid var(--ink);--shadow:6px 6px 0 var(--ink)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Archivo',system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+/* ticker */
+.ticker{background:var(--ink);color:#fff;overflow:hidden;white-space:nowrap;font-size:.8rem;font-weight:700;padding:8px 0}
+.ticker span{display:inline-block;animation:tk 22s linear infinite;padding-right:60px}
+.ticker b{color:var(--yellow)}
+@keyframes tk{to{transform:translateX(-50%)}}
+/* header */
+header{position:sticky;top:0;background:var(--bg);border-bottom:var(--line);z-index:50}
+.hd{max-width:1200px;margin:auto;display:flex;align-items:center;gap:14px;padding:12px 20px}
+.logo{font-family:'Archivo Black';font-size:1.5rem;letter-spacing:-1px}
+.logo em{font-style:normal;background:var(--yellow);padding:0 6px;border:var(--line);box-shadow:3px 3px 0 var(--ink)}
+nav.main{display:flex;gap:2px;margin-left:auto}
+nav.main a{font-weight:800;font-size:.82rem;padding:8px 14px;text-decoration:none;color:var(--ink);border:2px solid transparent}
+nav.main a:hover,nav.main a.on{background:var(--yellow);border:var(--line);box-shadow:3px 3px 0 var(--ink)}
+.burger{display:none;margin-left:auto;background:var(--yellow);border:var(--line);font-weight:900;padding:8px 12px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+@media(max-width:860px){nav.main{display:none;position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:var(--line);flex-direction:column;padding:10px}nav.main.open{display:flex}.burger{display:block}}
+.wrap{max-width:1200px;margin:auto;padding:24px 20px}
+/* breadcrumb */
+.crumb{font-size:.75rem;font-weight:700;color:#555;margin-bottom:14px}
+.crumb b{color:var(--ink)}
+/* product layout */
+.pd{display:grid;grid-template-columns:1.15fr 1fr;gap:34px}
+@media(max-width:900px){.pd{grid-template-columns:1fr}}
+.gallery{position:sticky;top:80px;align-self:start}
+@media(max-width:900px){.gallery{position:static}}
+.gmain{border:var(--line);box-shadow:var(--shadow);background:#fff;overflow:hidden;position:relative}
+.gmain img{width:100%;display:block;aspect-ratio:4/3.2;object-fit:cover}
+.badge-off{position:absolute;top:14px;left:14px;background:var(--red);color:#fff;font-weight:900;font-size:.85rem;padding:6px 12px;border:var(--line);box-shadow:3px 3px 0 var(--ink)}
+.thumbs{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.thumbs img{width:84px;border:var(--line);cursor:pointer;opacity:.55;background:#fff}
+.thumbs img.on{opacity:1;box-shadow:3px 3px 0 var(--red);outline:3px solid var(--red);outline-offset:-3px}
+/* info */
+.pill{display:inline-block;background:var(--green);color:#fff;font-size:.72rem;font-weight:800;padding:4px 10px;border:var(--line);margin-bottom:10px}
+h1.ptitle{font-family:'Archivo Black';font-size:clamp(1.5rem,3.5vw,2.2rem);line-height:1.1;letter-spacing:-.5px}
+.rating{margin:10px 0;font-weight:700;font-size:.85rem}
+.rating .st{color:#f5a623}
+.price{margin:16px 0;padding:14px;background:#fff;border:var(--line);box-shadow:var(--shadow);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.price .now{font-family:'Archivo Black';font-size:1.7rem;color:var(--red)}
+.price .was{font-size:1rem;color:#888;text-decoration:line-through}
+.price .save{background:var(--yellow);border:var(--line);padding:2px 8px;font-weight:800;font-size:.75rem}
+.optlbl{font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px}
+.optlbl small{color:#888;font-weight:600;text-transform:none;letter-spacing:0}
+.colors{display:flex;gap:10px}
+.colors button{width:38px;height:38px;border:var(--line);cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.colors button.on{outline:3px solid var(--red);outline-offset:2px}
+.sizes{display:flex;gap:8px;flex-wrap:wrap}
+.sizes button{min-width:52px;padding:10px 0;font-weight:800;border:var(--line);background:#fff;cursor:pointer;font-size:.9rem;box-shadow:3px 3px 0 var(--ink)}
+.sizes button.on{background:var(--ink);color:var(--yellow)}
+.sizes button:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+.qty{display:flex;align-items:center;gap:0;border:var(--line);width:max-content;box-shadow:3px 3px 0 var(--ink);background:#fff}
+.qty button{width:40px;height:44px;font-weight:900;font-size:1.1rem;border:none;background:var(--yellow);cursor:pointer}
+.qty input{width:56px;text-align:center;font-weight:800;font-size:1rem;border:none;border-left:var(--line);border-right:var(--line);height:44px}
+.cta{display:flex;gap:12px;margin:20px 0;flex-wrap:wrap}
+.cta .add{flex:1;min-width:170px;background:#fff;border:var(--line);font-weight:900;font-size:1rem;padding:15px;cursor:pointer;box-shadow:var(--shadow);font-family:inherit}
+.cta .buy{flex:1;min-width:170px;background:var(--red);color:#fff;border:var(--line);font-weight:900;font-size:1rem;padding:15px;cursor:pointer;box-shadow:var(--shadow);font-family:inherit}
+.cta button:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+.wa{display:block;text-align:center;font-weight:700;font-size:.82rem;margin-bottom:20px}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.trust div{background:#fff;border:var(--line);padding:10px;font-size:.7rem;font-weight:800;text-align:center;box-shadow:3px 3px 0 var(--ink)}
+.trust span{display:block;font-size:1.3rem;margin-bottom:4px}
+/* tabs */
+.tabs{margin-top:36px}
+.tabbtns{display:flex;gap:0;flex-wrap:wrap}
+.tabbtns button{padding:12px 20px;font-weight:900;border:var(--line);border-right:none;background:#ddd;cursor:pointer;font-family:inherit;font-size:.85rem}
+.tabbtns button:last-child{border-right:var(--line)}
+.tabbtns button.on{background:var(--yellow)}
+.tabbody{border:var(--line);border-top:none;background:#fff;padding:22px;box-shadow:var(--shadow)}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.feat div{border:var(--line);padding:12px;font-weight:600;font-size:.88rem;background:var(--bg)}
+.feat b{display:block;font-size:1.2rem;margin-bottom:4px}
+/* related */
+.rel{margin-top:44px}
+.rel h2{font-family:'Archivo Black';font-size:1.4rem;margin-bottom:16px}
+.relgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.rcard{background:#fff;border:var(--line);box-shadow:var(--shadow);text-decoration:none;color:var(--ink)}
+.rcard img{width:100%;aspect-ratio:1;object-fit:cover;border-bottom:var(--line)}
+.rcard .in{padding:12px}
+.rcard h3{font-size:.9rem;line-height:1.25}
+.rcard .p{margin-top:6px;font-weight:900;color:var(--red)}
+.rcard .p s{color:#999;font-weight:600;margin-right:8px}
+.rcard .off{display:inline-block;background:var(--red);color:#fff;font-size:.65rem;font-weight:900;padding:2px 7px;border:var(--line);margin-top:6px}
+/* footer */
+footer{background:var(--ink);color:#eee;margin-top:56px}
+.ft{max-width:1200px;margin:auto;padding:36px 20px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:28px;font-size:.85rem}
+@media(max-width:700px){.ft{grid-template-columns:1fr}}
+.ft h4{color:var(--yellow);margin-bottom:10px;font-size:.8rem;letter-spacing:1px}
+.ft a{color:#eee;text-decoration:none;display:block;margin:6px 0}
+.ft a:hover{color:var(--yellow)}
+.copy{border-top:1px solid #333;text-align:center;padding:14px;font-size:.72rem;color:#999}
+/* toast + cart */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--yellow);font-weight:800;padding:12px 22px;border:2px solid var(--yellow);z-index:99;transition:.3s}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.cartbtn{background:#fff;border:var(--line);box-shadow:3px 3px 0 var(--ink);padding:8px 14px;font-weight:800;cursor:pointer;position:relative;font-family:inherit;font-size:.85rem}
+.cartbtn i{position:absolute;top:-10px;right:-10px;background:var(--red);color:#fff;font-style:normal;font-size:.7rem;font-weight:900;min-width:22px;height:22px;border:2px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.checkout{display:none;background:#fff;max-width:520px;margin:30px auto;border:var(--line);box-shadow:8px 8px 0 var(--ink);padding:26px}
+.checkout.on{display:block}
+.checkout h2{font-family:'Archivo Black';margin-bottom:6px}
+.checkout label{display:block;font-weight:800;font-size:.75rem;margin:12px 0 4px;text-transform:uppercase;letter-spacing:1px}
+.checkout input,.checkout select,.checkout textarea{width:100%;padding:11px;border:var(--line);font-family:inherit;font-size:1rem;background:var(--bg)}
+.checkout .sum{background:var(--yellow);border:var(--line);padding:12px;margin-top:14px;font-weight:800}
+.checkout .go{width:100%;margin-top:14px;background:var(--red);color:#fff;border:var(--line);padding:15px;font-weight:900;font-size:1rem;font-family:inherit;cursor:pointer;box-shadow:var(--shadow)}
+</style>
+</head>
+<body>
+<div class="ticker"><span>🔥 PROMO SPESIAL! DISKON SAMPAI 30% OTOMATIS DI CHECKOUT — GRATIS ONGKIR MIN. BELANJA 500K — 100% ORIGINAL & GARANSI RESMI — 🔥 PROMO SPESIAL! DISKON SAMPAI 30% OTOMATIS DI CHECKOUT — GRATIS ONGKIR MIN. BELANJA 500K — 100% ORIGINAL & GARANSI RESMI —</span></div>
+<header><div class="hd">
+  <div class="logo">EXTR<em>IME</em></div>
+  <nav class="main" id="nav">
+    <a href="#" onclick="go(event,'home')">HOME</a>
+    <a href="#" onclick="go(event,'prod')" class="on">PRODUCT</a>
+    <a href="#" onclick="go(event,'best')">BEST SELLERS</a>
+    <a href="#" onclick="go(event,'sale')">SALE</a>
+  </nav>
+  <button class="cartbtn" onclick="toggleCheckout(true)">🛒 Keranjang <i id="cartN">0</i></button>
+  <button class="burger" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
+</div></header>
+
+<main class="wrap" id="prod">
+  <div class="crumb">HOME / JAS HUJAN / <b>JAS HUJAN ASV 02 PLUS SERAT PVC</b></div>
+  <div class="pd">
+    <div class="gallery">
+      <div class="gmain">
+        <span class="badge-off" id="offBadge">-29%</span>
+        <img id="gimg" src="https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat2.webp?v=1767948001&width=1200" alt="Jas Hujan ASV 02 Plus">
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+    <div class="info">
+      <span class="pill">✔ STOK TERSEDIA — KIRIM HARI INI</span>
+      <h1 class="ptitle">Jas Hujan ASV 02 Plus Serat PVC</h1>
+      <div class="rating"><span class="st">★★★★★</span> 4.9 <span style="color:#888">(127 ulasan) · 500+ terjual</span></div>
+      <div class="price">
+        <span class="now" id="pNow">Rp 467.600</span>
+        <span class="was" id="pWas">Rp 654.640</span>
+        <span class="save" id="pSave">HEMAT Rp 187.040</span>
+      </div>
+      <div class="optlbl">Warna <small>— <span id="colorName">Hitam</span></small></div>
+      <div class="colors" id="colors"></div>
+      <div class="optlbl">Ukuran <small>— <span id="sizeName">L</span></small></div>
+      <div class="sizes" id="sizes"></div>
+      <div class="optlbl">Jumlah</div>
+      <div class="qty">
+        <button onclick="qty(-1)">−</button>
+        <input id="qty" value="1" readonly>
+        <button onclick="qty(1)">+</button>
+      </div>
+      <div class="cta">
+        <button class="add" onclick="addToCart()">＋ TAMBAHKAN KE KERANJANG</button>
+        <button class="buy" onclick="buyNow()">⚡ BELI SEKARANG</button>
+      </div>
+      <a class="wa" href="https://wa.me/6285165859837?text=Halo%2C%20saya%20mau%20tanya%20Jas%20Hujan%20ASV%2002%20Plus" target="_blank">💬 Stok habis? Tanya admin via WhatsApp</a>
+      <div class="trust">
+        <div><span>🚚</span>GRATIS ONGKIR 500K</div>
+        <div><span>🛡️</span>GARANSI RESMI</div>
+        <div><span>↩️</span>RETUR 7 HARI</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tabbtns">
+      <button class="on" onclick="tab(event,'t-feat')">FITUR</button>
+      <button onclick="tab(event,'t-spec')">SPESIFIKASI</button>
+      <button onclick="tab(event,'t-ship')">PENGIRIMAN</button>
+      <button onclick="tab(event,'t-rev')">ULASAN</button>
+    </div>
+    <div class="tabbody" id="t-feat">
+      <h3 style="margin-bottom:12px">Fitur Utama — ASV 02 Plus Jas Hujan PVC Fiber</h3>
+      <div class="feat">
+        <div><b>🧥</b>Bahan Karet PVC Premium — anti rembes total, tetap lentur</div>
+        <div><b>🎒</b>Desain Ramah Ransel — bisa dipakai sambil bawa tas</div>
+        <div><b>🛡️</b>Sistem Perlindungan Ganda — lapisan luar + dalam</div>
+        <div><b>👖</b>Set Dua Potong — jaket & celana lengkap</div>
+        <div><b>🧢</b>Berkerudung Aman — leher tetap kering</div>
+        <div><b>🪡</b>Jahitan Kuat & Rapi — press seal anti bocor</div>
+        <div><b>⚫</b>Warna Hitam Elegan — tidak mudah kotor</div>
+        <div><b>🔧</b>Serbaguna — motor harian, touring, kerja lapangan</div>
+      </div>
+    </div>
+    <div class="tabbody" id="t-spec" style="display:none">
+      <table style="width:100%;font-size:.9rem;border-collapse:collapse">
+        <tr><td style="padding:8px;font-weight:800;width:180px">Material</td><td style="padding:8px">PVC Rubber Fiber premium</td></tr>
+        <tr style="background:var(--bg)"><td style="padding:8px;font-weight:800">Isi Paket</td><td style="padding:8px">1 jaket + 1 celana</td></tr>
+        <tr><td style="padding:8px;font-weight:800">Warna</td><td style="padding:8px">Hitam</td></tr>
+        <tr style="background:var(--bg)"><td style="padding:8px;font-weight:800">Ukuran</td><td style="padding:8px">L / XL / 2XL / 3XL</td></tr>
+        <tr><td style="padding:8px;font-weight:800">Berat</td><td style="padding:8px">± 2 kg</td></tr>
+        <tr style="background:var(--bg)"><td style="padding:8px;font-weight:800">Merek</td><td style="padding:8px">ASV — 100% original</td></tr>
+      </table>
+    </div>
+    <div class="tabbody" id="t-ship" style="display:none">
+      <p style="line-height:1.7;font-size:.92rem">Pesanan dikirim maksimal 1×24 jam setelah pembayaran diverifikasi. Estimasi tiba: Jawa 2–3 hari, Sumatra/Kalimanta/Sulawesi 3–5 hari, wilayah lain 4–7 hari. Nomor resi otomatis dikirim via WhatsApp. Gratis ongkir untuk pembelian minimal Rp 500.000.</p>
+    </div>
+    <div class="tabbody" id="t-rev" style="display:none">
+      <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px"><span style="font-family:'Archivo Black';font-size:2.6rem">4.9</span><div><div class="st" style="color:#f5a623;font-size:1.1rem">★★★★★</div><small style="color:#888">127 ulasan terverifikasi</small></div></div>
+      <div class="feat">
+        <div>⭐⭐⭐⭐⭐ "Bahan tebal, hujan deras gak tembus. Recommended!" — <b>Rizky, Bekasi</b></div>
+        <div>⭐⭐⭐⭐⭐ "Muat pas, ransel 35L masih kecover." — <b>Dedi, Bandung</b></div>
+        <div>⭐⭐⭐⭐⭐ "Jahitannya rapi banget, worth it!" — <b>Andi, Makassar</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rel">
+    <h2>Produk Serupa</h2>
+    <div class="relgrid" id="relgrid"></div>
+  </div>
+</main>
+
+<section class="checkout" id="checkout">
+  <h2>🛒 Checkout Pesanan</h2>
+  <small id="coItem" style="color:#666"></small>
+  <label>Nama Lengkap</label><input id="coNama" placeholder="cth: Budi Santoso">
+  <label>No. WhatsApp</label><input id="coWa" type="tel" placeholder="08xxxxxxxxxx">
+  <label>Alamat Lengkap</label><textarea id="coAlamat" rows="2" placeholder="Jalan, nomor rumah, kecamatan, kota"></textarea>
+  <label>Metode Pengiriman</label>
+  <select id="coKirim">
+    <option value="reg">Reguler (2-3 hari) — Rp 15.000</option>
+    <option value="kilat">Kilat / Next Day — Rp 25.000</option>
+    <option value="same">Instant (dalam kota) — Rp 35.000</option>
+  </select>
+  <label>Metode Pembayaran</label>
+  <select id="coBayar">
+    <option>Transfer Bank / QRIS</option>
+    <option>COD (Bayar di Tempat)</option>
+  </select>
+  <div class="sum" id="coSum"></div>
+  <button class="go" onclick="submitOrder()">🧾 KIRIM PESANAN VIA WHATSAPP</button>
+  <button style="width:100%;margin-top:10px;background:none;border:none;font-weight:700;cursor:pointer;color:#888" onclick="toggleCheckout(false)">← lanjut belanja</button>
+</section>
+
+<footer><div class="ft">
+  <div>
+    <div class="logo" style="color:#fff;margin-bottom:10px">EXTR<em>IME</em></div>
+    <p style="font-size:.82rem;color:#bbb;line-height:1.6">Distributor resmi jas hujan & aksesori motor premium. Kualitas terbaik, harga terjangkau, garansi resmi.</p>
+    <p style="font-size:.8rem;margin-top:10px">📍 Jl. Kebon Jeruk IX No.26, Jakarta Barat<br>💬 WA Admin: +62 851-6585-9837</p>
+  </div>
+  <div><h4>SUPPORT</h4><a href="#">FAQ</a><a href="#">Cara Pesan</a><a href="#">Lacak Pesanan</a><a href="#">Kontak Kami</a></div>
+  <div><h4>SHOP</h4><a href="#" onclick="go(event,'best')">Best Sellers</a><a href="#" onclick="go(event,'sale')">Produk Sale</a><a href="#">Semua Produk</a></div>
+</div><div class="copy">© 2026 EXTRIME Store — Dibuat dengan 💜</div></footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== DATA PRODUK ===== */
+const IMG=[
+ 'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat2.webp?v=1767948001&width=1200',
+ 'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat1.webp?v=1767948001&width=1200',
+ 'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat4.webp?v=1767948001&width=1200',
+ 'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat.webp?v=1767948001&width=1200',
+ 'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat3.webp?v=1767948001&width=1200'];
+const COLORS=[{n:'Hitam',c:'#111'},{n:'Navy',c:'#1e3a5f'},{n:'Abu',c:'#6b6b6b'}];
+const SIZES=[{n:'L',add:0},{n:'XL',add:15000},{n:'2XL',add:30000},{n:'3XL',add:45000}];
+const BASE=467600, WAS=654640;
+const RELATED=[
+ {t:'Jas Hujan Karet ASV 02',img:'https://gmaproductseries.com/cdn/shop/files/Rubber_Raincoat_ASV_02_blk.webp?v=1792392230&width=600',p:443800,w:633999},
+ {t:'Jas Hujan Karet Tipe ASV 04',img:'https://gmaproductseries.com/cdn/shop/files/raincoat_asv_04.webp?v=1782448242&width=600',p:256200,w:366000},
+ {t:'Jas Hujan ASV Tipe Osaka',img:'https://gmaproductseries.com/cdn/shop/files/ASVRaincoatTypeOsakablack.jpg?v=1764297719&width=600',p:184100,w:262999},
+ {t:'ASV Phantom Polyester Nylon',img:'https://gmaproductseries.com/cdn/shop/files/asvphantomraincoat.webp?v=1782284395&width=600',p:823200,w:1152480}];
+const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
+
+/* state */
+let color=0,size=0,qtyN=1,cart=0,addedItems=[];
+
+/* gallery */
+document.getElementById('thumbs').innerHTML=IMG.map((u,i)=>`<img src="${u}" class="${i===0?'on':''}" onclick="pickImg(${i},this)">`).join('');
+function pickImg(i,el){document.getElementById('gimg').src=IMG[i];document.querySelectorAll('#thumbs img').forEach(t=>t.classList.remove('on'));el.classList.add('on');}
+
+/* colors */
+document.getElementById('colors').innerHTML=COLORS.map((c,i)=>`<button class="${i===0?'on':''}" style="background:${c.c}" title="${c.n}" onclick="pickColor(${i},this)"></button>`).join('');
+function pickColor(i,el){color=i;document.getElementById('colorName').textContent=COLORS[i].n;document.querySelectorAll('#colors button').forEach(b=>b.classList.remove('on'));el.classList.add('on');}
+
+/* sizes */
+function renderSizes(){document.getElementById('sizes').innerHTML=SIZES.map((s,i)=>`<button class="${i===size?'on':''}" onclick="pickSize(${i})">${s.n}</button>`).join('');}
+renderSizes();
+function pickSize(i){size=i;document.getElementById('sizeName').textContent=SIZES[i].n;renderSizes();updatePrice();}
+function updatePrice(){
+  const now=BASE+SIZES[size].add, save=WAS+SIZES[size].add-now;
+  document.getElementById('pNow').textContent=rp(now);
+  document.getElementById('pWas').textContent=rp(WAS+SIZES[size].add);
+  document.getElementById('pSave').textContent='HEMAT '+rp(save);
+  document.getElementById('offBadge').textContent='-'+Math.round(save/(WAS+SIZES[size].add)*100)+'%';
+}
+function qty(d){qtyN=Math.max(1,qtyN+d);document.getElementById('qty').value=qtyN;}
+
+/* tabs */
+function tab(e,id){document.querySelectorAll('.tabbtns button').forEach(b=>b.classList.remove('on'));e.target.classList.add('on');['t-feat','t-spec','t-ship','t-rev'].forEach(t=>document.getElementById(t).style.display=t===id?'block':'none');}
+
+/* related */
+document.getElementById('relgrid').innerHTML=RELATED.map(r=>`
+ <a class="rcard" href="#" onclick="event.preventDefault()">
+  <img src="${r.img}" alt="${r.t}"><div class="in"><h3>${r.t}</h3>
+  <div class="p">${rp(r.p)} <s>${rp(r.w)}</s></div>
+  <span class="off">-${Math.round((r.w-r.p)/r.w*100)}%</span></div></a>`).join('');
+
+/* cart & checkout */
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200);}
+function addToCart(){
+  cart+=qtyN;
+  addedItems.push({nama:'Jas Hujan ASV 02 Plus',warna:COLORS[color].n,ukuran:SIZES[size].n,qty:qtyN,harga:BASE+SIZES[size].add});
+  document.getElementById('cartN').textContent=cart;
+  toast('✓ '+qtyN+'× masuk keranjang ('+COLORS[color].n+', '+SIZES[size].n+')');
+}
+function buyNow(){addToCart();toggleCheckout(true);}
+function toggleCheckout(on){
+  const el=document.getElementById('checkout');
+  el.classList.toggle('on',on);
+  if(on){renderCoSum();el.scrollIntoView({behavior:'smooth'});}
+}
+function renderCoSum(){
+  const total=addedItems.reduce((s,i)=>s+i.harga*i.qty,0);
+  const kirim=document.getElementById('coKirim');
+  const ship={reg:15000,kilat:25000,same:35000}[kirim.value];
+  const ong=total>=500000?0:ship;
+  document.getElementById('coItem').textContent=addedItems.map(i=>`${i.qty}× ${i.nama} (${i.warna}, ${i.ukuran})`).join(' · ')||'— keranjang kosong —';
+  document.getElementById('coSum').innerHTML=`Subtotal: <b>${rp(total)}</b><br>Ongkir: <b>${ong===0?'GRATIS 🎉':rp(ong)}</b><hr style="border:none;border-top:2px solid #111;margin:8px 0">TOTAL: <b style="font-size:1.2rem">${rp(total+ong)}</b>${total<500000?`<br><small>+${rp(500000-total)} lagi buat gratis ongkir!</small>`:''}`;
+}
+document.getElementById('coKirim').onchange=()=>addedItems.length&&renderCoSum();
+function submitOrder(){
+  const n=document.getElementById('coNama').value.trim(),w=document.getElementById('coWa').value.trim(),a=document.getElementById('coAlamat').value.trim();
+  if(!n||!w||!a){toast('⚠️ Lengkapi nama, WA, dan alamat dulu ya');return;}
+  const total=addedItems.reduce((s,i)=>s+i.harga*i.qty,0);
+  const ship={reg:15000,kilat:25000,same:35000}[document.getElementById('coKirim').value];
+  const ong=total>=500000?0:ship;
+  const msg=`Halo EXTRIME! 👋 Saya mau pesan:\n\n${addedItems.map(i=>`• ${i.qty}× ${i.nama} (${i.warna}, ${i.ukuran}) — ${rp(i.harga*i.qty)}`).join('\n')}\n\nNama: ${n}\nWA: ${w}\nAlamat: ${a}\nKirim: ${document.getElementById('coKirim').selectedOptions[0].text}\nBayar: ${document.getElementById('coBayar').value}\n\nTotal: ${rp(total+ong)}`;
+  window.open('https://wa.me/6285165859837?text='+encodeURIComponent(msg),'_blank');
+  toast('🧾 Membuka WhatsApp…');
+}
+/* nav demo */
+function go(e,p){e.preventDefault();document.querySelectorAll('nav.main a').forEach(a=>a.classList.remove('on'));e.target.classList.add('on');
+ if(p!=='prod'){toast('Halaman demo — ini katalog produk utama 😉');document.getElementById('nav').classList.remove('open');}
+ else window.scrollTo({top:0,behavior:'smooth'});}
+updatePrice();
+</script>
+</body>
+</html>
