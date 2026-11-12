@@ -15,6 +15,7 @@
     "test:e2e": "playwright test",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed": "tsx scripts/seed.ts",
+    "db:clear-sample-reviews": "tsx scripts/clear-sample-reviews.ts",
     "db:setup": "node scripts/migrate.mjs && tsx scripts/seed.ts",
     "placeholders": "tsx scripts/generate-placeholders.ts"
   },

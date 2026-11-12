@@ -123,10 +123,11 @@ export default async function HomePage() {
         <div>
           <h2 className="font-serif text-2xl">Ulasan</h2>
           <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-            {data.reviewAverage != null
-              ? `${data.reviewAverage.toLocaleString("id-ID")} dari 5, dari ${data.reviewCount} ulasan yang sudah diperiksa.`
-              : "Ulasan tayang setelah diperiksa."}{" "}
-            Kami tidak membeli ulasan.
+            {data.sampleReviewCount > 0
+              ? "Kutipan di bawah ini data contoh dari seed, bukan ulasan pembeli."
+              : data.reviewAverage != null
+                ? `${data.reviewAverage.toLocaleString("id-ID")} dari 5, dari ${data.reviewCount} ulasan yang sudah diperiksa. Kami tidak membeli ulasan.`
+                : "Ulasan tayang setelah diperiksa."}
           </p>
         </div>
         <div>
@@ -149,6 +150,7 @@ export default async function HomePage() {
             <blockquote key={quote.id} className="border-t border-line pt-4">
               <p className="leading-relaxed">“{quote.body}”</p>
               <footer className="mt-3 text-sm text-ink-soft">
+                {quote.sample ? "Data contoh · " : ""}
                 {quote.authorName}{quote.city ? `, ${quote.city}` : ""} · {quote.productName} · {quote.rating}/5
               </footer>
             </blockquote>

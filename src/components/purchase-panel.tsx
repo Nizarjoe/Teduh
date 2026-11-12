@@ -136,7 +136,10 @@ export function PurchasePanel({
           </Link>
         ) : null}
       </div>
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-paper px-4 py-3 md:hidden">
+      <div
+        className="fixed inset-x-0 z-30 border-t border-line bg-paper px-4 py-3 md:hidden"
+        style={{ bottom: "var(--wa-dock)" }}
+      >
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-xs text-ink-soft">{selected.size} · {selected.color}</p>

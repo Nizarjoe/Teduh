@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gte, ilike, lte, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, isNotNull, lte, sql } from "drizzle-orm";
 import { getDb } from "@/db/client";
 import {
   categories,
@@ -184,6 +184,7 @@ export async function homeData() {
     .select({
       count: sql<number>`count(*)::int`,
       average: sql<number | null>`round(avg(${reviews.rating})::numeric, 1)`,
+      sampleCount: sql<number>`count(*) filter (where ${reviews.seedKey} is not null)::int`,
     })
     .from(reviews)
     .where(eq(reviews.status, "approved"));
@@ -195,6 +196,7 @@ export async function homeData() {
       rating: reviews.rating,
       body: reviews.body,
       productName: products.name,
+      sample: sql<boolean>`${reviews.seedKey} is not null`,
     })
     .from(reviews)
     .innerJoin(products, eq(products.id, reviews.productId))
@@ -207,6 +209,7 @@ export async function homeData() {
     best: best.items.slice(0, 4),
     reviewCount: Number(stat?.count ?? 0),
     reviewAverage: stat?.average == null ? null : Number(stat.average),
+    sampleReviewCount: Number(stat?.sampleCount ?? 0),
     quotes,
   };
 }
@@ -270,6 +273,10 @@ export async function adminSummary() {
     .select({ count: sql<number>`count(*)::int` })
     .from(reviews)
     .where(eq(reviews.status, "pending"));
+  const sampleReviews = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(reviews)
+    .where(isNotNull(reviews.seedKey));
   return {
     series,
     max: Math.max(1, ...series.map((item) => item.total)),
@@ -278,6 +285,7 @@ export async function adminSummary() {
     statusCounts: counts.flatMap((row) => (isOrderStatus(row.status) ? [{ status: row.status as OrderStatus, count: Number(row.count) }] : [])),
     lowStock,
     pendingReviews: Number(pendingReviews[0]?.count ?? 0),
+    sampleReviews: Number(sampleReviews[0]?.count ?? 0),
   };
 }
 

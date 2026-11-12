@@ -41,8 +41,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const low = Math.min(...prices);
   const high = Math.max(...prices);
   const inStock = variants.some((variant) => variant.available > 0);
-  const ratingCount = product.reviews.length;
-  const ratingAvg = ratingCount ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / ratingCount : null;
+  const buyerReviews = product.reviews.filter((review) => !review.seedKey);
+  const sampleReviewCount = product.reviews.length - buyerReviews.length;
+  const ratingCount = buyerReviews.length;
+  const ratingAvg = ratingCount ? buyerReviews.reduce((sum, review) => sum + review.rating, 0) / ratingCount : null;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -134,11 +136,17 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       ) : null}
       <section className="mt-14">
         <h2 className="font-serif text-2xl">Ulasan</h2>
-        {ratingAvg != null ? <p className="mt-2 text-sm text-ink-soft">{ratingAvg.toFixed(1).replace(".", ",")} dari 5 · {ratingCount} ulasan</p> : null}
+        {ratingAvg != null ? <p className="mt-2 text-sm text-ink-soft">{ratingAvg.toFixed(1).replace(".", ",")} dari 5 · {ratingCount} ulasan pembeli</p> : null}
+        {sampleReviewCount > 0 ? (
+          <p className="mt-2 text-sm text-ink-soft">Ada {sampleReviewCount} ulasan bertanda data contoh. Itu isi seed, bukan pembeli.</p>
+        ) : null}
         <ul className="mt-6 space-y-6">
           {product.reviews.map((review) => (
             <li key={review.id} className="border-t border-line pt-4">
-              <p className="text-sm text-ink-soft">{review.rating}/5 · {review.authorName}{review.city ? `, ${review.city}` : ""} · {formatDate(review.createdAt)}</p>
+              <p className="text-sm text-ink-soft">
+                {review.seedKey ? <span className="mr-2 bg-sand px-1.5 py-0.5 text-ink">Data contoh</span> : null}
+                {review.rating}/5 · {review.authorName}{review.city ? `, ${review.city}` : ""} · {formatDate(review.createdAt)}
+              </p>
               <p className="mt-2 leading-relaxed">{review.body}</p>
               {review.photos.length > 0 ? (
                 <div className="mt-3 flex gap-2">

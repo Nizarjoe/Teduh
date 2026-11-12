@@ -12,6 +12,7 @@ export default async function ReviewsPage() {
       rating: reviews.rating,
       body: reviews.body,
       status: reviews.status,
+      sample: reviews.seedKey,
       productName: products.name,
     })
     .from(reviews)
@@ -23,6 +24,10 @@ export default async function ReviewsPage() {
   return (
     <div>
       <h1 className="font-serif text-4xl">Ulasan</h1>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-soft">
+        Yang bertanda data contoh berasal dari seed, bukan dari pembeli. Jangan tayangkan toko selagi tanda itu masih ada.
+        Hapus semuanya dengan <code className="bg-sand px-1">npm run db:clear-sample-reviews</code>.
+      </p>
       <ReviewModeration reviews={[...pending, ...rest]} />
     </div>
   );

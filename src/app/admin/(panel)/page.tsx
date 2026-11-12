@@ -7,6 +7,12 @@ export default async function AdminHome() {
   return (
     <div>
       <h1 className="font-serif text-4xl">Ringkasan</h1>
+      {data.sampleReviews > 0 ? (
+        <p className="mt-4 border border-line bg-sand px-4 py-3 text-sm leading-relaxed">
+          Masih ada {data.sampleReviews} ulasan contoh dari seed. Itu bukan pembeli. Hapus sebelum tayang dengan perintah{" "}
+          <code>npm run db:clear-sample-reviews</code>.
+        </p>
+      ) : null}
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         <section className="border border-line p-4">
           <p className="text-sm text-ink-soft">Lunas hari ini</p>

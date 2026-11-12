@@ -4,6 +4,7 @@
 
 :root {
   color-scheme: light;
+  --wa-dock: calc(3.75rem + env(safe-area-inset-bottom, 0px));
   --paper: 243 240 232;
   --surface: 255 252 247;
   --ink: 23 33 30;
@@ -14,6 +15,12 @@
   --mist: 227 234 231;
   --sand: 236 226 208;
   --clay: 158 63 30;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --wa-dock: 0px;
+  }
 }
 
 @layer base {

@@ -14,7 +14,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
         </p>
       </div>
       <SiteHeader />
-      <main id="isi" className="mx-auto min-h-[60vh] max-w-page px-5 pb-24 pt-8 md:pb-16 md:pt-12">
+      <main id="isi" className="mx-auto min-h-[60vh] max-w-page px-5 pb-8 pt-8 md:pr-36 md:pt-12">
         {children}
       </main>
       <SiteFooter />

@@ -24,8 +24,8 @@ const columns = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-line">
-      <div className="mx-auto grid max-w-page gap-10 px-5 py-12 md:grid-cols-4">
+    <footer className="mt-20 border-t border-line pb-[calc(var(--wa-dock)+5.5rem)] md:pb-0">
+      <div className="mx-auto grid max-w-page gap-10 px-5 py-12 md:grid-cols-4 md:pr-36">
         <div className="md:col-span-2">
           <p className="font-serif text-2xl">Teduh</p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-ink-soft">
@@ -54,7 +54,7 @@ export function SiteFooter() {
         ))}
       </div>
       <div className="border-t border-line">
-        <p className="mx-auto max-w-page px-5 py-4 text-xs leading-relaxed text-ink-soft">
+        <p className="mx-auto max-w-page px-5 py-4 text-xs leading-relaxed text-ink-soft md:pr-36">
           Pembayaran lewat Midtrans: QRIS, virtual account, GoPay, ShopeePay, dan kartu. Harga coret adalah harga
           pembanding yang kami catat sendiri, biasanya etalase marketplace, bukan harga yang ditarik otomatis.
         </p>

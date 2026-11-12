@@ -69,7 +69,15 @@ npm run db:migrate
 npm run db:seed
 ```
 
-Berkas SQL ada di `drizzle/`. Seed mengisi kategori, sepuluh produk, voucher `TEDUH10`, `PERTAMA`, dan `ONGKIR20`, ulasan yang sudah ditayangkan, serta tiga pesanan contoh. Seed juga menimpa stok katalog ke angka demo. Jangan jalankan seed di database produksi yang sudah berisi pesanan sungguhan.
+Berkas SQL ada di `drizzle/`. Seed mengisi kategori, sepuluh produk, voucher `TEDUH10`, `PERTAMA`, dan `ONGKIR20`, serta tiga pesanan contoh. Seed juga menimpa stok katalog ke angka demo. Jangan jalankan seed di database produksi yang sudah berisi pesanan sungguhan.
+
+Ulasan di seed adalah **data contoh**, bukan pembeli. Di admin ulasan itu bertanda “Data contoh”, dan etalase menulis hal yang sama. Hapus semuanya sebelum toko tayang:
+
+```bash
+npm run db:clear-sample-reviews
+```
+
+Perintah itu hanya menghapus baris dengan `seed_key`. Ulasan yang dikirim pembeli tidak ikut terhapus. Menjalankan `npm run db:seed` lagi akan memasukkan ulasan contoh kembali.
 
 Gambar di `public/products/` bertuliskan tempat foto. Ganti berkasnya, atau unggah foto dari admin. Nama berkas di data seed bisa diubah di `src/data/catalog-seed.ts`, lalu jalankan `npm run placeholders` jika ingin menggambar ulang SVG.
 
@@ -146,7 +154,7 @@ curl -X POST -H "Authorization: Bearer $CRON_SECRET" https://domain-kamu/api/cro
 - [ ] `NEXT_PUBLIC_STORE_LEGAL_NAME`, alamat, email, dan WhatsApp adalah data toko yang sah
 - [ ] Domain dan `APP_URL` sudah HTTPS
 - [ ] Halaman syarat, privasi, dan retur dibaca ulang (ini kerangka, bukan nasihat hukum)
-- [ ] Ulasan contoh diganti ulasan pembeli sebelum dipasang iklan
+- [ ] Ulasan contoh sudah dihapus dengan `npm run db:clear-sample-reviews` (admin tidak lagi menampilkan tanda “Data contoh”)
 - [ ] GA4 dan Meta Pixel diisi hanya jika kamu memang memakainya, lalu build ulang
 
 ## Struktur singkat
