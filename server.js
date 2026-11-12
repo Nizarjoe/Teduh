@@ -1,8 +1,10 @@
 const http=require('http'),fs=require('fs'),path=require('path');
 const DIST=path.join(__dirname,'public');
 const MIME={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml','.ico':'image/x-icon','.webp':'image/webp'};
-http.createServer((req,res)=>{
-  let f=path.join(DIST,req.url==='/'?'index.html':req.url);
+const server=http.createServer((req,res)=>{
+  let u=req.url.split('?')[0];
+  if(u==='/admin')u='/admin.html';
+  let f=path.join(DIST,u==='/'?'index.html':u);
   if(!fs.existsSync(f)||fs.statSync(f).isDirectory())f=path.join(DIST,'index.html');
   res.writeHead(200,{'Content-Type':MIME[path.extname(f).toLowerCase()]||'application/octet-stream'});
   fs.createReadStream(f).pipe(res);

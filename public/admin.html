@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin — TEDUH Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1c1d1d;--mut:#6a6d70;--bg:#f6f7f8;--line:#e5e7e9;--pri:#111;--grn:#1d7a4f;--red:#c0392b;--amb:#b7791f;--blu:#2563a8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+/* login */
+#login{position:fixed;inset:0;background:linear-gradient(135deg,#16202a,#2b3d4e);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+.lbox{background:#fff;border-radius:14px;padding:34px;max-width:380px;width:100%}
+.lbox h1{font-family:'Poppins';font-size:21px;margin-bottom:4px}
+.lbox p{color:var(--mut);font-size:13px;margin-bottom:18px}
+.lbox label{display:block;font-size:12px;font-weight:600;margin:12px 0 5px}
+.lbox input{width:100%;padding:11px 13px;border:1px solid #ccc;border-radius:8px;font-family:inherit;font-size:14px;background:var(--bg)}
+.lbox .btn{width:100%;margin-top:18px;background:var(--pri);color:#fff;border:none;height:48px;border-radius:8px;font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit}
+.lerr{color:var(--red);font-size:12.5px;margin-top:10px;display:none}
+.lhint{margin-top:14px;background:var(--bg);border-radius:8px;padding:10px 12px;font-size:11.5px;color:var(--mut);font-family:'JetBrains Mono'}
+/* shell */
+#app{display:none}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:236px;background:var(--pri);color:#cfd2d4;display:flex;flex-direction:column;z-index:40;transition:transform .25s}
+.sb-brand{padding:20px 22px;border-bottom:1px solid #2c2c2c;font-family:'Poppins';font-weight:700;font-size:17px;color:#fff;display:flex;align-items:center;gap:10px}
+.sb-brand .dot{width:26px;height:26px;background:#ffd60a;color:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+.sb-nav{flex:1;overflow:auto;padding:12px 10px}
+.sb-nav a{display:flex;gap:12px;align-items:center;padding:11px 14px;border-radius:8px;color:#b9bcbe;cursor:pointer;font-size:13.5px;font-weight:500;margin-bottom:2px}
+.sb-nav a:hover{background:#242424;color:#fff}
+.sb-nav a.on{background:#ffd60a;color:#111;font-weight:700}
+.sb-foot{padding:14px 18px;border-top:1px solid #2c2c2c;font-size:11.5px;color:#8b8e90}
+.main{margin-left:236px;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:#fff;border-bottom:1px solid var(--line);padding:0 26px;height:60px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:30}
+.burger{display:none;background:none;border:none;font-size:20px;cursor:pointer}
+.tb-title{font-family:'Poppins';font-weight:600;font-size:16px}
+.tb-right{margin-left:auto;display:flex;gap:12px;align-items:center}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--blu);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.content{padding:24px 26px;flex:1}
+.page{display:none}.page.on{display:block}
+@media(max-width:920px){
+ .sidebar{transform:translateX(-100%)}
+ .sidebar.open{transform:translateX(0)}
+ .main{margin-left:0}
+ .burger{display:block}
+ .content{padding:16px}
+}
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:39;display:none}
+.backdrop.on{display:block}
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.kpi small{color:var(--mut);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.kpi b{display:block;font-family:'Poppins';font-size:23px;margin-top:6px}
+.kpi .d{font-size:11.5px;font-weight:600;margin-top:4px}
+.kpi .up{color:var(--grn)}.kpi .dn{color:var(--red)}
+/* panels */
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:18px}
+.panel h3{font-family:'Poppins';font-size:14.5px;margin-bottom:14px}
+.row2{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+.row2e{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:900px){.row2,.row2e{grid-template-columns:1fr}}
+/* bars */
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:10px}
+.bars .g{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:0;height:100%}
+.bars .b{background:linear-gradient(180deg,#ffd60a,#e0b400);border-radius:5px 5px 0 0;position:relative;min-height:4px}
+.bars .b span{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9.5px;font-weight:600;font-family:'JetBrains Mono'}
+.bars .xl{text-align:center;font-size:10px;color:var(--mut);margin-top:6px;font-family:'JetBrains Mono'}
+/* donut */
+.donutwrap{display:flex;gap:18px;align-items:center}
+.donut{width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--grn) 0 55%,var(--amb) 55% 75%,var(--blu) 75% 90%,var(--red) 90% 100%);position:relative;flex-shrink:0}
+.donut::after{content:'112\A pesanan';white-space:pre;position:absolute;inset:26px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Poppins';font-weight:700;font-size:13px}
+.dleg{font-size:12px;line-height:2}
+.dleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:7px}
+/* tables */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--line);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mut)}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--line)}
+.tbl tr:hover td{background:var(--bg)}
+.tbl .mono{font-family:'JetBrains Mono';font-size:12px}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
+.b-grn{background:#e2f3e9;color:var(--grn)}.b-red{background:#fbe9e7;color:var(--red)}
+.b-amb{background:#fbf0da;color:var(--amb)}.b-blu{background:#e3edf7;color:var(--blu)}
+.b-gry{background:#ececec;color:#666}
+.sbtn{padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit}
+.sbtn:hover{border-color:var(--ink)}
+.sbtn.danger{color:var(--red);border-color:#f0c4bd}
+/* products grid admin */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.padm{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.padm .thumb{height:110px;display:flex;align-items:center;justify-content:center;background:var(--bg);font-family:'JetBrains Mono';font-size:10px;color:#999;position:relative}
+.padm .in{padding:12px 14px}
+.padm h4{font-size:13.5px;font-family:'Poppins'}
+.padm .st{margin:8px 0}
+.padm .rw{display:flex;gap:6px;flex-wrap:wrap}
+/* forms */
+.frm{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.frm{grid-template-columns:1fr}}
+.frm .full{grid-column:1/-1}
+.frm label{display:block;font-size:11.5px;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
+.frm input,.frm select,.frm textarea{width:100%;padding:10px 12px;border:1px solid #ccc;border-radius:8px;font-family:inherit;font-size:13.5px;background:var(--bg)}
+.frm input:focus,.frm select:focus,.frm textarea:focus{background:#fff;border-color:var(--ink);outline:none}
+.pbtn{background:var(--pri);color:#fff;border:none;height:44px;padding:0 24px;border-radius:8px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit}
+.pbtn.grn{background:var(--grn)}
+/* promo */
+.toggle{display:flex;align-items:center;gap:10px;font-size:13.5px}
+.switch{width:44px;height:24px;border-radius:12px;background:#ccc;position:relative;cursor:pointer;transition:.2s}
+.switch.on{background:var(--grn)}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s}
+.switch.on::after{left:23px}
+/* toast */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;font-size:13px;font-weight:600;padding:11px 22px;border-radius:22px;z-index:200;transition:.3s}
+.toast.on{transform:translateX(-50%) translateY(0)}
+/* activity */
+.act{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+.act:last-child{border:none}
+.act .ic{width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.act small{display:block;color:var(--mut);font-family:'JetBrains Mono';font-size:10px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lbox">
+    <h1>🛡️ Admin TEDUH</h1>
+    <p>Masuk untuk mengelola toko</p>
+    <label>Username</label><input id="lgUser" placeholder="admin">
+    <label>Password</label><input id="lgPass" type="password" placeholder="••••••••">
+    <button class="btn" onclick="doLogin()">Masuk →</button>
+    <div class="lerr" id="lErr">Username atau password salah!</div>
+    <div class="lhint">DEMO — klik Masuk apa pun isinya, atau:<br>admin / admin123 · superadmin / super123 · staff / staff1</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<div class="sidebar" id="sb">
+  <div class="sb-brand"><span class="dot">E</span>TEDUH Admin</div>
+  <div class="sb-nav" id="sbNav">
+    <a class="on" data-p="dash">📊 Dashboard</a>
+    <a data-p="orders">🧾 Pesanan</a>
+    <a data-p="prods">📦 Produk</a>
+    <a data-p="promos">🏷️ Promo & Diskon</a>
+    <a data-p="custs">👥 Pelanggan</a>
+    <a data-p="reports">📈 Laporan</a>
+    <a data-p="settings">⚙️ Pengaturan</a>
+  </div>
+  <div class="sb-foot">
+    <div id="whoAmI">—</div>
+    <a style="color:#ffd60a;cursor:pointer;font-weight:600" onclick="logout()">↩ Keluar</a>
+  </div>
+</div>
+<div class="backdrop" id="bd" onclick="closeSb()"></div>
+
+<div class="main">
+  <div class="topbar">
+    <button class="burger" onclick="openSb()">☰</button>
+    <span class="tb-title" id="pgTitle">Dashboard</span>
+    <div class="tb-right">
+      <span class="badge b-grn" id="storeStatus">● Toko Online</span>
+      <div class="avatar" id="ava">A</div>
+    </div>
+  </div>
+  <div class="content">
+
+  <!-- ===== DASHBOARD ===== -->
+  <div class="page on" id="p-dash">
+    <div class="kpis">
+      <div class="kpi"><small>Pendapatan Hari Ini</small><b>Rp 4.382.000</b><span class="d up">▲ 12% vs kemarin</span></div>
+      <div class="kpi"><small>Pesanan Baru</small><b>7</b><span class="d up">▲ 2 belum diproses</span></div>
+      <div class="kpi"><small>Pesanan Bulan Ini</small><b>112</b><span class="d up">▲ 8% vs bulan lalu</span></div>
+      <div class="kpi"><small>Pengunjung</small><b>1.204</b><span class="d dn">▼ 3% vs kemarin</span></div>
+    </div>
+    <div class="row2">
+      <div class="panel"><h3>Penjualan 7 Hari Terakhir</h3>
+        <div class="bars" id="chart"></div>
+      </div>
+      <div class="panel"><h3>Status Pesanan</h3>
+        <div class="donutwrap">
+          <div class="donut"></div>
+          <div class="dleg">
+            <div><i style="background:var(--grn)"></i>Selesai — <b>62</b></div>
+            <div><i style="background:var(--amb)"></i>Dikirim — <b>22</b></div>
+            <div><i style="background:var(--blu)"></i>Diproses — <b>17</b></div>
+            <div><i style="background:var(--red)"></i>Perlu Diperhatikan — <b>11</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row2e">
+      <div class="panel"><h3>Pesanan Terbaru</h3>
+        <table class="tbl"><tr><th>Order</th><th>Pelanggan</th><th>Total</th><th>Status</th></tr>
+        <tr><td class="mono">EXT-1042</td><td>Budi S.</td><td class="mono">Rp 965.200</td><td><span class="badge b-amb">Dikirim</span></td></tr>
+        <tr><td class="mono">EXT-1041</td><td>Sari W.</td><td class="mono">Rp 467.600</td><td><span class="badge b-blu">Diproses</span></td></tr>
+        <tr><td class="mono">EXT-1040</td><td>Andi M.</td><td class="mono">Rp 1.415.200</td><td><span class="badge b-grn">Selesai</span></td></tr></table>
+      </div>
+      <div class="panel"><h3>Aktivitas Terakhir</h3>
+        <div class="act"><div class="ic">📦</div><div>Stok "Teduh Touring Pro 2XL" <b>tinggal 4</b><small>10 menit lalu</small></div></div>
+        <div class="act"><div class="ic">🏷️</div><div>Promo <b>MUSIMHUJAN30</b> dipakai 24× hari ini<small>1 jam lalu</small></div></div>
+        <div class="act"><div class="ic">⭐</div><div>Ulasan baru ★5 pada Teduh Plus<small>3 jam lalu</small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ORDERS ===== -->
+  <div class="page" id="p-orders">
+    <div class="panel">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <input placeholder="Cari no. order / nama…" style="flex:1;min-width:180px;padding:10px 14px;border:1px solid #ccc;border-radius:8px;font-family:inherit" id="ordQ" oninput="drawOrders()">
+        <select style="padding:10px 14px;border:1px solid #ccc;border-radius:8px;font-family:inherit" id="ordF" onchange="drawOrders()">
+          <option value="">Semua status</option><option>Baru</option><option>Diproses</option><option>Dikirim</option><option>Selesai</option><option>Dibatalkan</option>
+        </select>
+        <button class="sbtn" onclick="toast('Demo — export CSV')">⬇ Export CSV</button>
+      </div>
+      <table class="tbl" id="tOrders"></table>
+    </div>
+  </div>
+
+  <!-- ===== PRODUCTS ===== -->
+  <div class="page" id="p-prods">
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+        <h3 style="margin:0">📦 Katalog Produk (<span id="pCount"></span>)</h3>
+        <button class="pbtn" onclick="openPform()">+ Tambah Produk</button>
+      </div>
+      <div class="pgrid" id="pGrid"></div>
+    </div>
+    <div class="panel" id="pform" style="display:none">
+      <h3 id="pfTitle">➕ Produk Baru</h3>
+      <div class="frm">
+        <div><label>Nama Produk</label><input id="pfNama" placeholder="Jas Hujan Teduh …"></div>
+        <div><label>Kategori</label><select id="pfKat"><option>PVC Rubber</option><option>Karet</option><option>Nylon</option></select></div>
+        <div><label>Harga Jual (Rp)</label><input id="pfHarga" type="number" placeholder="467600"></div>
+        <div><label>Harga Coret (Rp)</label><input id="pfWas" type="number" placeholder="654640"></div>
+        <div><label>Stok</label><input id="pfStok" type="number" placeholder="50"></div>
+        <div><label>Status</label><select id="pfStatus"><option>Aktif</option><option>Draf</option></select></div>
+        <div class="full"><label>Deskripsi Singkat</label><textarea id="pfDesc" rows="2" placeholder="Deskripsi produk…"></textarea></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="pbtn grn" onclick="saveProd()">💾 Simpan Produk</button>
+        <button class="sbtn" onclick="document.getElementById('pform').style.display='none'">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PROMOS ===== -->
+  <div class="page" id="p-promos">
+    <div class="panel"><h3>🏷️ Kode Kupon</h3>
+      <table class="tbl"><tr><th>Kode</th><th>Diskon</th><th>Min. Belanja</th><th>Dipakai</th><th>Status</th><th></th></tr>
+      <tr><td class="mono"><b>MUSIMHUJAN30</b></td><td>30%</td><td>Rp 300.000</td><td>24× hari ini</td><td><span class="badge b-grn">Aktif</span></td><td><button class="sbtn danger" onclick="toast('Kupon dimatikan (demo)')">Nonaktifkan</button></td></tr>
+      <tr><td class="mono"><b>GRATISONGKIR</b></td><td>Ongkir Rp 0</td><td>Rp 500.000</td><td>41× bulan ini</td><td><span class="badge b-grn">Aktif</span></td><td><button class="sbtn danger" onclick="toast('Kupon dimatikan (demo)')">Nonaktifkan</button></td></tr>
+      <tr><td class="mono"><b>RESSELLER10</b></td><td>10%</td><td>—</td><td>7×</td><td><span class="badge b-gry">Nonaktif</span></td><td><button class="sbtn" onclick="toast('Kupon diaktifkan (demo)')">Aktifkan</button></td></tr>
+      </table>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+        <input placeholder="KODE-BARU" style="padding:10px 14px;border:1px solid #ccc;border-radius:8px;font-family:'JetBrains Mono'">
+        <input type="number" placeholder="Diskon %" style="width:110px;padding:10px 14px;border:1px solid #ccc;border-radius:8px">
+        <button class="pbtn" onclick="toast('Kupon dibuat (demo)')">+ Buat Kupon</button>
+      </div>
+    </div>
+    <div class="panel"><h3>📣 Announcement Bar (toko)</h3>
+      <input style="width:100%;padding:11px 14px;border:1px solid #ccc;border-radius:8px;font-family:inherit" value="🔥 PROMO SPESIAL! DISKON SAMPAI 30% OTOMATIS DI CHECKOUT" id="annTxt">
+      <div style="display:flex;gap:12px;align-items:center;margin-top:12px;flex-wrap:wrap">
+        <button class="pbtn grn" onclick="toast('Announcement tersimpan (demo)')">💾 Simpan</button>
+        <div class="toggle">Tampilkan <span class="switch on" onclick="this.classList.toggle('on')"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CUSTOMERS ===== -->
+  <div class="page" id="p-custs">
+    <div class="panel"><h3>👥 Pelanggan Terdaftar</h3>
+      <table class="tbl"><tr><th>Nama</th><th>WhatsApp</th><th>Order</th><th>Total Belanja</th><th>Terakhir</th></tr>
+      <tr><td><b>Budi Santoso</b></td><td class="mono">0877••••5678</td><td>6</td><td class="mono">Rp 3.842.000</td><td>2 hari lalu</td></tr>
+      <tr><td><b>Sari Wulandari</b></td><td class="mono">0812••••3321</td><td>3</td><td class="mono">Rp 1.402.800</td><td>5 hari lalu</td></tr>
+      <tr><td><b>Andi Makmur</b></td><td class="mono">0853••••9090</td><td>2</td><td class="mono">Rp 1.832.200</td><td>kemarin</td></tr></table>
+    </div>
+  </div>
+
+  <!-- ===== REPORTS ===== -->
+  <div class="page" id="p-reports">
+    <div class="kpis">
+      <div class="kpi"><small>Omzet Bulan Ini</small><b>Rp 58.4jt</b><span class="d up">▲ 8%</span></div>
+      <div class="kpi"><small>Produk Terlaris</small><b>Teduh Plus</b><span class="d">38 terjual</span></div>
+      <div class="kpi"><small>Rata-rata Order</small><b>Rp 521.000</b><span class="d up">▲ 4%</span></div>
+      <div class="kpi"><small>Retur</small><b>1.8%</b><span class="d up">▲ membaik</span></div>
+    </div>
+    <div class="row2e">
+      <div class="panel"><h3>Penjualan per Kategori</h3>
+        <table class="tbl"><tr><th>Kategori</th><th>Terjual</th><th>Omzet</th></tr>
+        <tr><td>PVC Rubber</td><td>64</td><td class="mono">Rp 31.2jt</td></tr>
+        <tr><td>Karet</td><td>31</td><td class="mono">Rp 14.8jt</td></tr>
+        <tr><td>Nylon</td><td>17</td><td class="mono">Rp 12.4jt</td></tr></table>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><button class="sbtn" onclick="toast('Demo — unduh PDF')">⬇ Laporan PDF</button><button class="sbtn" onclick="toast('Demo — unduh CSV')">⬇ CSV</button></div>
+      </div>
+      <div class="panel"><h3>Stok Menipis</h3>
+        <table class="tbl"><tr><th>Produk</th><th>Stok</th><th></th></tr>
+        <tr><td>Teduh Touring Pro 2XL</td><td><span class="badge b-red">4</span></td><td><button class="sbtn" onclick="toast('Restock dicatat (demo)')">Restock</button></td></tr>
+        <tr><td>Teduh Moto Poncho</td><td><span class="badge b-amb">9</span></td><td><button class="sbtn" onclick="toast('Restock dicatat (demo)')">Restock</button></td></tr>
+        <tr><td>Teduh Karet 02 3XL</td><td><span class="badge b-amb">11</span></td><td><button class="sbtn" onclick="toast('Restock dicatat (demo)')">Restock</button></td></tr></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS ===== -->
+  <div class="page" id="p-settings">
+    <div class="panel"><h3>🏪 Informasi Toko</h3>
+      <div class="frm">
+        <div><label>Nama Toko</label><input value="TEDUH — Extrime Product Series"></div>
+        <div><label>WhatsApp Admin</label><input value="+62 851-6585-9837"></div>
+        <div class="full"><label>Alamat</label><input value="Jl. Kebon Jeruk IX No.26, Jakarta Barat 11160"></div>
+        <div><label>Minimal Gratis Ongkir</label><input value="Rp 500.000"></div>
+        <div><label>Slot Foto Lokasi Toko</label><div class="wx" style="height:46px;border-radius:8px">PETA / FOTO</div></div>
+      </div>
+      <button class="pbtn grn" style="margin-top:14px" onclick="toast('Pengaturan tersimpan (demo)')">💾 Simpan</button>
+    </div>
+    <div class="panel"><h3>🔐 Pengguna Admin</h3>
+      <table class="tbl"><tr><th>Username</th><th>Role</th><th>Akses</th></tr>
+      <tr><td><b>superadmin</b></td><td><span class="badge b-amb">Superadmin</span></td><td>Semua + kelola user</td></tr>
+      <tr><td><b>admin</b></td><td><span class="badge b-blu">Admin</span></td><td>Semua kecuali user</td></tr>
+      <tr><td><b>staff</b></td><td><span class="badge b-gry">Staff</span></td><td>Pesanan & produk saja</td></tr></table>
+      <button class="pbtn" style="margin-top:14px" onclick="toast('Demo — tambah user')">+ Tambah User</button>
+    </div>
+  </div>
+
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== LOGIN DEMO ===== */
+const USERS={admin:{p:'admin123',role:'Admin',n:'Admin'},superadmin:{p:'super123',role:'Superadmin',n:'Superadmin'},staff:{p:'staff1',role:'Staff',n:'Staff'}};
+let ME=null;
+function doLogin(){
+  const u=USERS[document.getElementById('lgUser').value.trim().toLowerCase()];
+  const pw=document.getElementById('lgPass').value;
+  if(u&&u.p===pw){
+    ME=document.getElementById('lgUser').value.trim().toLowerCase();
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('whoAmI').textContent=u.n+' · '+u.role;
+    document.getElementById('ava').textContent=u.n[0].toUpperCase();
+    ['promos','settings','custs'].forEach(k=>{const el=document.querySelector('[data-p="'+k+'"]');if(el)el.style.display='';});
+    if(u.role==='Staff'){['promos','settings','custs'].forEach(k=>{document.querySelector('[data-p="'+k+'"]').style.display='none';});}
+    toast('Selamat datang, '+u.n+'! 👋');
+  }else{document.getElementById('lErr').style.display='block';}
+}
+document.getElementById('lgPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+function logout(){ME=null;document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';document.getElementById('lgPass').value='';}
+
+/* ===== NAV ===== */
+const TITLES={dash:'Dashboard',orders:'Pesanan',prods:'Produk',promos:'Promo & Diskon',custs:'Pelanggan',reports:'Laporan',settings:'Pengaturan'};
+document.querySelectorAll('#sbNav a').forEach(a=>a.onclick=()=>{
+  document.querySelectorAll('#sbNav a').forEach(x=>x.classList.remove('on'));
+  a.classList.add('on');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('p-'+a.dataset.p).classList.add('on');
+  document.getElementById('pgTitle').textContent=TITLES[a.dataset.p];
+  closeSb();window.scrollTo({top:0});
+});
+function openSb(){document.getElementById('sb').classList.add('open');document.getElementById('bd').classList.add('on');}
+function closeSb(){document.getElementById('sb').classList.remove('open');document.getElementById('bd').classList.remove('on');}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200);}
+
+/* ===== CHART ===== */
+const CH=[{d:'Sen',v:4.1},{d:'Sel',v:3.2},{d:'Rab',v:5.6},{d:'Kam',v:4.8},{d:'Jum',v:6.9},{d:'Sab',v:8.2},{d:'Min',v:4.4}];
+const mx=Math.max(...CH.map(c=>c.v));
+document.getElementById('chart').innerHTML=CH.map(c=>`<div class="g"><div class="b" style="height:${c.v/mx*100}%"><span>${c.v}jt</span></div><div class="xl">${c.d}</div></div>`).join('');
+
+/* ===== ORDERS DEMO DATA ===== */
+const ORD=[
+ {id:'EXT-1042',nama:'Budi Santoso',tgl:'12 Nov',total:965200,st:'Dikirim',kirim:'Reguler',bayar:'QRIS',item:'2× Teduh Plus (Hitam, XL)'},
+ {id:'EXT-1041',nama:'Sari Wulandari',tgl:'12 Nov',total:467600,st:'Diproses',kirim:'Kilat',bayar:'Transfer',item:'1× Teduh Plus (Navy, L)'},
+ {id:'EXT-1040',nama:'Andi Makmur',tgl:'11 Nov',total:1415200,st:'Selesai',kirim:'Instant',bayar:'COD',item:'2× Teduh Touring + Poncho'},
+ {id:'EXT-1039',nama:'Dedi Kurnia',tgl:'11 Nov',total:256200,st:'Baru',kirim:'Reguler',bayar:'QRIS',item:'1× Teduh Tipe 04 (Hitam)'},
+ {id:'EXT-1038',nama:'Rina Hapsari',tgl:'10 Nov',total:184100,st:'Dibatalkan',kirim:'Reguler',bayar:'—',item:'1× Teduh Osaka (Abu)'},
+ {id:'EXT-1037',nama:'Joko Prasetyo',tgl:'10 Nov',total:823200,st:'Dikirim',kirim:'Kilat',bayar:'Transfer',item:'1× Teduh Phantom (Hitam)'},
+ {id:'EXT-1036',nama:'Budi Santoso',tgl:'09 Nov',total:443800,st:'Selesai',kirim:'Reguler',bayar:'QRIS',item:'1× Teduh Karet 02 (Hitam, XL)'}];
+const stBadge=s=>({'Baru':'b-blu','Diproses':'b-blu','Dikirim':'b-amb','Selesai':'b-grn','Dibatalkan':'b-red'}[s]||'b-gry');
+function drawOrders(){
+  const q=(document.getElementById('ordQ').value||'').toLowerCase(),f=document.getElementById('ordF').value;
+  const list=ORD.filter(o=>(!q||o.id.toLowerCase().includes(q)||o.nama.toLowerCase().includes(q))&&(!f||o.st===f));
+  document.getElementById('tOrders').innerHTML=`<tr><th>Order</th><th>Pelanggan</th><th>Item</th><th>Total</th><th>Bayar</th><th>Status</th><th>Aksi</th></tr>`+
+   (list.length?list.map(o=>`<tr><td class="mono"><b>${o.id}</b><br><small style="color:#999">${o.tgl}</small></td>
+   <td><b>${o.nama}</b></td><td><small>${o.item}</small></td><td class="mono">${'Rp '+o.total.toLocaleString('id-ID')}</td>
+   <td><small>${o.bayar}<br>${o.kirim}</small></td><td><span class="badge ${stBadge(o.st)}">${o.st}</span></td>
+   <td>${o.st==='Baru'?`<button class="sbtn" onclick="adv('${o.id}')">→ Proses</button>`:o.st==='Diproses'?`<button class="sbtn" onclick="adv('${o.id}')">→ Kirim</button>`:o.st==='Dikirim'?`<button class="sbtn" onclick="adv('${o.id}')">✓ Selesai</button>`:`<button class="sbtn" onclick="toast('Detail ${o.id} (demo)')">Detail</button>`}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:#999;padding:30px">Tidak ada pesanan cocok</td></tr>');
+}
+function adv(id){
+  const o=ORD.find(x=>x.id===id);const flow={'Baru':'Diproses','Diproses':'Dikirim','Dikirim':'Selesai'};
+  o.st=flow[o.st]||o.st;drawOrders();toast(o.id+' → '+o.st+' ✓');
+}
+drawOrders();
+
+/* ===== PRODUCTS ADMIN ===== */
+let PRODS=[
+ {t:'Jas Hujan Teduh Plus Serat PVC',kat:'PVC Rubber',p:467600,w:654640,stok:42,st:'Aktif',d:'Flagship — press seal full, ramah ransel'},
+ {t:'Jas Hujan Teduh Karet 02',kat:'Karet',p:443800,w:633999,stok:28,st:'Aktif',d:'Karet tebal klasik'},
+ {t:'Jas Hujan Teduh Tipe 04',kat:'Karet',p:256200,w:366000,stok:55,st:'Aktif',d:'Paling ramah di kantong'},
+ {t:'Jas Hujan Teduh Tipe Osaka',kat:'PVC Rubber',p:184100,w:262999,stok:60,st:'Aktif',d:'Ringkas untuk harian'},
+ {t:'Teduh Phantom Polyester Nylon',kat:'Nylon',p:823200,w:1152480,stok:12,st:'Aktif',d:'Premium lightweight'},
+ {t:'Teduh Hydro Guard Polyurethane',kat:'Nylon',p:1242500,w:1739500,stok:7,st:'Aktif',d:'Grade tertinggi'},
+ {t:'Teduh Moto Poncho Lipat',kat:'PVC Rubber',p:96500,w:135000,stok:9,st:'Aktif',d:'Cadangan di jok motor'},
+ {t:'Teduh Touring Pro 2-in-1',kat:'PVC Rubber',p:598000,w:812000,stok:4,st:'Draf',d:'Untuk perjalanan jauh'}];
+const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
+function drawProds(){
+  document.getElementById('pCount').textContent=PRODS.length;
+  document.getElementById('pGrid').innerHTML=PRODS.map((p,i)=>`
+   <div class="padm"><div class="thumb">FOTO PRODUK<span class="badge" style="position:absolute;top:8px;left:8px;background:${p.st==='Aktif'?'var(--grn)':'#999'};color:#fff">${p.st}</span></div>
+   <div class="in"><h4>${p.t}</h4>
+   <div style="font-size:11.5px;color:var(--mut);margin:3px 0">${p.kat} · stok <b style="color:${p.stok<10?'var(--red)':'inherit'}">${p.stok}</b></div>
+   <div style="font-weight:700;color:var(--red)">${rp(p.p)} <s style="color:#aaa;font-weight:400">${rp(p.w)}</s></div>
+   <div class="rw" style="margin-top:10px">
+     <button class="sbtn" onclick="editProd(${i})">✏️ Edit</button>
+     <button class="sbtn" onclick="toast('Stok ${p.t} → restock (demo)')">📦 Stok</button>
+     <button class="sbtn danger" onclick="delProd(${i})">Hapus</button>
+   </div></div></div>`).join('');
+}
+function openPform(){
+  document.getElementById('pform').style.display='block';
+  document.getElementById('pfTitle').textContent='➕ Produk Baru';
+  ['pfNama','pfHarga','pfWas','pfStok','pfDesc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pfStatus').value='Aktif';
+  document.getElementById('pform').scrollIntoView({behavior:'smooth'});
+}
+let editIdx=-1;
+function editProd(i){
+  editIdx=i;const p=PRODS[i];
+  document.getElementById('pform').style.display='block';
+  document.getElementById('pfTitle').textContent='✏️ Edit: '+p.t;
+  document.getElementById('pfNama').value=p.t;document.getElementById('pfKat').value=p.kat;
+  document.getElementById('pfHarga').value=p.p;document.getElementById('pfWas').value=p.w;
+  document.getElementById('pfStok').value=p.stok;document.getElementById('pfStatus').value=p.st;
+  document.getElementById('pfDesc').value=p.d;
+  document.getElementById('pform').scrollIntoView({behavior:'smooth'});
+}
+function saveProd(){
+  const nama=document.getElementById('pfNama').value.trim(),h=+document.getElementById('pfHarga').value;
+  if(!nama||!h){toast('⚠️ Nama & harga wajib diisi');return;}
+  const obj={t:nama,kat:document.getElementById('pfKat').value,p:h,w:+document.getElementById('pfWas').value||h,stok:+document.getElementById('pfStok').value||0,st:document.getElementById('pfStatus').value,d:document.getElementById('pfDesc').value.trim()};
+  if(editIdx>=0){PRODS[editIdx]=obj;toast('Produk diupdate ✓');}
+  else{PRODS.push(obj);toast('Produk ditambahkan ✓');}
+  editIdx=-1;document.getElementById('pform').style.display='none';drawProds();
+}
+function delProd(i){if(confirm('Hapus '+PRODS[i].t+'?')){PRODS.splice(i,1);drawProds();toast('Produk dihapus');}}
+drawProds();
+</script>
+</body>
+</html>
