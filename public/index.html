@@ -10,26 +10,71 @@
 :root{--ink:#1c1d1d;--mut:#5c5f62;--bg:#fff;--gray:#f4f4f4;--line:#e5e5e5;--sale:#c0392b}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Work Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px}
-a{color:inherit}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
 .ann{background:#111;color:#fff;text-align:center;font-size:13px;padding:9px 14px;letter-spacing:.3px}
-.ann a{color:#ffd60a;font-weight:600;text-decoration:none}
+.ann a{color:#ffd60a;font-weight:600}
 header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:60}
 .hd{max-width:1280px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;padding:14px 28px}
-.logo{font-family:'Poppins';font-weight:700;font-size:22px;letter-spacing:1px;display:flex;align-items:center;gap:8px;text-decoration:none}
-.logo .mark{width:30px;height:30px;background:#111;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700}
+.logo{font-family:'Poppins';font-weight:700;font-size:22px;letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.logo .mark{width:30px;height:30px;background:#111;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px}
+.logo small{font-weight:400;color:#8a8d90;font-size:15px;letter-spacing:0}
 .search{display:flex;justify-content:center}
 .search input{width:min(420px,100%);padding:10px 16px;border:1px solid #ccc;border-radius:22px;font-family:inherit;font-size:14px;background:var(--gray);outline:none}
 .search input:focus{border-color:#111;background:#fff}
 .icons{display:flex;gap:10px;align-items:center}
 .icons button{background:none;border:none;font-size:19px;cursor:pointer;position:relative;padding:6px}
 .icons .count{position:absolute;top:0;right:-2px;background:#111;color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-nav{border-bottom:1px solid var(--line);background:#fff}
+nav{border-bottom:1px solid var(--line);background:#fff;position:relative}
 nav .in{max-width:1280px;margin:auto;display:flex;justify-content:center;gap:34px;padding:0 20px;overflow-x:auto}
-nav a{padding:13px 0;font-size:13.5px;font-weight:600;letter-spacing:.8px;color:var(--mut);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent}
+nav a{padding:13px 0;font-size:13.5px;font-weight:600;letter-spacing:.8px;color:var(--mut);white-space:nowrap;border-bottom:2px solid transparent;cursor:pointer}
 nav a.on,nav a:hover{color:var(--ink);border-color:var(--ink)}
 .crumb{max-width:1280px;margin:auto;padding:16px 28px;font-size:12.5px;color:#8a8d90}
 .crumb b{color:var(--ink);font-weight:600}
 .wrap{max-width:1280px;margin:auto;padding:8px 28px 50px}
+.page{display:none}.page.on{display:block}
+/* HERO home */
+.hero{position:relative;border-radius:14px;overflow:hidden;background:linear-gradient(120deg,#16202a,#2b3d4e 60%,#3d566e);color:#fff;padding:64px 48px;margin-bottom:44px}
+.hero h1{font-family:'Poppins';font-size:clamp(1.7rem,4vw,2.7rem);font-weight:700;line-height:1.15;max-width:620px}
+.hero p{margin:14px 0 24px;color:#cfd8e0;max-width:520px;line-height:1.7}
+.hero .btn{background:#ffd60a;color:#111;border:none;height:52px;padding:0 34px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
+.hero .ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);margin-left:10px}
+.hero .drop{position:absolute;right:-40px;bottom:-40px;font-size:220px;opacity:.12}
+/* section titles */
+.sect{margin:44px 0 20px;display:flex;align-items:baseline;justify-content:space-between}
+.sect h2{font-family:'Poppins';font-size:22px;font-weight:600}
+.sect a{font-size:13px;color:var(--mut);cursor:pointer}
+.sect a:hover{color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:.15s;cursor:pointer;position:relative}
+.card:hover{box-shadow:0 6px 18px rgba(0,0,0,.09)}
+.card img{width:100%;aspect-ratio:1;object-fit:cover;background:#fafafa}
+.card .in{padding:12px 14px 16px}
+.card .vt{font-size:11px;letter-spacing:1.5px;color:#8a8d90;text-transform:uppercase}
+.card h3{font-family:'Poppins';font-weight:600;font-size:14.5px;line-height:1.35;margin:4px 0 8px}
+.card .p{font-size:14px;font-weight:600;color:var(--sale)}
+.card .p s{color:#9a9da1;font-weight:400;margin-right:8px}
+.card .off{position:absolute;top:10px;left:10px;background:var(--sale);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px}
+.card .stars{color:#f0a500;font-size:12px;margin-bottom:6px}
+/* value props */
+.props{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:36px 0}
+.props div{background:var(--gray);border-radius:12px;padding:20px;text-align:center}
+.props b{display:block;font-family:'Poppins';margin-top:8px;font-size:14px}
+.props small{color:var(--mut)}
+/* banner strip */
+.strip{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:40px 0}
+@media(max-width:700px){.strip{grid-template-columns:1fr}}
+.strip>div{border-radius:14px;padding:30px;color:#fff}
+.strip .a{background:linear-gradient(120deg,#1d7a4f,#27ae60)}
+.strip .b{background:linear-gradient(120deg,#8e2c38,#c0392b)}
+.strip h3{font-family:'Poppins';font-size:20px;margin-bottom:8px}
+.strip p{font-size:13.5px;opacity:.9;margin-bottom:14px}
+.strip button{background:#fff;border:none;color:#111;font-weight:700;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13.5px}
+/* collection header */
+.colhead{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 24px}
+.colhead button{padding:9px 18px;border:1px solid #ccc;border-radius:20px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:var(--mut)}
+.colhead button.on{background:#111;color:#fff;border-color:#111}
+/* product page */
 .pd{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:start}
 @media(max-width:920px){.pd{grid-template-columns:1fr;gap:26px}.wrap{padding:8px 16px 40px}}
 .gmain{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fafafa;position:relative}
@@ -37,12 +82,13 @@ nav a.on,nav a:hover{color:var(--ink);border-color:var(--ink)}
 .gnav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:#fff;border:1px solid var(--line);cursor:pointer;font-size:16px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
 .gnav.l{left:10px}.gnav.r{right:10px}
 .thumbs{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.thumbs img{width:72px;height:72px;object-fit:cover;border:1px solid var(--line);border-radius:8px;cursor:pointer;opacity:.7;transition:.15s}
+.thumbs img{width:72px;height:72px;object-fit:cover;border:1px solid var(--line);border-radius:8px;cursor:pointer;opacity:.7}
 .thumbs img.on{opacity:1;border:2px solid #111}
 .vendor{font-size:12px;letter-spacing:2px;font-weight:600;color:#8a8d90;text-transform:uppercase;margin-bottom:6px}
 h1.ptitle{font-family:'Poppins';font-weight:600;font-size:28px;line-height:1.2;margin-bottom:10px}
 .stars{color:#f0a500;font-size:14px;margin-bottom:14px}
 .stars small{color:var(--mut);font-size:13px;margin-left:6px}
+.pill{display:inline-flex;gap:6px;align-items:center;background:#eef7f0;color:#1d7a4f;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:16px;margin-bottom:14px}
 .prices{display:flex;align-items:baseline;gap:12px;margin:6px 0 4px;flex-wrap:wrap}
 .prices .now{font-family:'Poppins';font-size:26px;font-weight:600;color:var(--sale)}
 .prices .was{color:#9a9da1;text-decoration:line-through;font-size:17px}
@@ -55,27 +101,25 @@ h1.ptitle{font-family:'Poppins';font-weight:600;font-size:28px;line-height:1.2;m
 .swatches button{width:34px;height:34px;border-radius:50%;border:2px solid #fff;outline:1px solid #ccc;cursor:pointer}
 .swatches button.on{outline:2px solid #111}
 .sizes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
-.sizes button{min-width:56px;padding:11px 14px;border:1px solid #ccc;border-radius:8px;background:#fff;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer}
+.sizes button{min-width:56px;padding:11px 14px;border:1px solid #ccc;border-radius:8px;background:#fff;font-size:14px;font-weight:500;cursor:pointer}
 .sizes button.on{border:2px solid #111;background:#111;color:#fff}
 .buyrow{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
 .qty{display:flex;border:1px solid #ccc;border-radius:8px;overflow:hidden;height:52px}
 .qty button{width:46px;background:#fff;border:none;font-size:18px;cursor:pointer;color:var(--ink)}
-.qty button:hover{background:var(--gray)}
 .qty input{width:52px;text-align:center;border:none;border-left:1px solid var(--line);border-right:1px solid var(--line);font-family:inherit;font-size:15px;font-weight:600;height:52px}
-.btn{height:52px;border-radius:8px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;border:none}
+.btn{height:52px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;border:none}
 .btn.add{flex:1;min-width:180px;background:#111;color:#fff}
 .btn.add:hover{background:#333}
 .btn.buy{flex:1;min-width:160px;background:#fff;color:#111;border:1px solid #111}
 .btn.buy:hover{background:var(--gray)}
-.waline{margin-top:14px;display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--mut)}
-.waline a{color:#25d366;font-weight:600;text-decoration:none}
-.pill{display:inline-flex;gap:6px;align-items:center;background:#eef7f0;color:#1d7a4f;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:16px;margin-bottom:14px}
+.waline{margin-top:14px;font-size:13.5px;color:var(--mut)}
+.waline a{color:#25d366;font-weight:600}
 .trust{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
-.trust div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12.5px;font-weight:500;display:flex;gap:10px;align-items:center;color:var(--mut)}
+.trust div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12.5px;display:flex;gap:10px;align-items:center;color:var(--mut)}
 .trust b{color:var(--ink);font-size:13px}
 .tabs{margin-top:56px}
 .tabbtns{display:flex;border-bottom:2px solid var(--line);gap:4px;overflow-x:auto}
-.tabbtns button{background:none;border:none;padding:13px 22px;font-family:inherit;font-size:14px;font-weight:600;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tabbtns button{background:none;border:none;padding:13px 22px;font-size:14px;font-weight:600;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap}
 .tabbtns button.on{color:var(--ink);border-color:var(--ink)}
 .tabbody{padding:24px 4px;font-size:14.5px;line-height:1.75;color:#3a3d40}
 .tabbody h3{font-family:'Poppins';margin-bottom:10px;color:var(--ink)}
@@ -84,23 +128,29 @@ h1.ptitle{font-family:'Poppins';font-weight:600;font-size:28px;line-height:1.2;m
 table.spec{width:100%;border-collapse:collapse;font-size:14px}
 table.spec td{padding:11px 8px;border-bottom:1px solid var(--line)}
 table.spec td:first-child{font-weight:600;width:190px;color:var(--ink)}
-.rel{margin-top:64px}
-.rel h2{font-family:'Poppins';font-size:22px;font-weight:600;margin-bottom:18px}
-.relgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
-.rcard{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;text-decoration:none;color:var(--ink);transition:.15s}
-.rcard:hover{box-shadow:0 6px 18px rgba(0,0,0,.09)}
-.rcard img{width:100%;aspect-ratio:1;object-fit:cover}
-.rcard .in{padding:12px 14px 16px}
-.rcard .vt{font-size:11px;letter-spacing:1.5px;color:#8a8d90;text-transform:uppercase}
-.rcard h3{font-family:'Poppins';font-weight:600;font-size:14.5px;line-height:1.35;margin:4px 0 8px}
-.rcard .p{font-size:14px;font-weight:600;color:var(--sale)}
-.rcard .p s{color:#9a9da1;font-weight:400;margin-right:8px}
+/* cart page */
+.cartpg{max-width:900px;margin:auto}
+.cartpg h1{font-family:'Poppins';font-size:26px;margin-bottom:20px}
+.crow{display:flex;gap:16px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.crow img{width:84px;height:84px;border-radius:10px;object-fit:cover}
+.crow .inf{flex:1}
+.crow b{font-family:'Poppins';font-size:14.5px}
+.crow small{display:block;color:#8a8d90;margin:2px 0}
+.crow .p{font-weight:600;color:var(--sale)}
+.crow .qty{height:44px}.crow .qty button{width:38px}.crow .qty input{width:44px;height:44px}
+.crow .rm{background:none;border:none;color:var(--sale);font-size:12.5px;font-weight:600;cursor:pointer}
+.sumbox{background:var(--gray);border-radius:12px;padding:20px;margin-top:18px}
+.sumbox .t{display:flex;justify-content:space-between;margin:6px 0;font-size:14.5px}
+.sumbox .g{font-weight:700;font-size:17px;border-top:1px solid #d5d5d5;padding-top:10px;margin-top:8px}
+.empty{text-align:center;padding:70px 20px;color:#8a8d90}
+.empty div{font-size:56px;margin-bottom:10px}
+/* footer */
 footer{border-top:1px solid var(--line);background:#fafafa;margin-top:70px}
 .ft{max-width:1280px;margin:auto;padding:44px 28px;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:34px;font-size:13.5px}
 @media(max-width:820px){.ft{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.ft{grid-template-columns:1fr}}
 .ft h4{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;color:var(--ink)}
-.ft p,.ft a{color:var(--mut);text-decoration:none;line-height:1.9;display:block}
+.ft p,.ft a{color:var(--mut);line-height:1.9;display:block}
 .ft a:hover{color:var(--ink)}
 .news{display:flex;margin-top:12px;max-width:320px}
 .news input{flex:1;padding:11px 14px;border:1px solid #ccc;border-radius:8px 0 0 8px;font-family:inherit;font-size:13.5px}
@@ -108,6 +158,7 @@ footer{border-top:1px solid var(--line);background:#fafafa;margin-top:70px}
 .soc{display:flex;gap:10px;margin-top:14px}
 .soc a{width:36px;height:36px;background:#fff;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px}
 .copy{border-top:1px solid var(--line);text-align:center;padding:16px;font-size:12.5px;color:#8a8d90}
+/* drawer + modal */
 .drawer{position:fixed;top:0;right:-420px;width:min(420px,92vw);height:100%;background:#fff;z-index:100;box-shadow:-8px 0 30px rgba(0,0,0,.15);transition:right .25s;display:flex;flex-direction:column}
 .drawer.on{right:0}
 .dr-h{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
@@ -122,7 +173,7 @@ footer{border-top:1px solid var(--line);background:#fafafa;margin-top:70px}
 .dr-f{border-top:1px solid var(--line);padding:18px 22px}
 .dr-f .tot{display:flex;justify-content:space-between;font-weight:600;margin-bottom:12px}
 .dr-f .btn{width:100%}
-.dr-f .cont{background:none;border:none;width:100%;margin-top:10px;font-weight:600;color:var(--mut);cursor:pointer;font-family:inherit;text-decoration:underline}
+.dr-f .cont{background:none;border:none;width:100%;margin-top:10px;font-weight:600;color:var(--mut);cursor:pointer;text-decoration:underline}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:110;display:none;align-items:center;justify-content:center;padding:18px}
 .overlay.on{display:flex}
 .modal{background:#fff;border-radius:14px;max-width:480px;width:100%;max-height:92vh;overflow:auto;padding:28px}
@@ -135,35 +186,101 @@ footer{border-top:1px solid var(--line);background:#fafafa;margin-top:70px}
 .msum .t{display:flex;justify-content:space-between;margin:4px 0}
 .msum .g{font-weight:700;font-size:15px;border-top:1px solid #d5d5d5;padding-top:8px;margin-top:8px}
 .modal .go{width:100%;margin-top:16px;background:#25d366;color:#fff;height:50px;font-size:15px}
-.modal .cls{width:100%;margin-top:8px;background:none;border:none;font-weight:600;color:var(--mut);cursor:pointer;font-family:inherit;padding:8px}
+.modal .cls{width:100%;margin-top:8px;background:none;border:none;font-weight:600;color:var(--mut);cursor:pointer;padding:8px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(90px);background:#111;color:#fff;font-size:13.5px;font-weight:600;padding:12px 22px;border-radius:24px;z-index:200;transition:.3s;box-shadow:0 8px 22px rgba(0,0,0,.3)}
 .toast.on{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<div class="ann">🔥 PROMO SPESIAL! DISKON SAMPAI 30% OTOMATIS DI CHECKOUT &nbsp;·&nbsp; <a href="#" onclick="return false">BELANJA SEKARANG</a></div>
+<div class="ann">🔥 PROMO SPESIAL! DISKON SAMPAI 30% OTOMATIS DI CHECKOUT &nbsp;·&nbsp; <a onclick="nav('sale')">BELANJA SEKARANG</a></div>
 
 <header><div class="hd">
-  <a class="logo" href="#"><span class="mark">E</span>EXTRIME <span style="font-weight:400;color:#8a8d90">PRODUCT SERIES</span></a>
-  <div class="search"><input placeholder="Cari produk…" onkeydown="if(event.key==='Enter')toast('Demo — pencarian: '+this.value)"></div>
+  <a class="logo" onclick="nav('home')" style="cursor:pointer"><span class="mark">E</span>EXTRIME <small>PRODUCT SERIES</small></a>
+  <div class="search"><input id="q" placeholder="Cari produk…" onkeydown="if(event.key==='Enter')doSearch()"></div>
   <div class="icons">
-    <button title="Akun">👤</button>
+    <button title="Akun" onclick="toast('Demo — akun menyusul 👤')">👤</button>
     <button title="Keranjang" onclick="openCart(true)">🛒<span class="count" id="cartN">0</span></button>
   </div>
 </div></header>
 
 <nav><div class="in">
-  <a href="#" onclick="fake(event)">HOME</a>
-  <a href="#" onclick="fake(event)">SALE</a>
-  <a href="#" onclick="fake(event)">BEST SELLERS</a>
-  <a href="#" onclick="fake(event)" class="on">JAS HUJAN</a>
-  <a href="#" onclick="fake(event)">GUIDE</a>
+  <a data-nav="home" class="on" onclick="nav('home')">HOME</a>
+  <a data-nav="sale" onclick="nav('sale')">SALE</a>
+  <a data-nav="best" onclick="nav('best')">BEST SELLERS</a>
+  <a data-nav="new" onclick="nav('new')">NEW ARRIVALS</a>
+  <a data-nav="product" onclick="nav('product')">JAS HUJAN</a>
+  <a data-nav="guide" onclick="nav('guide')">GUIDE</a>
 </div></nav>
 
-<div class="crumb">Beranda / Jas Hujan / <b>Jas Hujan Teduh Plus Serat PVC</b></div>
+<!-- ===== HOME ===== -->
+<div class="page on" id="p-home">
+  <div class="wrap">
+    <div class="hero">
+      <div class="drop">☔</div>
+      <h1>Tetap Teduh & Kering,<br>Apa Pun Cuacanya ☔</h1>
+      <p>Jas hujan premium serat PVC dengan press seal full — dirancang untuk pengendara motor yang nggak mau setengah basah. Garansi resmi, retur mudah, kirim cepat.</p>
+      <button class="btn" onclick="nav('product')">Belanja Sekarang</button>
+      <button class="btn ghost" onclick="nav('best')">Best Sellers →</button>
+    </div>
 
-<main class="wrap">
+    <div class="props">
+      <div>🚚<b>Gratis Ongkir</b><small>min. belanja 500K</small></div>
+      <div>🛡️<b>Garansi Resmi</b><small>100% original</small></div>
+      <div>↩️<b>Retur 7 Hari</b><small>tanpa ribet</small></div>
+      <div>📦<b>Kirim 1×24 Jam</b><small>dari Jakarta Barat</small></div>
+    </div>
+
+    <div class="sect"><h2>⭐ Best Sellers</h2><a onclick="nav('best')">Lihat semua →</a></div>
+    <div class="grid" id="gridBest"></div>
+
+    <div class="strip">
+      <div class="a"><h3>Musim Hujan Tiba! 🌧️</h3><p>Diskon sampai 30% untuk semua jas hujan Teduh Series. Otomatis terpotong di checkout.</p><button onclick="nav('sale')">Ambil Promonya</button></div>
+      <div class="b"><h3>Jadi Reseller 💼</h3><p>Harga khusus toko & dropship. Minimal 10 pcs, gratis katalog digital.</p><button onclick="toast('Hubungi admin WA untuk harga reseller 💬')">Daftar Reseller</button></div>
+    </div>
+
+    <div class="sect"><h2>🆕 Produk Baru</h2><a onclick="nav('new')">Lihat semua →</a></div>
+    <div class="grid" id="gridNew"></div>
+
+    <div class="sect"><h2>🏆 Kenapa Teduh?</h2></div>
+    <div class="feat">
+      <div>🧵 <b>Press Seal Full Sealing</b> — setiap jahitan dilekat panas, bukan cuma dijahit</div>
+      <div>🧪 <b>Serat PVC Tebal</b> — diuji rembes air hujan deras 2 jam nonstop</div>
+      <div>🎒 <b>Ramah Ransel</b> — panel belakang longgar untuk tas sampai 35L</div>
+      <div>👥 <b>500+ Pelanggan Puas</b> — rating 4.9/5 dari ulasan terverifikasi</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COLLECTIONS ===== -->
+<div class="page" id="p-sale"><div class="wrap">
+  <div class="crumb">Beranda / <b>Sale</b></div>
+  <div class="sect" style="margin-top:0"><h2>🔥 Produk Sale</h2></div>
+  <div class="grid" id="gridSale"></div>
+</div></div>
+
+<div class="page" id="p-best"><div class="wrap">
+  <div class="crumb">Beranda / <b>Best Sellers</b></div>
+  <div class="sect" style="margin-top:0"><h2>⭐ Best Sellers</h2></div>
+  <div class="grid" id="gridBest2"></div>
+</div></div>
+
+<div class="page" id="p-new"><div class="wrap">
+  <div class="crumb">Beranda / <b>New Arrivals</b></div>
+  <div class="sect" style="margin-top:0"><h2>🆕 New Arrivals</h2></div>
+  <div class="grid" id="gridNew2"></div>
+</div></div>
+
+<div class="page" id="p-collection"><div class="wrap">
+  <div class="crumb">Beranda / <b>Semua Jas Hujan</b></div>
+  <div class="sect" style="margin-top:0"><h2>Semua Jas Hujan</h2></div>
+  <div class="colhead" id="colFilter"></div>
+  <div class="grid" id="gridAll"></div>
+</div></div>
+
+<!-- ===== PRODUCT ===== -->
+<div class="page" id="p-product"><div class="wrap">
+  <div class="crumb">Beranda / Jas Hujan / <b>Jas Hujan Teduh Plus Serat PVC</b></div>
   <div class="pd">
     <div>
       <div class="gmain">
@@ -173,7 +290,6 @@ footer{border-top:1px solid var(--line);background:#fafafa;margin-top:70px}
       </div>
       <div class="thumbs" id="thumbs"></div>
     </div>
-
     <div>
       <span class="vendor">EXTRIME · TEDUH SERIES</span>
       <h1 class="ptitle">Jas Hujan Teduh Plus Serat PVC</h1>
@@ -260,21 +376,51 @@ footer{border-top:1px solid var(--line);background:#fafafa;margin-top:70px}
   </div>
 
   <div class="rel">
-    <h2>Anda mungkin juga suka</h2>
-    <div class="relgrid" id="relgrid"></div>
+    <div class="sect"><h2>Anda mungkin juga suka</h2></div>
+    <div class="grid" id="relgrid"></div>
   </div>
-</main>
+</div></div>
+
+<!-- ===== GUIDE ===== -->
+<div class="page" id="p-guide"><div class="wrap">
+  <div class="crumb">Beranda / <b>Guide</b></div>
+  <div class="sect" style="margin-top:0"><h2>📖 Panduan Memilih Jas Hujan</h2></div>
+  <div class="feat">
+    <div>📏 <b>Pilih Ukuran yang Pas</b><br><small style="color:#5c5f62">Ukur tinggi & lingkar dada. L untuk 160-168cm, XL 168-175cm, 2XL 175-180cm, 3XL 180cm+. Kalau sering bawa ransel, milih 1 ukuran lebih besar biar kecover.</small></div>
+    <div>🧵 <b>Cek Press Seal</b><br><small style="color:#5c5f62">Jas hujan bagus pakai jahitan yang dilekat panas (press seal), bukan cuma dijahit. Gesek bagian dalam jahitan — kalau ada lapisan menonjol, itu seal-nya.</small></div>
+    <div>🧪 <b>Perhatikan Material</b><br><small style="color:#5c5f62">PVC rubber paling tahan untuk motor harian. Polyester nylon lebih ringan tapi kurang awet untuk hujan deras + angin.</small></div>
+    <div>🧢 <b>Jangan Lupakan Hood</b><br><small style="color:#5c5f62">Kerudung harus punya tali pengetat. Kalau longgar, air masuk dari leher — titik paling sering bocor.</small></div>
+  </div>
+  <div class="sect"><h2>❓ FAQ</h2></div>
+  <div class="feat" style="grid-template-columns:1fr">
+    <div><b>Bisa COD?</b><br><small style="color:#5c5f62">Bisa! Pilih COD saat checkout, bayar saat paket sampai (tambahan biaya sesuai kurir).</small></div>
+    <div><b>Garansi nya gimana?</b><br><small style="color:#5c5f62">Garansi jahitan & seal 30 hari. Retur ukuran gratis 7 hari dengan tag terpasang.</small></div>
+    <div><b>Kirim ke luar Jawa?</b><br><small style="color:#5c5f62">Kirim ke seluruh Indonesia. Estimasi 3-7 hari sesuai wilayah.</small></div>
+  </div>
+</div></div>
+
+<!-- ===== CART PAGE ===== -->
+<div class="page" id="p-cart"><div class="wrap"><div class="cartpg">
+  <div class="crumb">Beranda / <b>Keranjang</b></div>
+  <h1>🛒 Keranjang Anda</h1>
+  <div id="cartPageBody"></div>
+  <div class="sumbox" id="cartPageSum"></div>
+  <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap">
+    <button class="btn add" style="min-width:220px" onclick="goCheckout()">Lanjut ke Checkout</button>
+    <button class="btn buy" onclick="nav('collection')">← Lanjut Belanja</button>
+  </div>
+</div></div></div>
 
 <footer><div class="ft">
   <div>
-    <a class="logo" href="#" style="margin-bottom:12px"><span class="mark">E</span>EXTRIME</a>
+    <a class="logo" onclick="nav('home')" style="cursor:pointer;margin-bottom:12px"><span class="mark">E</span>EXTRIME</a>
     <p style="max-width:300px">Distributor resmi jas hujan & aksesori motor premium. Kualitas terbaik, harga terjangkau, garansi resmi.</p>
-    <div class="news"><input placeholder="Email untuk promo" onkeydown="if(event.key==='Enter')toast('Terima kasih! Cek email kamu 💌')"><button onclick="toast('Terima kasih! Cek email kamu 💌')">Daftar</button></div>
-    <div class="soc"><a href="#" onclick="fake(event)">📷</a><a href="#" onclick="fake(event)">🎵</a><a href="#" onclick="fake(event)">💬</a></div>
+    <div class="news"><input placeholder="Email untuk promo" id="nlMail" onkeydown="if(event.key==='Enter')subNews()"><button onclick="subNews()">Daftar</button></div>
+    <div class="soc"><a onclick="fake(event)">📷</a><a onclick="fake(event)">🎵</a><a onclick="fake(event)">💬</a></div>
   </div>
-  <div><h4>Perusahaan</h4><a href="#" onclick="fake(event)">Tentang Kami</a><a href="#" onclick="fake(event)">Kebijakan Privasi</a><a href="#" onclick="fake(event)">Syarat & Ketentuan</a><a href="#" onclick="fake(event)">Pengembalian Dana</a></div>
-  <div><h4>Dukungan</h4><a href="#" onclick="fake(event)">FAQ</a><a href="#" onclick="fake(event)">Cara Pesan</a><a href="#" onclick="fake(event)">Lacak Pesanan</a><a href="#" onclick="fake(event)">Hubungi Kami</a></div>
-  <div><h4>Toko</h4><a href="#" onclick="fake(event)">Best Sellers</a><a href="#" onclick="fake(event)">Produk Sale</a><a href="#" onclick="fake(event)">Semua Produk</a>
+  <div><h4>Perusahaan</h4><a onclick="fake(event)">Tentang Kami</a><a onclick="fake(event)">Kebijakan Privasi</a><a onclick="fake(event)">Syarat & Ketentuan</a><a onclick="fake(event)">Pengembalian Dana</a></div>
+  <div><h4>Dukungan</h4><a onclick="nav('guide')">FAQ</a><a onclick="nav('guide')">Cara Pesan</a><a onclick="fake(event)">Lacak Pesanan</a><a onclick="fake(event)">Hubungi Kami</a></div>
+  <div><h4>Toko</h4><a onclick="nav('best')">Best Sellers</a><a onclick="nav('sale')">Produk Sale</a><a onclick="nav('collection')">Semua Produk</a>
     <p style="margin-top:14px">📍 PT. Maju Gemilang Persada<br>Jl. Kebon Jeruk IX No.26<br>Jakarta Barat 11160</p></div>
 </div><div class="copy">© 2026 EXTRIME Product Series — Dibuat dengan 💜</div></footer>
 
@@ -283,7 +429,7 @@ footer{border-top:1px solid var(--line);background:#fafafa;margin-top:70px}
   <div class="dr-body" id="cartBody"></div>
   <div class="dr-f">
     <div class="tot"><span>Subtotal</span><span id="cartTot">Rp 0</span></div>
-    <button class="btn add" onclick="openCheckout()">Lanjut ke Checkout</button>
+    <button class="btn add" onclick="goCheckout()">Lanjut ke Checkout</button>
     <button class="cont" onclick="openCart(false)">lanjutkan belanja</button>
   </div>
 </div>
@@ -312,27 +458,84 @@ footer{border-top:1px solid var(--line);background:#fafafa;margin-top:70px}
 <div class="toast" id="toast"></div>
 
 <script>
+/* ===== DATA ===== */
 const IMG=[
  'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat2.webp?v=1767948001&width=1200',
  'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat1.webp?v=1767948001&width=1200',
  'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat4.webp?v=1767948001&width=1200',
  'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat.webp?v=1767948001&width=1200',
  'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat3.webp?v=1767948001&width=1200'];
+const PRODUCTS=[
+ {t:'Jas Hujan Teduh Plus Serat PVC',img:IMG[0],imgs:IMG,p:467600,w:654640,tag:'best',cat:'pvc',r:'4.9',sold:'500+',main:true},
+ {t:'Jas Hujan Teduh Karet 02',img:'https://gmaproductseries.com/cdn/shop/files/Rubber_Raincoat_ASV_02_blk.webp?v=1792392230&width=600',p:443800,w:633999,tag:'best',cat:'karet',r:'4.8',sold:'350+'},
+ {t:'Jas Hujan Teduh Tipe 04',img:'https://gmaproductseries.com/cdn/shop/files/raincoat_asv_04.webp?v=1782448242&width=600',p:256200,w:366000,tag:'sale',cat:'karet',r:'4.7',sold:'280+'},
+ {t:'Jas Hujan Teduh Tipe Osaka',img:'https://gmaproductseries.com/cdn/shop/files/ASVRaincoatTypeOsakablack.jpg?v=1764297719&width=600',p:184100,w:262999,tag:'sale',cat:'pvc',r:'4.8',sold:'410+'},
+ {t:'Teduh Phantom Polyester Nylon',img:'https://gmaproductseries.com/cdn/shop/files/asvphantomraincoat.webp?v=1782284395&width=600',p:823200,w:1152480,tag:'new',cat:'nylon',r:'4.9',sold:'120+'},
+ {t:'Teduh Hydro Guard Polyurethane',img:'https://gmaproductseries.com/cdn/shop/files/Jas_Hujan_ASV_Hydro_Guard_Polyurethane_-converted-from-jpg.webp?v=1782462207&width=600',p:1242500,w:1739500,tag:'new',cat:'nylon',r:'5.0',sold:'85+'},
+ {t:'Teduh Moto Poncho Lipat',img:'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat1.webp?v=1767948001&width=600',p:96500,w:135000,tag:'new',cat:'pvc',r:'4.6',sold:'600+'},
+ {t:'Teduh Touring Pro 2-in-1',img:'https://gmaproductseries.com/cdn/shop/files/asv02plusraincoat3.webp?v=1767948001&width=600',p:598000,w:812000,tag:'best',cat:'pvc',r:'4.9',sold:'190+'}];
 const COLORS=[{n:'Hitam',c:'#161616'},{n:'Navy',c:'#22344f'},{n:'Abu',c:'#7d7d7d'}];
 const SIZES=[{n:'L',add:0},{n:'XL',add:15000},{n:'2XL',add:30000},{n:'3XL',add:45000}];
-const BASE=467600, WAS=654640;
-const RELATED=[
- {t:'Jas Hujan Teduh Karet 02',img:'https://gmaproductseries.com/cdn/shop/files/Rubber_Raincoat_ASV_02_blk.webp?v=1792392230&width=600',p:443800,w:633999},
- {t:'Jas Hujan Teduh Tipe 04',img:'https://gmaproductseries.com/cdn/shop/files/raincoat_asv_04.webp?v=1782448242&width=600',p:256200,w:366000},
- {t:'Jas Hujan Teduh Tipe Osaka',img:'https://gmaproductseries.com/cdn/shop/files/ASVRaincoatTypeOsakablack.jpg?v=1764297719&width=600',p:184100,w:262999},
- {t:'Teduh Phantom Polyester Nylon',img:'https://gmaproductseries.com/cdn/shop/files/asvphantomraincoat.webp?v=1782284395&width=600',p:823200,w:1152480}];
+const MAIN=PRODUCTS[0];
+const BASE=MAIN.p, WAS=MAIN.w;
 const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
-let gi=0,color=0,size=0,cart=[];
+let gi=0,color=0,size=0,cart=[],curPage='home';
 
+/* ===== NAV ===== */
+function nav(p){
+  curPage=p;
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
+  const el=document.getElementById('p-'+p);if(el)el.classList.add('on');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.nav===p));
+  window.scrollTo({top:0});
+  if(p==='cart')renderCartPage();
+}
+/* ===== HELPERS ===== */
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200);}
+function fake(e){if(e)e.preventDefault();toast('Demo — halaman ini hanya contoh 😉');}
+function doSearch(){
+  const qv=document.getElementById('q').value.toLowerCase().trim();
+  if(!qv){toast('Ketik kata kunci dulu ya');return;}
+  nav('collection');
+  drawGrid('gridAll',PRODUCTS.filter(p=>p.t.toLowerCase().includes(qv)));
+  toast('Hasil pencarian: "'+qv+'"');
+}
+function subNews(){
+  const m=document.getElementById('nlMail').value.trim();
+  if(!m.includes('@')){toast('Masukkan email yang valid ya 💌');return;}
+  document.getElementById('nlMail').value='';toast('Terima kasih! Cek email kamu 💌');
+}
+
+/* ===== CARD RENDER ===== */
+function cardHTML(p,i){
+  const off=Math.round((p.w-p.p)/p.w*100);
+  return `<div class="card" onclick="${p.main?`nav('product')`:`toast('Demo — ${p.t}')`}">
+   ${p.tag==='sale'?`<span class="off">-${off}%</span>`:''}
+   <img src="${p.img}" alt="${p.t}">
+   <div class="in"><div class="stars">★ ${p.r} <span style="color:#8a8d90">· ${p.sold} terjual</span></div>
+   <h3>${p.t}</h3>
+   <div class="p">${rp(p.p)} <s>${rp(p.w)}</s></div></div></div>`;
+}
+function drawGrid(id,list){const el=document.getElementById(id);if(el)el.innerHTML=list.map(cardHTML).join('')||'<div class="empty">Tidak ada produk 🤷</div>';}
+drawGrid('gridBest',PRODUCTS.filter(p=>p.tag==='best'));
+drawGrid('gridNew',PRODUCTS.filter(p=>p.tag==='new'));
+drawGrid('gridSale',PRODUCTS.filter(p=>p.tag==='sale'));
+drawGrid('gridBest2',PRODUCTS.filter(p=>p.tag==='best'));
+drawGrid('gridNew2',PRODUCTS.filter(p=>p.tag==='new'));
+drawGrid('gridAll',PRODUCTS);
+drawGrid('relgrid',PRODUCTS.slice(1,5));
+/* collection filter */
+const CATS=[{k:'all',n:'Semua'},{k:'pvc',n:'PVC Rubber'},{k:'karet',n:'Karet'},{k:'nylon',n:'Nylon'}];
+document.getElementById('colFilter').innerHTML=CATS.map((c,i)=>`<button class="${i===0?'on':''}" onclick="filterCat('${c.k}',this)">${c.n}</button>`).join('');
+function filterCat(k,el){
+  document.querySelectorAll('#colFilter button').forEach(b=>b.classList.remove('on'));el.classList.add('on');
+  drawGrid('gridAll',k==='all'?PRODUCTS:PRODUCTS.filter(p=>p.cat===k));
+}
+
+/* ===== PRODUCT ===== */
 document.getElementById('thumbs').innerHTML=IMG.map((u,i)=>`<img src="${u}" class="${i===0?'on':''}" onclick="gset(${i})">`).join('');
 function gset(i){gi=i;document.getElementById('gimg').src=IMG[i];document.querySelectorAll('#thumbs img').forEach((t,j)=>t.classList.toggle('on',j===i));}
 function gmove(d){gset((gi+d+IMG.length)%IMG.length);}
-
 document.getElementById('colors').innerHTML=COLORS.map((c,i)=>`<button class="${i===0?'on':''}" style="background:${c.c}" title="${c.n}" onclick="pickColor(${i},this)"></button>`).join('');
 function pickColor(i,el){color=i;document.getElementById('colorName').textContent=COLORS[i].n;document.querySelectorAll('#colors button').forEach(b=>b.classList.remove('on'));el.classList.add('on');}
 function renderSizes(){document.getElementById('sizes').innerHTML=SIZES.map((s,i)=>`<button class="${i===size?'on':''}" onclick="pickSize(${i})">${s.n}</button>`).join('');}
@@ -347,18 +550,11 @@ function updatePrice(){
 function q(d){document.getElementById('qty').value=Math.max(1,+document.getElementById('qty').value+d);}
 function tab(e,id){document.querySelectorAll('.tabbtns button').forEach(b=>b.classList.remove('on'));e.target.classList.add('on');['t-feat','t-spec','t-ship','t-rev'].forEach(t=>document.getElementById(t).style.display=t===id?'block':'none');}
 
-document.getElementById('relgrid').innerHTML=RELATED.map(r=>`
- <a class="rcard" href="#" onclick="event.preventDefault();toast('Demo — ${r.t}')">
-  <img src="${r.img}"><div class="in"><div class="vt">EXTRIME · TEDUH</div><h3>${r.t}</h3>
-  <div class="p">${rp(r.p)} <s>${rp(r.w)}</s></div></div></a>`).join('');
-
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200);}
-function fake(e){e.preventDefault();toast('Demo — halaman katalog lengkap menyusul 😉');}
-
+/* ===== CART ===== */
 function addToCart(){
   cart.push({warna:COLORS[color].n,ukuran:SIZES[size].n,qty:+document.getElementById('qty').value,harga:BASE+SIZES[size].add});
   document.getElementById('cartN').textContent=cart.reduce((s,i)=>s+i.qty,0);
-  drawCart();toast('✓ Ditambahkan ke keranjang');openCart(true);
+  drawCart();renderCartPage();toast('✓ Ditambahkan ke keranjang');openCart(true);
 }
 function drawCart(){
   const body=document.getElementById('cartBody');
@@ -369,14 +565,29 @@ function drawCart(){
    <button class="rm" onclick="rmCart(${k})">Hapus</button></div>`).join(''):'<p style="color:#8a8d90;text-align:center;padding:30px 0">Keranjang Anda kosong 🛒</p>';
   document.getElementById('cartTot').textContent=rp(cart.reduce((s,i)=>s+i.harga*i.qty,0));
 }
-function rmCart(k){cart.splice(k,1);document.getElementById('cartN').textContent=cart.reduce((s,i)=>s+i.qty,0);drawCart();}
+function rmCart(k){cart.splice(k,1);document.getElementById('cartN').textContent=cart.reduce((s,i)=>s+i.qty,0);drawCart();renderCartPage();}
 function openCart(on){document.getElementById('drawer').classList.toggle('on',on);drawCart();}
-function buyNow(){addToCart();openCart(false);openCheckout();}
-
-function openCheckout(){
+function renderCartPage(){
+  const body=document.getElementById('cartPageBody');
+  body.innerHTML=cart.length?cart.map((i,k)=>`
+   <div class="crow"><img src="${IMG[0]}">
+   <div class="inf"><b>Jas Hujan Teduh Plus</b><small>${i.warna} · ${i.ukuran}</small>
+   <span class="p">${rp(i.harga)}</span></div>
+   <div class="qty"><button onclick="pq(${k},-1)">−</button><input value="${i.qty}" readonly><button onclick="pq(${k},1)">+</button></div>
+   <b style="min-width:110px;text-align:right">${rp(i.harga*i.qty)}</b>
+   <button class="rm" onclick="rmCart(${k})">Hapus</button></div>`).join(''):
+   `<div class="empty"><div>🛒</div>Keranjang Anda kosong<br><br><button class="btn add" style="min-width:200px" onclick="nav('collection')">Lihat Produk</button></div>`;
+  const total=cart.reduce((s,i)=>s+i.harga*i.qty,0);
+  document.getElementById('cartPageSum').innerHTML=total?`
+   <div class="t"><span>Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} item)</span><b>${rp(total)}</b></div>
+   <div class="t"><span>Ongkir</span><span>dihitung saat checkout</span></div>
+   ${total<500000?`<small style="color:#8a8d90">+${rp(500000-total)} lagi untuk gratis ongkir!</small>`:'<small style="color:#1d7a4f;font-weight:600">🎉 Kamu dapat GRATIS ONGKIR!</small>'}`:'';
+}
+function pq(k,d){cart[k].qty=Math.max(1,cart[k].qty+d);document.getElementById('cartN').textContent=cart.reduce((s,i)=>s+i.qty,0);drawCart();renderCartPage();}
+function buyNow(){addToCart();openCart(false);goCheckout();}
+function goCheckout(){
   if(!cart.length){toast('Keranjang masih kosong 😅');return;}
-  document.getElementById('drawer').classList.remove('on');
-  renderCoSum();document.getElementById('ov').classList.add('on');
+  openCart(false);renderCoSum();document.getElementById('ov').classList.add('on');
 }
 function closeCheckout(){document.getElementById('ov').classList.remove('on');}
 function renderCoSum(){
@@ -396,7 +607,8 @@ function submitOrder(){
   const total=cart.reduce((s,i)=>s+i.harga*i.qty,0);
   const ship={reg:15000,kilat:25000,same:35000}[document.getElementById('coKirim').value];
   const ong=total>=500000?0:ship;
-  const msg=`Halo EXTRIME! 👋 Saya mau pesan:\n\n${cart.map(i=>`• ${i.qty}× Jas Hujan Teduh Plus (${i.warna}, ${i.ukuran}) — ${rp(i.harga*i.qty)}`).join('\n')}\n\nNama: ${n}\nWA: ${w}\nAlamat: ${a}\nKirim: ${document.getElementById('coKirim').selectedOptions[0].text}\nBayar: ${document.getElementById('coBayar').value}\n\nTotal: ${rp(total+ong)}`;
+  const no='EXT-'+Date.now().toString().slice(-6);
+  const msg=`Halo EXTRIME! 👋 Saya mau pesan:\n\nNo. Order: ${no}\n\n${cart.map(i=>`• ${i.qty}× Jas Hujan Teduh Plus (${i.warna}, ${i.ukuran}) — ${rp(i.harga*i.qty)}`).join('\n')}\n\nNama: ${n}\nWA: ${w}\nAlamat: ${a}\nKirim: ${document.getElementById('coKirim').selectedOptions[0].text}\nBayar: ${document.getElementById('coBayar').value}\n\nTotal: ${rp(total+ong)}`;
   window.open('https://wa.me/6285165859837?text='+encodeURIComponent(msg),'_blank');
   toast('🧾 Membuka WhatsApp…');
 }
