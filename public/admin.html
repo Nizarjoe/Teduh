@@ -144,6 +144,7 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
     <a data-p="custs">👥 Pelanggan</a>
     <a data-p="reports">📈 Laporan</a>
     <a data-p="settings">⚙️ Pengaturan</a>
+    <a data-p="media">🖼️ Media & Foto</a>
   </div>
   <div class="sb-foot">
     <div id="whoAmI">—</div>
@@ -235,6 +236,13 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
         <div><label>Stok</label><input id="pfStok" type="number" placeholder="50"></div>
         <div><label>Status</label><select id="pfStatus"><option>Aktif</option><option>Draf</option></select></div>
         <div class="full"><label>Deskripsi Singkat</label><textarea id="pfDesc" rows="2" placeholder="Deskripsi produk…"></textarea></div>
+        <div class="full"><label>Foto Produk (superadmin/admin)</label>
+          <div style="display:flex;gap:12px;align-items:center">
+            <label class="pbtn" style="cursor:pointer">📤 Upload Foto<input type="file" id="pfFile" accept="image/*" style="display:none"></label>
+            <img id="pfPrev" style="display:none;width:74px;height:74px;object-fit:cover;border-radius:8px;border:1px solid #ddd">
+            <span id="pfFileStat" style="font-size:12px;color:var(--mut)"></span>
+          </div>
+        </div>
       </div>
       <div style="display:flex;gap:10px;margin-top:14px">
         <button class="pbtn grn" onclick="saveProd()">💾 Simpan Produk</button>
@@ -320,7 +328,22 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
       <tr><td><b>staff</b></td><td><span class="badge b-gry">Staff</span></td><td>Pesanan & produk saja</td></tr></table>
       <button class="pbtn" style="margin-top:14px" onclick="toast('Demo — tambah user')">+ Tambah User</button>
     </div>
-  </div>
+        <div class="page" id="p-media">
+    <div class="panel"><h3>🖼️ Upload Foto (Produk & Halaman Customer)</h3>
+      <p style="font-size:12px;color:var(--mut);margin:6px 0 12px">Upload gambar maksimal 5 MB (PNG / JPG / WEBP / GIF / SVG). Foto bisa dipakai untuk kartu produk, banner promo, maupun halaman customer.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <select id="upWhere" style="padding:8px 10px;border:1px solid #ddd;border-radius:8px">
+          <option value="produk">Foto Produk</option>
+          <option value="customer">Foto Halaman Customer</option>
+          <option value="banner">Banner / Promo</option>
+          <option value="lainnya">Lainnya</option>
+        </select>
+        <label class="pbtn grn" style="cursor:pointer">📤 Pilih Gambar & Upload<input type="file" id="upFile" accept="image/*" style="display:none"></label>
+        <span id="upStat" style="font-size:12px;color:var(--mut)"></span>
+      </div>
+      <div id="upGrid" class="pgrid" style="margin-top:14px"></div>
+    </div>
+    </div>
 
   </div>
 </div>
@@ -341,8 +364,8 @@ function doLogin(){
     document.getElementById('app').style.display='block';
     document.getElementById('whoAmI').textContent=u.n+' · '+u.role;
     document.getElementById('ava').textContent=u.n[0].toUpperCase();
-    ['promos','settings','custs'].forEach(k=>{const el=document.querySelector('[data-p="'+k+'"]');if(el)el.style.display='';});
-    if(u.role==='Staff'){['promos','settings','custs'].forEach(k=>{document.querySelector('[data-p="'+k+'"]').style.display='none';});}
+    ['promos','settings','custs','media'].forEach(k=>{const el=document.querySelector('[data-p="'+k+'"]');if(el)el.style.display='';});document.getElementById('pfFile').disabled=false;
+    if(u.role==='Staff'){['promos','settings','custs','media'].forEach(k=>{const el=document.querySelector('[data-p="'+k+'"]');if(el)el.style.display='none';});document.getElementById('pfFile').disabled=true;}
     toast('Selamat datang, '+u.n+'! 👋');
   }else{document.getElementById('lErr').style.display='block';}
 }
@@ -350,7 +373,7 @@ document.getElementById('lgPass').addEventListener('keydown',e=>{if(e.key==='Ent
 function logout(){ME=null;document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';document.getElementById('lgPass').value='';}
 
 /* ===== NAV ===== */
-const TITLES={dash:'Dashboard',orders:'Pesanan',prods:'Produk',promos:'Promo & Diskon',custs:'Pelanggan',reports:'Laporan',settings:'Pengaturan'};
+const TITLES={dash:'Dashboard',orders:'Pesanan',prods:'Produk',promos:'Promo & Diskon',custs:'Pelanggan',reports:'Laporan',settings:'Pengaturan',media:'Media & Foto'};
 document.querySelectorAll('#sbNav a').forEach(a=>a.onclick=()=>{
   document.querySelectorAll('#sbNav a').forEach(x=>x.classList.remove('on'));
   a.classList.add('on');
@@ -407,7 +430,7 @@ const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
 function drawProds(){
   document.getElementById('pCount').textContent=PRODS.length;
   document.getElementById('pGrid').innerHTML=PRODS.map((p,i)=>`
-   <div class="padm"><div class="thumb">FOTO PRODUK<span class="badge" style="position:absolute;top:8px;left:8px;background:${p.st==='Aktif'?'var(--grn)':'#999'};color:#fff">${p.st}</span></div>
+   <div class="padm"><div class="thumb">${p.img?`<img src="${p.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:'FOTO PRODUK'}<span class="badge" style="position:absolute;top:8px;left:8px;background:${p.st==='Aktif'?'var(--grn)':'#999'};color:#fff">${p.st}</span></div>
    <div class="in"><h4>${p.t}</h4>
    <div style="font-size:11.5px;color:var(--mut);margin:3px 0">${p.kat} · stok <b style="color:${p.stok<10?'var(--red)':'inherit'}">${p.stok}</b></div>
    <div style="font-weight:700;color:var(--red)">${rp(p.p)} <s style="color:#aaa;font-weight:400">${rp(p.w)}</s></div>
@@ -433,18 +456,71 @@ function editProd(i){
   document.getElementById('pfHarga').value=p.p;document.getElementById('pfWas').value=p.w;
   document.getElementById('pfStok').value=p.stok;document.getElementById('pfStatus').value=p.st;
   document.getElementById('pfDesc').value=p.d;
+  setPfImg(p.img||'');
   document.getElementById('pform').scrollIntoView({behavior:'smooth'});
 }
 function saveProd(){
   const nama=document.getElementById('pfNama').value.trim(),h=+document.getElementById('pfHarga').value;
   if(!nama||!h){toast('⚠️ Nama & harga wajib diisi');return;}
-  const obj={t:nama,kat:document.getElementById('pfKat').value,p:h,w:+document.getElementById('pfWas').value||h,stok:+document.getElementById('pfStok').value||0,st:document.getElementById('pfStatus').value,d:document.getElementById('pfDesc').value.trim()};
+  const obj={t:nama,kat:document.getElementById('pfKat').value,p:h,w:+document.getElementById('pfWas').value||h,stok:+document.getElementById('pfStok').value||0,st:document.getElementById('pfStatus').value,d:document.getElementById('pfDesc').value.trim(),img:pfImg||''};
   if(editIdx>=0){PRODS[editIdx]=obj;toast('Produk diupdate ✓');}
   else{PRODS.push(obj);toast('Produk ditambahkan ✓');}
   editIdx=-1;document.getElementById('pform').style.display='none';drawProds();
 }
 function delProd(i){if(confirm('Hapus '+PRODS[i].t+'?')){PRODS.splice(i,1);drawProds();toast('Produk dihapus');}}
 drawProds();
+
+/* ===== UPLOAD FOTO (superadmin/admin) ===== */
+const CAN_UPLOAD = ME!=='staff'; // dihitung saat login juga
+let pfImg='';
+function canUpload(){return ME && ME!=='staff';}
+function pfResetImg(){pfImg='';document.getElementById('pfPrev').style.display='none';document.getElementById('pfFileStat').textContent='';}
+function setPfImg(u){pfImg=u||'';const im=document.getElementById('pfPrev');if(u){im.src=u;im.style.display='block';document.getElementById('pfFileStat').textContent='✓ foto terpasang';}else{im.style.display='none';document.getElementById('pfFileStat').textContent='';}}
+function guardUpload(el){if(!canUpload()){toast('⛔ Hanya superadmin & admin yang bisa upload foto');if(el&&el.tagName==='INPUT')el.value='';return false;}return true;}
+function uploadImage(file,where,cb){
+  if(!guardUpload())return;
+  const fd=new FileReader();
+  fd.onload=()=>{
+    fetch('/api/upload?where='+encodeURIComponent(where),{method:'POST',body:fd.result})
+    .then(r=>r.json()).then(j=>{
+      if(j.ok)cb(j.file);else toast('❌ '+(j.err||'Gagal upload'));
+      if(!j.ok&&j.err&&j.err.indexOf('maksimal')>=0)toast('⛔ Maksimal 5 MB');
+    }).catch(()=>toast('❌ Gagal upload'));
+  };
+  fd.readAsArrayBuffer(file);
+}
+document.getElementById('pfFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  uploadImage(f,'produk',u=>{setPfImg(u);toast('Foto produk terupload ✓');e.target.value='';});
+});
+/* ===== HALAMAN MEDIA ===== */
+function drawMedia(){
+  fetch('/api/uploads').then(r=>r.json()).then(j=>{
+    const g=document.getElementById('upGrid');
+    if(!j.list.length){g.innerHTML='<p style="color:var(--mut);font-size:13px">Belum ada foto terupload.</p>';return;}
+    g.innerHTML=j.list.map(x=>`
+      <div class="padm" style="max-width:200px"><div class="thumb" style="height:120px"><img src="/uploads/${x.file}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
+      <div class="in"><b style="font-size:12px">${x.where}</b><div style="font-size:10.5px;color:var(--mut)">${(x.size/1024).toFixed(0)} KB · ${new Date(x.at).toLocaleString('id-ID')}</div>
+      <div class="rw" style="margin-top:8px"><button class="sbtn" onclick="copyUp('${x.file}')">📋 Salin URL</button><button class="sbtn" onclick="delUp('${x.file}')">🗑️ Hapus</button></div></div></div>`).join('');
+  });
+}
+function copyUp(f){navigator.clipboard&&navigator.clipboard.writeText(location.origin+'/uploads/'+f);toast('URL disalin ✓');}
+function delUp(f){
+  if(!canUpload())return toast('⛔ Hanya superadmin & admin');
+  fetch('/api/uploads/delete?file='+f,{method:'POST'}).then(()=>{toast('Foto dihapus ✓');drawMedia();});
+}
+document.getElementById('upFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const where=document.getElementById('upWhere').value;
+  document.getElementById('upStat').textContent='Mengunggah…';
+  uploadImage(f,where,u=>{
+    document.getElementById('upStat').textContent='✓ '+u;
+    toast('Foto terupload ✓');drawMedia();e.target.value='';
+  });
+});
+// hook: saat tab media dibuka, gambar list
+const _obs=new MutationObserver(()=>{if(document.getElementById('p-media')&&document.getElementById('p-media').classList.contains('on'))drawMedia();});
+const pm=document.getElementById('p-media'); if(pm)_obs.observe(pm,{attributes:true,attributeFilter:['class']});
 </script>
 </body>
 </html>
