@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: teduh
+      POSTGRES_PASSWORD: teduh
+      POSTGRES_DB: teduh
+    ports:
+      - "5432:5432"
+    volumes:
+      - teduh-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U teduh -d teduh"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://teduh:teduh@db:5432/teduh
+      REDIS_URL: redis://redis:6379
+      MIGRATE_ON_BOOT: "true"
+      APP_URL: http://localhost:3000
+    volumes:
+      - teduh-uploads:/app/storage/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  teduh-pg:
+  teduh-uploads:

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img">
+  <rect width="800" height="1000" fill="#E6E1D6"/>
+  <ellipse cx="400" cy="860" rx="190" ry="16" fill="#17211E" opacity="0.08"/>
+  
+    <rect x="285" y="600" width="90" height="250" rx="10" fill="#234840"/>
+    <rect x="425" y="600" width="90" height="250" rx="10" fill="#234840"/>
+    <path d="M300 300 L250 360 L215 470 L250 505 L275 640 H525 L550 505 L585 470 L550 360 L500 300 Z" fill="#234840"/>
+    <path d="M300 320 L175 450 L155 490 L220 520 L310 400 Z" fill="#355a52"/>
+    <path d="M500 320 L625 450 L645 490 L580 520 L490 400 Z" fill="#355a52"/>
+    <path d="M330 250 C330 170 470 170 470 250 L450 300 H350 Z" fill="#395e56"/>
+    <path d="M400 300 V630" stroke="#5a7f77" stroke-width="2"/>
+    <rect x="315" y="460" width="55" height="42" fill="none" stroke="#5a7f77" stroke-width="2"/>
+    <rect x="430" y="460" width="55" height="42" fill="none" stroke="#5a7f77" stroke-width="2"/>
+    
+  
+  <text x="400" y="930" text-anchor="middle" font-family="Georgia, serif" font-size="18" letter-spacing="3" fill="#3C4A45">TEMPAT FOTO PRODUK</text>
+  <text x="400" y="962" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#66716C">Ganti berkas ini dengan foto asli</text>
+</svg>

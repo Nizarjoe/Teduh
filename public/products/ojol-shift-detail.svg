@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img">
+  <rect width="800" height="1000" fill="#E6E1D6"/>
+  <ellipse cx="400" cy="860" rx="190" ry="16" fill="#17211E" opacity="0.08"/>
+  
+        <path d="M180 260 H620" stroke="#a47400" stroke-width="3"/>
+        <path d="M180 340 H620" stroke="#a47400" stroke-width="3"/>
+        <path d="M400 180 V760" stroke="#a47400" stroke-width="3"/>
+        <circle cx="400" cy="420" r="18" fill="#D6A62E" stroke="#a47400" stroke-width="3"/>
+        <path d="M80 120 L140 80 M80 180 L160 120 M80 240 L180 160" stroke="#9AA49E" stroke-width="2"/>
+      
+  <text x="400" y="930" text-anchor="middle" font-family="Georgia, serif" font-size="18" letter-spacing="3" fill="#3C4A45">TEMPAT FOTO PRODUK</text>
+  <text x="400" y="962" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#66716C">Ganti berkas ini dengan foto asli</text>
+</svg>

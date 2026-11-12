@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "cursor/**"]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: teduh
+          POSTGRES_PASSWORD: teduh
+          POSTGRES_DB: teduh
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U teduh -d teduh"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://teduh:teduh@localhost:5432/teduh
+      SESSION_SECRET: ci-session-secret-minimum-32-characters
+      APP_URL: http://localhost:3000
+      MIDTRANS_SERVER_KEY: SB-Mid-server-placeholder
+      MIDTRANS_CLIENT_KEY: SB-Mid-client-placeholder
+      MIDTRANS_IS_PRODUCTION: "false"
+      MIDTRANS_ALLOW_MOCK: "true"
+      ORIGIN_POSTAL_CODE: "12430"
+      SEED_ADMIN_EMAIL: admin@teduh.id
+      SEED_ADMIN_PASSWORD: ci-admin-password
+      NEXT_PUBLIC_WHATSAPP_NUMBER: "628111908800"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run db:migrate
+      - run: npm run db:seed
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
