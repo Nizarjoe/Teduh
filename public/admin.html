@@ -301,19 +301,13 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
         <pre id="repPrev" style="background:#f7f7f9;border:1px solid #e3e3e8;border-radius:10px;padding:12px;font-size:12px;white-space:pre-wrap;margin-top:10px"></pre>
       </div>
     </div>
-    <div class="kpis">
-      <div class="kpi"><small>Omzet Bulan Ini</small><b>Rp 58.4jt</b><span class="d up">▲ 8%</span></div>
-      <div class="kpi"><small>Produk Terlaris</small><b>Teduh Plus</b><span class="d">38 terjual</span></div>
-      <div class="kpi"><small>Rata-rata Order</small><b>Rp 521.000</b><span class="d up">▲ 4%</span></div>
-      <div class="kpi"><small>Retur</small><b>1.8%</b><span class="d up">▲ membaik</span></div>
+    <div class="panel"><h3>💰 Keuangan — sinkron status pembayaran</h3>
+      <div class="kpis" id="finKpis"></div>
+      <table class="tbl" id="tFin"></table>
     </div>
     <div class="row2e">
       <div class="panel"><h3>Penjualan per Kategori</h3>
-        <table class="tbl"><tr><th>Kategori</th><th>Terjual</th><th>Omzet</th></tr>
-        <tr><td>PVC Rubber</td><td>64</td><td class="mono">Rp 31.2jt</td></tr>
-        <tr><td>Karet</td><td>31</td><td class="mono">Rp 14.8jt</td></tr>
-        <tr><td>Nylon</td><td>17</td><td class="mono">Rp 12.4jt</td></tr></table>
-        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><button class="sbtn" onclick="toast('Demo — unduh PDF')">⬇ Laporan PDF</button><button class="sbtn" onclick="toast('Demo — unduh CSV')">⬇ CSV</button></div>
+        <table class="tbl" id="tKat"><tr><th>Kategori</th><th>Terjual</th><th>Omzet</th></tr><tr><td colspan="3" style="text-align:center;color:#999;padding:20px">Belum ada transaksi</td></tr></table>
       </div>
       <div class="panel"><h3>Stok Menipis</h3>
         <table class="tbl"><tr><th>Produk</th><th>Stok</th><th></th></tr>
@@ -405,6 +399,7 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 <div class="toast" id="toast"></div>
 
 <script>
+const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
 /* ===== LOGIN DEMO ===== */
 const USERS={admin:{p:'admin123',role:'Admin',n:'Admin'},superadmin:{p:'super123',role:'Superadmin',n:'Superadmin'},staff:{p:'staff1',role:'Staff',n:'Staff'}};
 let ME=null;
@@ -460,14 +455,14 @@ function drawOrders(){
   document.getElementById('tOrders').innerHTML=`<tr><th>Order</th><th>Pelanggan</th><th>Item</th><th>Total</th><th>Bayar</th><th>Status</th><th>Aksi</th></tr>`+
    (list.length?list.map(o=>`<tr><td class="mono"><b>${o.id}</b><br><small style="color:#999">${o.tgl}</small></td>
    <td><b>${o.nama}</b></td><td><small>${o.item}</small></td><td class="mono">${'Rp '+o.total.toLocaleString('id-ID')}</td>
-   <td><small>${o.bayar}<br>${o.kirim}</small></td><td><span class="badge ${stBadge(o.st)}">${o.st}</span></td>
+   <td><small>${o.bayar}<br>${o.kirim}</small><br><span class="badge ${payBadge(o.paySt)}" style="font-size:9px">${o.paySt||'Belum Bayar'}</span></td><td><span class="badge ${stBadge(o.st)}">${o.st}</span></td>
    <td>${o.st==='Baru'?`<button class="sbtn" onclick="adv('${o.id}')">→ Proses</button>`:o.st==='Diproses'?`<button class="sbtn" onclick="adv('${o.id}')">→ Kirim</button>`:o.st==='Dikirim'?`<button class="sbtn" onclick="adv('${o.id}')">✓ Selesai</button>`:`<button class="sbtn" onclick="toast('Detail ${o.id} (demo)')">Detail</button>`}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:#999;padding:30px">Tidak ada pesanan cocok</td></tr>');
 }
 function adv(id){
   const o=ORD.find(x=>x.id===id);const flow={'Baru':'Diproses','Diproses':'Dikirim','Dikirim':'Selesai'};
   o.st=flow[o.st]||o.st;drawOrders();toast(o.id+' → '+o.st+' ✓');
 }
-drawOrders();
+drawOrders();if(typeof drawFin==='function')drawFin();
 
 /* ===== PRODUCTS ADMIN ===== */
 let PRODS=[
@@ -479,7 +474,6 @@ let PRODS=[
  {t:'Teduh Hydro Guard Polyurethane',kat:'Nylon',p:1242500,w:1739500,stok:7,st:'Aktif',d:'Grade tertinggi'},
  {t:'Teduh Moto Poncho Lipat',kat:'PVC Rubber',p:96500,w:135000,stok:9,st:'Aktif',d:'Cadangan di jok motor'},
  {t:'Teduh Touring Pro 2-in-1',kat:'PVC Rubber',p:598000,w:812000,stok:4,st:'Draf',d:'Untuk perjalanan jauh'}];
-const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
 function drawProds(){
   document.getElementById('pCount').textContent=PRODS.length;
   document.getElementById('pGrid').innerHTML=PRODS.map((p,i)=>`
@@ -535,6 +529,7 @@ function syncFromServer(){
     if(j.content){CONTENT=Object.assign(CONTENT,j.content);fillContentForm();}
     if(j.settings){if(j.settings.payment)PAY=j.settings.payment;if(j.settings.waOwner){OWNER=j.settings.waOwner;const ow=document.getElementById('ownerWa');if(ow)ow.textContent='+'+OWNER.replace(/^62/,'62 ');}}
     if(typeof drawPay==='function')drawPay();
+    if(typeof drawFin==='function')drawFin();
   }).catch(()=>{});
 }
 function pushToServer(patch){
@@ -587,15 +582,53 @@ function savePay(){
   pushToServer({settings:Object.assign({payment:PAY},st)});
   drawPayInfo();toast('Pengaturan pembayaran tersimpan ✓');
 }
+/* ===== DASHBOARD KEUANGAN (sinkron status pembayaran) ===== */
+function payBadge(s){return({'Lunas':'b-grn','Belum Bayar':'b-red','Menunggu Verifikasi':'b-amb','Gagal':'b-red','COD (bayar di tempat)':'b-blu'}[s]||'b-gry');}
+function setPaySt(id,st){
+  const o=ORD.find(x=>x.id===id);if(!o)return;
+  o.paySt=st;o.paidAt=st==='Lunas'?new Date().toISOString():o.paidAt;
+  pushToServer({orders:ORD});drawFin();drawOrders();
+  toast(id+' → '+st+(st==='Lunas'?' ✓ masuk omzet':''));
+}
+function drawFin(){
+  const fk=document.getElementById('finKpis'),tf=document.getElementById('tFin');
+  if(!fk)return;
+  const lunas=ORD.filter(o=>o.paySt==='Lunas');
+  const omzet=lunas.reduce((s,o)=>s+o.total,0);
+  const pending=ORD.filter(o=>o.paySt==='Menunggu Verifikasi');
+  const unpaid=ORD.filter(o=>o.paySt==='Belum Bayar');
+  const cod=ORD.filter(o=>(o.paySt||'').startsWith('COD'));
+  fk.innerHTML=`
+   <div class="kpi"><small>Omzet Terkumpul (Lunas)</small><b>${rp(omzet)}</b><span class="d up">${lunas.length} pesanan lunas</span></div>
+   <div class="kpi"><small>Menunggu Verifikasi</small><b>${pending.length}</b><span class="d">${rp(pending.reduce((s,o)=>s+o.total,0))}</span></div>
+   <div class="kpi"><small>Belum Bayar</small><b>${unpaid.length}</b><span class="d">${rp(unpaid.reduce((s,o)=>s+o.total,0))}</span></div>
+   <div class="kpi"><small>COD (di tempat)</small><b>${cod.length}</b><span class="d">${rp(cod.reduce((s,o)=>s+o.total,0))}</span></div>`;
+  tf.innerHTML='<tr><th>Order</th><th>Metode</th><th>Total</th><th>Status Bayar</th><th>Aksi</th></tr>'+
+   (ORD.length?ORD.map(o=>`<tr><td class="mono"><b>${o.id}</b><br><small style="color:#999">${o.tgl} · ${o.nama}</small></td>
+   <td>${o.bayar}</td><td class="mono">${rp(o.total)}</td>
+   <td><span class="badge ${payBadge(o.paySt)}">${o.paySt||'Belum Bayar'}</span>${o.paidAt?`<br><small style="color:#999">${new Date(o.paidAt).toLocaleString('id-ID')}</small>`:''}</td>
+   <td>${o.paySt==='Belum Bayar'?`<button class="sbtn" onclick="setPaySt('${o.id}','Menunggu Verifikasi')">📥 Bukti Masuk</button>`:''}
+       ${o.paySt==='Menunggu Verifikasi'?`<button class="sbtn" onclick="setPaySt('${o.id}','Lunas')">✓ Verifikasi Lunas</button> <button class="sbtn danger" onclick="setPaySt('${o.id}','Gagal')">✕ Gagal</button>`:''}
+       ${o.paySt==='Gagal'?`<button class="sbtn" onclick="setPaySt('${o.id}','Menunggu Verifikasi')">↩ Reset</button>`:''}
+       ${(o.paySt||'').startsWith('COD')&&o.st==='Selesai'?`<button class="sbtn grn" onclick="setPaySt('${o.id}','Lunas')">✓ COD Diterima</button>`:''}
+       ${o.paySt==='Lunas'?'<span class="lbl">selesai</span>':''}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:#999;padding:26px">Belum ada transaksi — keuangan kosong, otomatis terisi saat customer bayar</td></tr>');
+  // kategori real
+  const kat={};
+  lunas.forEach(o=>{const m=(o.item||'').toLowerCase();const k=m.includes('poncho')||m.includes('osaka')?'PVC Rubber':m.includes('nylon')||m.includes('phantom')||m.includes('hydro')?'Nylon':'Karet';kat[k]=kat[k]||{n:0,v:0};kat[k].n++;kat[k].v+=o.total;});
+  const tk=document.getElementById('tKat');
+  if(tk)tk.innerHTML='<tr><th>Kategori</th><th>Terjual</th><th>Omzet</th></tr>'+(Object.keys(kat).length?Object.entries(kat).map(([k,v])=>`<tr><td>${k}</td><td>${v.n}</td><td class="mono">${rp(v.v)}</td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:#999;padding:20px">Belum ada transaksi</td></tr>');
+}
 /* ===== LAPORAN KE OWNER VIA WA ===== */
 function buildReport(){
-  const rev=ORD.filter(o=>o.st==='Selesai').reduce((s,o)=>s+o.total,0);
+  const rev=ORD.filter(o=>o.paySt==='Lunas').reduce((s,o)=>s+o.total,0);
   const revAll=ORD.reduce((s,o)=>s+o.total,0);
+  const piutang=ORD.filter(o=>o.paySt==='Belum Bayar'||o.paySt==='Menunggu Verifikasi').reduce((s,o)=>s+o.total,0);
   const c1=ORD.filter(o=>o.st==='Baru').length,c2=ORD.filter(o=>o.st==='Diproses').length,c3=ORD.filter(o=>o.st==='Dikirim').length;
   const low=PRODS.filter(p=>p.stok<10);
   const tgl=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   return '*📊 LAPORAN HARIAN TEDUH*\n'+tgl+'\n\n'+
-  '*Omzet:*\n• Selesai: '+rp(rev)+'\n• Total (semua status): '+rp(revAll)+'\n\n'+
+  '*Omzet (LUNAS):* '+rp(rev)+'\n*Piutang (belum lunas):* '+rp(piutang)+'\n*Total transaksi:* '+rp(revAll)+'\n\n'+
+  '*Status pembayaran:*\n• Lunas: '+ORD.filter(o=>o.paySt==='Lunas').length+'\n• Menunggu verifikasi: '+ORD.filter(o=>o.paySt==='Menunggu Verifikasi').length+'\n• Belum bayar: '+ORD.filter(o=>o.paySt==='Belum Bayar').length+'\n\n'+
   '*Pesanan ('+ORD.length+'):*\n• Baru: '+c1+'\n• Diproses: '+c2+'\n• Dikirim: '+c3+'\n• Selesai: '+(ORD.length-c1-c2-c3)+'\n\n'+
   (low.length?'*⚠️ Stok menipis (<10):*\n'+low.map(p=>'• '+p.t+' — sisa '+p.stok).join('\n')+'\n\n':'')+
   '*Produk aktif:* '+PRODS.filter(p=>p.st==='Aktif').length+'/'+PRODS.length+'\n'+

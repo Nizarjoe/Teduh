@@ -23,9 +23,26 @@ if(req.method==='POST'&&u==='/api/order'){
       o.id='EXT-'+(1000+d.orders.length+1);
       o.tgl=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short'});
       o.st='Baru';
+      o.paySt=(o.bayar==='COD')?'COD (bayar di tempat)':'Belum Bayar';
+      o.paidAt=null;
       d.orders.unshift(o);
       writeData(d);
       json(res,200,{ok:true,id:o.id});
+    }catch(e){json(res,400,{ok:false,err:'Payload invalid'})}
+  });
+  return;
+}
+if(req.method==='POST'&&u==='/api/pay/verify'){
+  body(req,buf=>{
+    try{
+      const {id,st}=JSON.parse(buf.toString());
+      const d=readData();
+      const o=d.orders.find(x=>x.id===id);
+      if(!o)return json(res,404,{ok:false,err:'Order tidak ditemukan'});
+      o.paySt=st;
+      if(st==='Lunas')o.paidAt=new Date().toISOString();
+      writeData(d);
+      json(res,200,{ok:true});
     }catch(e){json(res,400,{ok:false,err:'Payload invalid'})}
   });
   return;
