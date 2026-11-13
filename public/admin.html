@@ -171,39 +171,21 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 
   <!-- ===== DASHBOARD ===== -->
   <div class="page on" id="p-dash">
-    <div class="kpis">
-      <div class="kpi"><small>Pendapatan Hari Ini</small><b>Rp 4.382.000</b><span class="d up">▲ 12% vs kemarin</span></div>
-      <div class="kpi"><small>Pesanan Baru</small><b>7</b><span class="d up">▲ 2 belum diproses</span></div>
-      <div class="kpi"><small>Pesanan Bulan Ini</small><b>112</b><span class="d up">▲ 8% vs bulan lalu</span></div>
-      <div class="kpi"><small>Pengunjung</small><b>1.204</b><span class="d dn">▼ 3% vs kemarin</span></div>
-    </div>
+    <div class="kpis" id="dashKpis"></div>
     <div class="row2">
       <div class="panel"><h3>Penjualan 7 Hari Terakhir</h3>
         <div class="bars" id="chart"></div>
       </div>
       <div class="panel"><h3>Status Pesanan</h3>
-        <div class="donutwrap">
-          <div class="donut"></div>
-          <div class="dleg">
-            <div><i style="background:var(--grn)"></i>Selesai — <b>62</b></div>
-            <div><i style="background:var(--amb)"></i>Dikirim — <b>22</b></div>
-            <div><i style="background:var(--blu)"></i>Diproses — <b>17</b></div>
-            <div><i style="background:var(--red)"></i>Perlu Diperhatikan — <b>11</b></div>
-          </div>
-        </div>
+        <div class="donutwrap" id="dashDonut"></div>
       </div>
     </div>
     <div class="row2e">
       <div class="panel"><h3>Pesanan Terbaru</h3>
-        <table class="tbl"><tr><th>Order</th><th>Pelanggan</th><th>Total</th><th>Status</th></tr>
-        <tr><td class="mono">EXT-1042</td><td>Budi S.</td><td class="mono">Rp 965.200</td><td><span class="badge b-amb">Dikirim</span></td></tr>
-        <tr><td class="mono">EXT-1041</td><td>Sari W.</td><td class="mono">Rp 467.600</td><td><span class="badge b-blu">Diproses</span></td></tr>
-        <tr><td class="mono">EXT-1040</td><td>Andi M.</td><td class="mono">Rp 1.415.200</td><td><span class="badge b-grn">Selesai</span></td></tr></table>
+        <table class="tbl" id="dashRecent"></table>
       </div>
       <div class="panel"><h3>Aktivitas Terakhir</h3>
-        <div class="act"><div class="ic">📦</div><div>Stok "Teduh Touring Pro 2XL" <b>tinggal 4</b><small>10 menit lalu</small></div></div>
-        <div class="act"><div class="ic">🏷️</div><div>Promo <b>MUSIMHUJAN30</b> dipakai 24× hari ini<small>1 jam lalu</small></div></div>
-        <div class="act"><div class="ic">⭐</div><div>Ulasan baru ★5 pada Teduh Plus<small>3 jam lalu</small></div></div>
+        <div id="dashAct"><div class="act"><div class="ic">🕒</div><div>Belum ada aktivitas — akan terisi otomatis dari transaksi nyata<small>—</small></div></div></div>
       </div>
     </div>
   </div>
@@ -326,7 +308,12 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
         <div><label>WhatsApp Admin</label><input value="+62 851-6585-9837"></div>
         <div class="full"><label>Alamat</label><input value="Jl. Kebon Jeruk IX No.26, Jakarta Barat 11160"></div>
         <div><label>Minimal Gratis Ongkir</label><input value="Rp 500.000"></div>
-        <div><label>Slot Foto Lokasi Toko</label><div class="wx" style="height:46px;border-radius:8px">PETA / FOTO</div></div>
+        <div class="full"><label>Foto Lokasi Toko (tampil di footer/halaman customer)</label>
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+            <div class="wx" id="ctLocPrev" style="height:60px;min-width:120px">PETA / FOTO</div>
+            <label class="sbtn" style="cursor:pointer;display:inline-block">📤 Upload Foto Lokasi<input type="file" id="ctLocFile" accept="image/*" style="display:none"></label>
+          </div>
+        </div>
       </div>
       <button class="pbtn grn" style="margin-top:14px" onclick="toast('Pengaturan tersimpan (demo)')">💾 Simpan</button>
     </div>
@@ -368,9 +355,13 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
           <div class="wx" id="ctHeroPrev" style="height:70px">[ HERO BANNER ]</div>
           <label class="sbtn" style="cursor:pointer;display:inline-block;margin-top:6px">📤 Ganti Foto<input type="file" id="ctHeroFile" accept="image/*" style="display:none"></label>
         </div>
-        <div><label>Banner Promo — Upload Foto</label>
-          <div class="wx" id="ctBannerPrev" style="height:70px">[ BANNER PROMO ]</div>
+        <div><label>Banner Promo 1 — Upload Foto</label>
+          <div class="wx" id="ctBannerPrev" style="height:70px">[ BANNER PROMO 1 ]</div>
           <label class="sbtn" style="cursor:pointer;display:inline-block;margin-top:6px">📤 Ganti Foto<input type="file" id="ctBannerFile" accept="image/*" style="display:none"></label>
+        </div>
+        <div><label>Banner Promo 2 — Upload Foto</label>
+          <div class="wx" id="ctBanner2Prev" style="height:70px">[ BANNER PROMO 2 ]</div>
+          <label class="sbtn" style="cursor:pointer;display:inline-block;margin-top:6px">📤 Ganti Foto<input type="file" id="ctBanner2File" accept="image/*" style="display:none"></label>
         </div>
         <div><label>Foto QRIS (fallback pembayaran)</label>
           <div class="wx" id="ctQrisPrev" style="height:70px">[ QRIS ]</div>
@@ -429,26 +420,45 @@ document.querySelectorAll('#sbNav a').forEach(a=>a.onclick=()=>{
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.getElementById('p-'+a.dataset.p).classList.add('on');
   document.getElementById('pgTitle').textContent=TITLES[a.dataset.p];
+  if(a.dataset.p==='dash'&&typeof drawDash==='function'){drawDash();renderChart();}
   closeSb();window.scrollTo({top:0});
 });
 function openSb(){document.getElementById('sb').classList.add('open');document.getElementById('bd').classList.add('on');}
 function closeSb(){document.getElementById('sb').classList.remove('open');document.getElementById('bd').classList.remove('on');}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200);}
 
-/* ===== CHART ===== */
-const CH=[{d:'Sen',v:4.1},{d:'Sel',v:3.2},{d:'Rab',v:5.6},{d:'Kam',v:4.8},{d:'Jum',v:6.9},{d:'Sab',v:8.2},{d:'Min',v:4.4}];
-const mx=Math.max(...CH.map(c=>c.v));
-document.getElementById('chart').innerHTML=CH.map(c=>`<div class="g"><div class="b" style="height:${c.v/mx*100}%"><span>${c.v}jt</span></div><div class="xl">${c.d}</div></div>`).join('');
+/* ===== CHART + DASHBOARD REAL ===== */
+function renderChart(){
+  const el=document.getElementById('chart');if(!el)return;
+  const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));return d;});
+  const labels=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  const vals=days.map(d=>ORD.filter(o=>o.paySt==='Lunas'&&o.tgl===d.toLocaleDateString('id-ID',{day:'numeric',month:'short'})).reduce((s,o)=>s+o.total,0));
+  const mx=Math.max(...vals,1);
+  el.innerHTML=vals.map((v,i)=>`<div class="g"><div class="b" style="height:${v/mx*100}%;min-height:3px"><span>${v?(v/1000).toFixed(0)+'rb':''}</span></div><div class="xl">${labels[days[i].getDay()]}</div></div>`).join('');
+}
+function drawDash(){
+  const kp=document.getElementById('dashKpis');if(!kp)return;
+  const today=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+  const revToday=ORD.filter(o=>o.tgl===today&&o.paySt==='Lunas').reduce((s,o)=>s+o.total,0);
+  const baru=ORD.filter(o=>o.st==='Baru').length;
+  const revAll=ORD.filter(o=>o.paySt==='Lunas').reduce((s,o)=>s+o.total,0);
+  kp.innerHTML=`
+   <div class="kpi"><small>Pendapatan Hari Ini</small><b>${rp(revToday)}</b><span class="d">${revToday?'':'belum ada transaksi hari ini'}</span></div>
+   <div class="kpi"><small>Pesanan Baru</small><b>${baru}</b><span class="d">${baru?baru+' perlu diproses':'tidak ada pesanan baru'}</span></div>
+   <div class="kpi"><small>Total Omzet (Lunas)</small><b>${rp(revAll)}</b><span class="d">${ORD.length} pesanan masuk</span></div>
+   <div class="kpi"><small>Produk Aktif</small><b>${PRODS.filter(p=>p.st==='Aktif').length}/${PRODS.length}</b><span class="d">katalog toko</span></div>`;
+  const cnt={};ORD.forEach(o=>cnt[o.st]=(cnt[o.st]||0)+1);
+  const colors={'Selesai':'var(--grn)','Dikirim':'var(--amb)','Diproses':'var(--blu)','Baru':'var(--red)','Dibatalkan':'#999'};
+  const dn=document.getElementById('dashDonut');
+  if(dn)dn.innerHTML=ORD.length?`<div class="donut" style="background:conic-gradient(${Object.entries(cnt).map(([k,v],i)=>{const tot=ORD.length;const prev=Object.values(cnt).slice(0,i).reduce((s,x)=>s+x,0);return colors[k]+' '+Math.round(prev/tot*100)+'% '+Math.round((prev+v)/tot*100)+'%';}).join(',')});"></div><div class="dleg">${Object.entries(cnt).map(([k,v])=>`<div><i style="background:${colors[k]||'#999'}"></i>${k} — <b>${v}</b></div>`).join('')}</div>`:'<div class="lbl" style="padding:20px">Belum ada pesanan — dashboard otomatis terisi saat customer checkout</div>';
+  const rc=document.getElementById('dashRecent');
+  if(rc)rc.innerHTML='<tr><th>Order</th><th>Pelanggan</th><th>Total</th><th>Status</th></tr>'+(ORD.length?ORD.slice(0,5).map(o=>`<tr><td class="mono"><b>${o.id}</b><br><small style="color:#999">${o.tgl}</small></td><td><b>${o.nama}</b></td><td class="mono">${rp(o.total)}</td><td><span class="badge ${stBadge(o.st)}">${o.st}</span></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:#999;padding:26px">Belum ada pesanan</td></tr>');
+}
+/* hook drawOrders → refresh dash juga */
+const _drawOrders0=drawOrders;
 
 /* ===== ORDERS DEMO DATA ===== */
-const ORD=[
- {id:'EXT-1042',nama:'Budi Santoso',tgl:'12 Nov',total:965200,st:'Dikirim',kirim:'Reguler',bayar:'QRIS',item:'2× Teduh Plus (Hitam, XL)'},
- {id:'EXT-1041',nama:'Sari Wulandari',tgl:'12 Nov',total:467600,st:'Diproses',kirim:'Kilat',bayar:'Transfer',item:'1× Teduh Plus (Navy, L)'},
- {id:'EXT-1040',nama:'Andi Makmur',tgl:'11 Nov',total:1415200,st:'Selesai',kirim:'Instant',bayar:'COD',item:'2× Teduh Touring + Poncho'},
- {id:'EXT-1039',nama:'Dedi Kurnia',tgl:'11 Nov',total:256200,st:'Baru',kirim:'Reguler',bayar:'QRIS',item:'1× Teduh Tipe 04 (Hitam)'},
- {id:'EXT-1038',nama:'Rina Hapsari',tgl:'10 Nov',total:184100,st:'Dibatalkan',kirim:'Reguler',bayar:'—',item:'1× Teduh Osaka (Abu)'},
- {id:'EXT-1037',nama:'Joko Prasetyo',tgl:'10 Nov',total:823200,st:'Dikirim',kirim:'Kilat',bayar:'Transfer',item:'1× Teduh Phantom (Hitam)'},
- {id:'EXT-1036',nama:'Budi Santoso',tgl:'09 Nov',total:443800,st:'Selesai',kirim:'Reguler',bayar:'QRIS',item:'1× Teduh Karet 02 (Hitam, XL)'}];
+const ORD=[];
 const stBadge=s=>({'Baru':'b-blu','Diproses':'b-blu','Dikirim':'b-amb','Selesai':'b-grn','Dibatalkan':'b-red'}[s]||'b-gry');
 function drawOrders(){
   const q=(document.getElementById('ordQ').value||'').toLowerCase(),f=document.getElementById('ordF').value;
@@ -463,7 +473,7 @@ function adv(id){
   const o=ORD.find(x=>x.id===id);const flow={'Baru':'Diproses','Diproses':'Dikirim','Dikirim':'Selesai'};
   o.st=flow[o.st]||o.st;drawOrders();toast(o.id+' → '+o.st+' ✓');
 }
-drawOrders();if(typeof drawFin==='function')drawFin();
+drawOrders();
 
 /* ===== PRODUCTS ADMIN ===== */
 let PRODS=[
@@ -531,6 +541,8 @@ function syncFromServer(){
     if(j.settings){if(j.settings.payment)PAY=j.settings.payment;if(j.settings.waOwner){OWNER=j.settings.waOwner;const ow=document.getElementById('ownerWa');if(ow)ow.textContent='+'+OWNER.replace(/^62/,'62 ');}}
     if(typeof drawPay==='function')drawPay();
     if(typeof drawFin==='function')drawFin();
+    if(typeof drawDash==='function')drawDash();
+    if(typeof renderChart==='function')renderChart();
   }).catch(()=>{});
 }
 function pushToServer(patch){
@@ -546,14 +558,14 @@ function drawPayInfo(){
   if(el)el.textContent=PAY.gateway+' ('+PAY.mode+') · Transfer '+PAY.bank.nama+' '+PAY.bank.no+' a.n. '+PAY.bank.an;
 }
 /* ===== KONTEN HALAMAN CUSTOMER ===== */
-let CONTENT={ann:'',annOn:true,heroImg:'',bannerImg:'',qrisImg:''};
+let CONTENT={ann:'',annOn:true,heroImg:'',bannerImg:'',banner2Img:'',qrisImg:'',locImg:''};
 function fillContentForm(){
   const f=id=>document.getElementById(id);
   if(!f('ctAnn'))return;
   f('ctAnn').value=CONTENT.ann||'';
   f('ctAnnOn').classList.toggle('on',CONTENT.annOn!==false);
   const setPrev=(id,img)=>{const el=f(id);if(!el)return;if(img){el.innerHTML='<img src="'+img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">';}else{el.textContent='[ '+id.replace('ct','').replace('Prev','').toUpperCase()+' ]';}};
-  setPrev('ctHeroPrev',CONTENT.heroImg);setPrev('ctBannerPrev',CONTENT.bannerImg);setPrev('ctQrisPrev',CONTENT.qrisImg);
+  setPrev('ctHeroPrev',CONTENT.heroImg);setPrev('ctBannerPrev',CONTENT.bannerImg);setPrev('ctBanner2Prev',CONTENT.banner2Img);setPrev('ctQrisPrev',CONTENT.qrisImg);setPrev('ctLocPrev',CONTENT.locImg);
 }
 function saveContent(){
   CONTENT.ann=document.getElementById('ctAnn').value.trim();
@@ -568,7 +580,7 @@ function hookContentUpload(fid,key){
     uploadImage(f,'customer',u=>{CONTENT[key]=u;fillContentForm();toast('Foto diperbarui — jangan lupa "Terapkan ke Toko"');e.target.value='';});
   });
 }
-hookContentUpload('ctHeroFile','heroImg');hookContentUpload('ctBannerFile','bannerImg');hookContentUpload('ctQrisFile','qrisImg');
+hookContentUpload('ctHeroFile','heroImg');hookContentUpload('ctBannerFile','bannerImg');hookContentUpload('ctBanner2File','banner2Img');hookContentUpload('ctQrisFile','qrisImg');hookContentUpload('ctLocFile','locImg');
 function savePay(){
   PAY.gateway=document.getElementById('payGw').value;
   PAY.mode=document.getElementById('payMode').value.startsWith('Production')?'production':'sandbox';
@@ -699,6 +711,7 @@ document.getElementById('upFile').addEventListener('change',e=>{
     toast('Foto terupload ✓');drawMedia();e.target.value='';
   });
 });
+if(typeof drawFin==='function')drawFin();if(typeof drawDash==='function')drawDash();if(typeof renderChart==='function')renderChart();
 // hook: saat tab media dibuka, gambar list
 const _obs=new MutationObserver(()=>{if(document.getElementById('p-media')&&document.getElementById('p-media').classList.contains('on'))drawMedia();});
 const pm=document.getElementById('p-media'); if(pm)_obs.observe(pm,{attributes:true,attributeFilter:['class']});

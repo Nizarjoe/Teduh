@@ -135,8 +135,8 @@ footer{border-top:2px solid var(--ink);background:#fff;margin-top:50px}
 
 <header><div class="hd">
   <div class="logo"><span class="dot"></span>TEDUH <small style="font-weight:400;color:#888;font-size:13px">/ extrime</small></div>
-  <div class="sbar">🔍 &nbsp;search-input<span style="margin-left:auto;font-family:'JetBrains Mono';font-size:9.5px;color:#bbb;letter-spacing:1px">FIELD</span></div>
-  <div class="icbtn" onclick="toast('★ account-icon')">👤</div>
+  <div class="sbar">🔍 <input id="qInput" placeholder="Cari produk… (Enter)" style="flex:1;background:transparent;border:none;outline:none;font-family:inherit;font-size:13px;color:inherit"><span id="qGo" style="margin-left:auto;font-family:'JetBrains Mono';font-size:9.5px;color:#bbb;letter-spacing:1px;cursor:pointer">CARI ↵</span></div>
+  <div class="icbtn" onclick="toast('👤 Login pelanggan — hubungi admin via WA untuk akun')">👤</div>
   <div class="icbtn" onclick="nav('cart')">🛒<i id="cartN">0</i></div>
 </div></header>
 
@@ -234,8 +234,8 @@ footer{border-top:2px solid var(--ink);background:#fff;margin-top:50px}
       <div class="swrow"><div class="swl">Jumlah</div>
         <div class="qty" style="width:max-content"><button onclick="toast('-')">−</button><input value="1" readonly><button onclick="toast('+')">+</button></div></div>
       <div class="buyrow">
-        <button class="btn pri" style="flex:1;min-width:170px" onclick="toast('→ masuk keranjang')">+ TAMBAH KERANJANG</button>
-        <button class="btn" style="flex:1;min-width:150px" onclick="toast('→ checkout langsung')">BELI SEKARANG</button>
+        <button class="btn pri" style="flex:1;min-width:170px" onclick="addToCart()">+ TAMBAH KERANJANG</button>
+        <button class="btn" style="flex:1;min-width:150px" onclick="addToCart(1)">BELI SEKARANG</button>
       </div>
       <div class="mut" style="margin-top:12px">💬 link fallback: tanya admin via WhatsApp</div>
       <div class="tworow">
@@ -336,7 +336,11 @@ const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
 let cart=0;let WA_ADMIN='6285165859837';
 
 function applyProdImgs(){
-  const P0=P.find(p=>p.main)||P[0];
+  const P0=P[CURP]||P.find(p=>p.main)||P[0];
+  const tt=document.querySelector('#pg-product .ptitle');
+  if(tt&&P0.t)tt.textContent=P0.t;
+  const pr=document.querySelector('#pg-product .pr');
+  if(pr&&P0.p)pr.innerHTML='<b>'+rp(P0.p)+'</b> <s>'+rp(P0.w||P0.p)+'</s>';
   const imgs=(P0.imgs&&P0.imgs.length)?P0.imgs:(P0.img?[P0.img]:[]);
   const main=document.querySelector('#pg-product .gal .wx');
   if(main&&imgs.length){main.innerHTML='<img src="'+imgs[0]+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><button class="gnav l">‹</button><button class="gnav r">›</button><span class="badge">-'+Math.round((P0.w-P0.p)/P0.w*100)+'%</span>';
@@ -348,6 +352,7 @@ function applyProdImgs(){
     if(R)R.onclick=()=>{gi=(gi+1)%imgs.length;main.querySelector('img').src=imgs[gi];};
   }
 }
+let CURP=0;
 function nav(p){if(p==='product')setTimeout(applyProdImgs,30);
   document.querySelectorAll('.page').forEach(e=>e.classList.remove('on'));
   const el=document.getElementById('pg-'+p==='pg-collection'?'pg-collection':('pg-'+p));
@@ -362,7 +367,8 @@ function tab(e,id){document.querySelectorAll('.tabbtns button').forEach(b=>b.cla
 
 function card(p){
   const off=Math.round((p.w-p.p)/p.w*100);
-  return `<div class="wb pcard" onclick="${p.main?`nav('product')`:`toast('wireframe — ${p.t}')`}">
+  const idx=P.indexOf(p);
+  return `<div class="wb pcard" onclick="CURP=${idx};nav('product')">
    ${p.tag==='sale'?`<span class="badge">-${off}%</span>`:''}
    <div class="im wx">${p.img?`<img src="${p.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">${(p.imgs&&p.imgs.length>1)?`<span class="badge" style="position:absolute;bottom:6px;right:6px">${p.imgs.length} foto</span>`:''}`:(p.tag==='sale'?'FOTO PRODUK':'FOTO PRODUK')}</div>
    <div class="in"><div class="rt">★ ${p.r} · ${p.sold} terjual</div><h3>${p.t}</h3>
@@ -372,11 +378,22 @@ function draw(id,list){const el=document.getElementById(id);if(el)el.innerHTML=l
 fetch('/api/data').then(r=>r.json()).then(j=>{
   if(j.ok&&j.content){
     const ct=j.content;
-    if(ct.annOn!==false&&ct.ann){document.querySelectorAll('.spec-ann, .annbar, [class*=ann]').forEach(e=>{e.textContent=ct.ann;});}
+    const ANN=document.querySelector('.spec-ann');
+    if(ct.annOn!==false&&ct.ann){document.querySelectorAll('.spec-ann').forEach(e=>{e.textContent=ct.ann;});}
+    else if(ct.annOn===false&&ANN){ANN.style.display='none';}
     const hero=document.querySelector('.hero');
-    if(hero&&ct.heroImg){hero.style.backgroundImage='linear-gradient(rgba(10,14,18,.55),rgba(10,14,18,.55)),url('+ct.heroImg+')';hero.style.backgroundSize='cover';hero.style.backgroundPosition='center';}
-    if(ct.bannerImg){document.querySelectorAll('.promogrid .wb, .promos .wb').forEach(e=>{e.style.backgroundImage='linear-gradient(rgba(10,14,18,.35),rgba(10,14,18,.35)),url('+ct.bannerImg+')';e.style.backgroundSize='cover';e.style.color='#fff';});}
+    if(hero&&ct.heroImg){
+      hero.style.backgroundImage='linear-gradient(rgba(10,14,18,.55),rgba(10,14,18,.55)),url('+ct.heroImg+')';
+      hero.style.backgroundSize='cover';hero.style.backgroundPosition='center';hero.style.borderRadius='10px';
+      const htxt=hero.querySelector('.txt');if(htxt)htxt.style.color='#fff';
+      const hp=hero.querySelector('p');if(hp)hp.style.color='#e5e7e9';
+    }
+    const promos=document.querySelectorAll('.strip2 .wb');
+    if(ct.bannerImg&&promos[0]){promos[0].style.backgroundImage='linear-gradient(rgba(10,14,18,.4),rgba(10,14,18,.4)),url('+ct.bannerImg+')';promos[0].style.backgroundSize='cover';promos[0].style.backgroundPosition='center';promos[0].style.color='#fff';promos[0].style.borderColor='transparent';}
+    if(ct.banner2Img&&promos[1]){promos[1].style.backgroundImage='linear-gradient(rgba(10,14,18,.4),rgba(10,14,18,.4)),url('+ct.banner2Img+')';promos[1].style.backgroundSize='cover';promos[1].style.backgroundPosition='center';promos[1].style.color='#fff';promos[1].style.borderColor='transparent';}
+    if(ct.locImg){const fp=document.querySelector('footer .ft > div:first-child p');if(fp)fp.innerHTML='<img src="'+ct.locImg+'" style="width:100%;max-width:220px;border-radius:8px;border:1px dashed #aaa;display:block;margin-bottom:6px">'+(fp.textContent);}
     window.__QRIS=ct.qrisImg||'';
+    window.__CONTENT=ct;
   }
   if(j.ok&&j.products&&j.products.length){
     j.products.forEach((p,i)=>{
@@ -419,6 +436,7 @@ function drawCart(){
   document.getElementById('freeHint').textContent=tot>=500000?'🎉 GRATIS ONGKIR AKTIF':'+Rp '+(500000-tot).toLocaleString('id-ID')+' lagi untuk gratis ongkir';
 }
 function chCart(d){cart=Math.max(1,cart+d);drawCart();}
+function addToCart(gotoCart){cart=Math.max(1,cart+1);drawCart();toast(gotoCart?'✅ Masuk keranjang — lanjut checkout':'✅ Masuk keranjang ('+cart+' item)');if(gotoCart)setTimeout(()=>nav('cart'),600);}
 /* add from product demo */
 document.querySelectorAll('.buyrow .btn')[0]?.addEventListener('click',()=>{cart=Math.max(1,cart+1);drawCart();});
 drawCart();
@@ -472,6 +490,47 @@ function submitCo(){
     cart=0;drawCart();document.getElementById('coBox').style.display='none';
   });
 }
+
+// Footer links berfungsi
+document.querySelectorAll('footer .ft a').forEach(a=>{
+  const t=a.textContent.toLowerCase();
+  a.style.cursor='pointer';
+  a.onclick=()=>{ 
+    if(t.includes('best'))nav('best');
+    else if(t.includes('sale'))nav('sale');
+    else if(t.includes('produk')||t.includes('semua'))nav('collection');
+    else if(t.includes('faq')||t.includes('cara'))nav('guide');
+    else if(t.includes('kontak'))window.open('https://wa.me/'+WA_ADMIN,'_blank');
+    else if(t.includes('lacak'))nav('cart');
+    else nav('guide');
+  };
+});
+// CTA hero
+document.querySelectorAll('.hero .btn').forEach((b,i)=>{
+  b.style.cursor='pointer';
+  b.onclick=()=>nav(i===0?'collection':'guide');
+});
+// newsletter
+const nf=document.querySelector('.fnews button');
+if(nf)nf.onclick=()=>{const inp=document.querySelector('.fnews input');if(inp&&inp.value.includes('@')){toast('✅ Terdaftar: '+inp.value);inp.value='';}else toast('⚠️ Isi email yang valid');};
+// search header: cari produk
+function doSearch(q){
+  q=(q||'').toLowerCase();
+  window.__Q=q;
+  nav('collection');
+  setTimeout(()=>{
+    const list=q?P.filter(p=>p.t.toLowerCase().includes(q)):P;
+    draw('g-col',list);
+    const sec=document.querySelector('#pg-collection .sect');
+    if(sec&&!list.length)sec.insertAdjacentHTML('beforeend','<div class="lbl" style="padding:20px">Tidak ada produk cocok dengan "'+q+'"</div>');
+  },50);
+}
+['qInput'].forEach(id=>{const inp=document.getElementById(id);if(!inp)return;
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')doSearch(inp.value);});
+  inp.addEventListener('input',()=>{if(inp.value.length>=2)doSearch(inp.value);else if(!inp.value){window.__Q='';draw('g-col',P);}});
+});
+
+document.getElementById('qGo').onclick=()=>{const inp=document.getElementById('qInput');if(inp)doSearch(inp.value);};
 </script>
 </body>
 </html>
