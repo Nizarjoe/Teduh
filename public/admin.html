@@ -241,22 +241,19 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
   <!-- ===== PROMOS ===== -->
   <div class="page" id="p-promos">
     <div class="panel"><h3>🏷️ Kode Kupon</h3>
-      <table class="tbl"><tr><th>Kode</th><th>Diskon</th><th>Min. Belanja</th><th>Dipakai</th><th>Status</th><th></th></tr>
-      <tr><td class="mono"><b>MUSIMHUJAN30</b></td><td>30%</td><td>Rp 300.000</td><td>24× hari ini</td><td><span class="badge b-grn">Aktif</span></td><td><button class="sbtn danger" onclick="toast('Kupon dimatikan (demo)')">Nonaktifkan</button></td></tr>
-      <tr><td class="mono"><b>GRATISONGKIR</b></td><td>Ongkir Rp 0</td><td>Rp 500.000</td><td>41× bulan ini</td><td><span class="badge b-grn">Aktif</span></td><td><button class="sbtn danger" onclick="toast('Kupon dimatikan (demo)')">Nonaktifkan</button></td></tr>
-      <tr><td class="mono"><b>RESSELLER10</b></td><td>10%</td><td>—</td><td>7×</td><td><span class="badge b-gry">Nonaktif</span></td><td><button class="sbtn" onclick="toast('Kupon diaktifkan (demo)')">Aktifkan</button></td></tr>
-      </table>
+      <table class="tbl" id="tKupon"></table>
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-        <input placeholder="KODE-BARU" style="padding:10px 14px;border:1px solid #ccc;border-radius:8px;font-family:'JetBrains Mono'">
-        <input type="number" placeholder="Diskon %" style="width:110px;padding:10px 14px;border:1px solid #ccc;border-radius:8px">
-        <button class="pbtn" onclick="toast('Kupon dibuat (demo)')">+ Buat Kupon</button>
+        <input id="kpKode" placeholder="KODE-BARU" style="padding:10px 14px;border:1px solid #ccc;border-radius:8px;font-family:'JetBrains Mono'">
+        <input id="kpDiskon" type="number" placeholder="Diskon %" style="width:110px;padding:10px 14px;border:1px solid #ccc;border-radius:8px">
+        <input id="kpMin" type="number" placeholder="Min. belanja (Rp)" style="width:150px;padding:10px 14px;border:1px solid #ccc;border-radius:8px">
+        <button class="pbtn" onclick="addKupon()">+ Buat Kupon</button>
       </div>
     </div>
-    <div class="panel"><h3>📣 Announcement Bar (toko)</h3>
-      <input style="width:100%;padding:11px 14px;border:1px solid #ccc;border-radius:8px;font-family:inherit" value="🔥 PROMO SPESIAL! DISKON SAMPAI 30% OTOMATIS DI CHECKOUT" id="annTxt">
+    <div class="panel"><h3>📣 Announcement Bar (toko — tampil di halaman customer)</h3>
+      <input style="width:100%;padding:11px 14px;border:1px solid #ccc;border-radius:8px;font-family:inherit" value="Gratis ongkir setiap pembelian minimal Rp 500.000" id="annTxt">
       <div style="display:flex;gap:12px;align-items:center;margin-top:12px;flex-wrap:wrap">
-        <button class="pbtn grn" onclick="toast('Announcement tersimpan (demo)')">💾 Simpan</button>
-        <div class="toggle">Tampilkan <span class="switch on" onclick="this.classList.toggle('on')"></span></div>
+        <button class="pbtn grn" onclick="saveAnn()">💾 Simpan & Tampilkan di Toko</button>
+        <div class="toggle">Tampilkan <span class="switch on" id="annSw" onclick="this.classList.toggle('on')"></span></div>
       </div>
     </div>
   </div>
@@ -537,7 +534,7 @@ function syncFromServer(){
     if(!j.ok)return;
     if(j.orders&&j.orders.length){ORD.length=0;j.orders.forEach(o=>ORD.push(o));drawOrders();}
     if(j.products&&j.products.length){PRODS.length=0;j.products.forEach(p=>PRODS.push(p));drawProds();}
-    if(j.content){CONTENT=Object.assign(CONTENT,j.content);fillContentForm();}
+    if(j.content){CONTENT=Object.assign(CONTENT,j.content);fillContentForm();if(document.getElementById('p-promos')?.classList.contains('on'))drawKupon();}
     if(j.settings){if(j.settings.payment)PAY=j.settings.payment;if(j.settings.waOwner){OWNER=j.settings.waOwner;const ow=document.getElementById('ownerWa');if(ow)ow.textContent='+'+OWNER.replace(/^62/,'62 ');}}
     if(typeof drawPay==='function')drawPay();
     if(typeof drawFin==='function')drawFin();
@@ -557,8 +554,51 @@ function drawPayInfo(){
   const el=document.getElementById('payInfo');
   if(el)el.textContent=PAY.gateway+' ('+PAY.mode+') · Transfer '+PAY.bank.nama+' '+PAY.bank.no+' a.n. '+PAY.bank.an;
 }
+/* ===== KUPON REAL (sinkron customer) ===== */
+function drawKupon(){
+  const t=document.getElementById('tKupon');if(!t)return;
+  const KS=CONTENT.coupons||[];
+  t.innerHTML='<tr><th>Kode</th><th>Diskon</th><th>Min. Belanja</th><th>Dipakai</th><th>Status</th><th></th></tr>'+
+   (KS.length?KS.map((k,i)=>`<tr><td class="mono"><b>${k.kode}</b></td><td>${k.diskon}%</td><td>${k.min?rp(k.min):'—'}</td><td>${k.dipakai||0}×</td>
+   <td><span class="badge ${k.on?'b-grn':'b-gry'}">${k.on?'Aktif':'Nonaktif'}</span></td>
+   <td><button class="sbtn ${k.on?'danger':''}" onclick="toggleKupon(${i})">${k.on?'Nonaktifkan':'Aktifkan'}</button> <button class="sbtn danger" onclick="delKupon(${i})">Hapus</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;color:#999;padding:22px">Belum ada kupon — buat di bawah</td></tr>');
+}
+function toggleKupon(i){
+  const KS=CONTENT.coupons;KS[i].on=!KS[i].on;
+  pushToServer({content:CONTENT});drawKupon();
+  toast('Kupon '+KS[i].kode+' → '+(KS[i].on?'AKTIF ✓ (berlaku di toko)':'NONAKTIF (tidak berlaku)'));
+}
+function delKupon(i){
+  if(!confirm('Hapus kupon '+CONTENT.coupons[i].kode+'?'))return;
+  CONTENT.coupons.splice(i,1);pushToServer({content:CONTENT});drawKupon();toast('Kupon dihapus ✓');
+}
+function addKupon(){
+  const kode=document.getElementById('kpKode').value.trim().toUpperCase();
+  const diskon=+document.getElementById('kpDiskon').value;
+  const min=+document.getElementById('kpMin').value||0;
+  if(!kode||!diskon){toast('⚠️ Isi kode & diskon %');return;}
+  if(diskon<1||diskon>90){toast('⚠️ Diskon 1–90%');return;}
+  CONTENT.coupons=CONTENT.coupons||[];
+  if(CONTENT.coupons.some(k=>k.kode===kode)){toast('⚠️ Kode sudah ada');return;}
+  CONTENT.coupons.push({kode,diskon,min,on:true,dipakai:0});
+  pushToServer({content:CONTENT});
+  document.getElementById('kpKode').value='';document.getElementById('kpDiskon').value='';document.getElementById('kpMin').value='';
+  drawKupon();toast('Kupon '+kode+' dibuat & langsung aktif ✓');
+}
+function saveAnn(){
+  CONTENT.ann=document.getElementById('annTxt').value.trim();
+  CONTENT.annOn=document.getElementById('annSw').classList.contains('on');
+  pushToServer({content:CONTENT});
+  toast('Announcement diperbarui — tampil di toko customer ✓');
+}
+/* hook: render kupon saat tab promo dibuka */
+const _promoObs=new MutationObserver(()=>{if(document.getElementById('p-promos')?.classList.contains('on')){drawKupon();const at=document.getElementById('annTxt');if(at&&CONTENT.ann)at.value=CONTENT.ann;const asw=document.getElementById('annSw');if(asw)asw.classList.toggle('on',CONTENT.annOn!==false);}});
+const pp=document.getElementById('p-promos'); if(pp)_promoObs.observe(pp,{attributes:true,attributeFilter:['class']});
 /* ===== KONTEN HALAMAN CUSTOMER ===== */
-let CONTENT={ann:'',annOn:true,heroImg:'',bannerImg:'',banner2Img:'',qrisImg:'',locImg:''};
+let CONTENT={ann:'',annOn:true,heroImg:'',bannerImg:'',banner2Img:'',qrisImg:'',locImg:'',coupons:[
+  {kode:'MUSIMHUJAN30',diskon:30,min:300000,on:true,dipakai:24},
+  {kode:'GRATISONGKIR',diskon:0,ongkir:true,min:500000,on:true,dipakai:41},
+  {kode:'RESSELLER10',diskon:10,min:0,on:false,dipakai:7}]};
 function fillContentForm(){
   const f=id=>document.getElementById(id);
   if(!f('ctAnn'))return;

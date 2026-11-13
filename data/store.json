@@ -1,1 +1,144 @@
-{"orders": [], "products": [{"t": "Jas Hujan Teduh Plus Serat PVC", "kat": "PVC Rubber", "p": 467600, "w": 654640, "stok": 42, "st": "Aktif", "d": "Flagship \u2014 press seal full, ramah ransel", "img": "/uploads/up_mwelrmi9lpkvb.jpg", "imgs": ["/uploads/up_mwelrmi9lpkvb.jpg", "/uploads/up_mwelryoynxj6o.png"]}, {"t": "Jas Hujan Teduh Karet 02", "kat": "Karet", "p": 443800, "w": 633999, "stok": 28, "st": "Aktif", "d": "Karet tebal klasik", "img": "/uploads/up_mwelqleh7io95.webp", "imgs": ["/uploads/up_mwelqleh7io95.webp", "/uploads/up_mwelquggabjvn.png", "/uploads/up_mwelqzqaivqc6.jpg"]}, {"t": "Jas Hujan Teduh Tipe 04", "kat": "Karet", "p": 256200, "w": 366000, "stok": 55, "st": "Aktif", "d": "Paling ramah di kantong"}, {"t": "Jas Hujan Teduh Tipe Osaka", "kat": "PVC Rubber", "p": 184100, "w": 262999, "stok": 60, "st": "Aktif", "d": "Ringkas untuk harian"}, {"t": "Teduh Phantom Polyester Nylon", "kat": "Nylon", "p": 823200, "w": 1152480, "stok": 12, "st": "Aktif", "d": "Premium lightweight"}, {"t": "Teduh Hydro Guard Polyurethane", "kat": "Nylon", "p": 1242500, "w": 1739500, "stok": 7, "st": "Aktif", "d": "Grade tertinggi"}, {"t": "Teduh Moto Poncho Lipat", "kat": "PVC Rubber", "p": 96500, "w": 135000, "stok": 9, "st": "Aktif", "d": "Cadangan di jok motor"}, {"t": "Teduh Touring Pro 2-in-1", "kat": "PVC Rubber", "p": 598000, "w": 812000, "stok": 4, "st": "Draf", "d": "Untuk perjalanan jauh"}], "settings": {"waOwner": "6285165859837", "waAdmin": "6285165859837", "payment": {"gateway": "Manual Transfer / QRIS", "mode": "production", "clientFallback": true, "bank": {"nama": "BCA", "no": "1234567890", "an": "TEDUH STORE"}, "midtransServerKey": "", "clientKey": "", "merchantId": ""}}, "content": {"ann": "Gratis ongkir setiap pembelian minimal Rp 500.000", "annOn": true, "coupons": [], "heroImg": "", "bannerImg": "", "qrisImg": "", "banner2Img": "", "locImg": ""}}
+{
+ "orders": [
+  {
+   "nama": "fddd",
+   "wa": "0876546363",
+   "alamat": "fgssfh",
+   "item": "1× Jas Hujan Teduh Plus",
+   "total": 467600,
+   "bayar": "COD",
+   "kirim": "Reguler",
+   "id": "EXT-1002",
+   "tgl": "13 Nov",
+   "st": "Baru",
+   "paySt": "COD (bayar di tempat)",
+   "paidAt": null
+  },
+  {
+   "nama": "fddd",
+   "wa": "0876546363",
+   "alamat": "fgssfh",
+   "item": "6× Jas Hujan Teduh Plus",
+   "total": 2805600,
+   "bayar": "Transfer Bank",
+   "kirim": "Reguler",
+   "id": "EXT-1001",
+   "tgl": "13 Nov",
+   "st": "Baru",
+   "paySt": "Menunggu Verifikasi",
+   "paidAt": null
+  }
+ ],
+ "products": [
+  {
+   "t": "Jas Hujan Teduh Plus Serat PVC",
+   "kat": "PVC Rubber",
+   "p": 467600,
+   "w": 654640,
+   "stok": 42,
+   "st": "Aktif",
+   "d": "Flagship — press seal full, ramah ransel",
+   "img": "/uploads/up_mwelrmi9lpkvb.jpg",
+   "imgs": [
+    "/uploads/up_mwelrmi9lpkvb.jpg",
+    "/uploads/up_mwelryoynxj6o.png"
+   ]
+  },
+  {
+   "t": "Jas Hujan Teduh Karet 02",
+   "kat": "Karet",
+   "p": 443800,
+   "w": 633999,
+   "stok": 28,
+   "st": "Aktif",
+   "d": "Karet tebal klasik",
+   "img": "/uploads/up_mwelqleh7io95.webp",
+   "imgs": [
+    "/uploads/up_mwelqleh7io95.webp",
+    "/uploads/up_mwelquggabjvn.png",
+    "/uploads/up_mwelqzqaivqc6.jpg"
+   ]
+  },
+  {
+   "t": "Jas Hujan Teduh Tipe 04",
+   "kat": "Karet",
+   "p": 256200,
+   "w": 366000,
+   "stok": 55,
+   "st": "Aktif",
+   "d": "Paling ramah di kantong"
+  },
+  {
+   "t": "Jas Hujan Teduh Tipe Osaka",
+   "kat": "PVC Rubber",
+   "p": 184100,
+   "w": 262999,
+   "stok": 60,
+   "st": "Aktif",
+   "d": "Ringkas untuk harian"
+  },
+  {
+   "t": "Teduh Phantom Polyester Nylon",
+   "kat": "Nylon",
+   "p": 823200,
+   "w": 1152480,
+   "stok": 12,
+   "st": "Aktif",
+   "d": "Premium lightweight"
+  },
+  {
+   "t": "Teduh Hydro Guard Polyurethane",
+   "kat": "Nylon",
+   "p": 1242500,
+   "w": 1739500,
+   "stok": 7,
+   "st": "Aktif",
+   "d": "Grade tertinggi"
+  },
+  {
+   "t": "Teduh Moto Poncho Lipat",
+   "kat": "PVC Rubber",
+   "p": 96500,
+   "w": 135000,
+   "stok": 9,
+   "st": "Aktif",
+   "d": "Cadangan di jok motor"
+  },
+  {
+   "t": "Teduh Touring Pro 2-in-1",
+   "kat": "PVC Rubber",
+   "p": 598000,
+   "w": 812000,
+   "stok": 4,
+   "st": "Draf",
+   "d": "Untuk perjalanan jauh"
+  }
+ ],
+ "settings": {
+  "waOwner": "6285165859837",
+  "waAdmin": "6285165859837",
+  "payment": {
+   "gateway": "Manual Transfer / QRIS",
+   "mode": "production",
+   "clientFallback": true,
+   "bank": {
+    "nama": "BCA",
+    "no": "1234567890",
+    "an": "TEDUH STORE"
+   },
+   "midtransServerKey": "",
+   "clientKey": "",
+   "merchantId": ""
+  }
+ },
+ "content": {
+  "ann": "Gratis ongkir setiap pembelian minimal Rp 500.000",
+  "annOn": true,
+  "coupons": [],
+  "heroImg": "",
+  "bannerImg": "",
+  "qrisImg": "",
+  "banner2Img": "",
+  "locImg": ""
+ }
+}

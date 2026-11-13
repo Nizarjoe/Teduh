@@ -50,8 +50,9 @@ nav a.on{color:var(--ink);border-color:var(--accent)}
 .sect h2{font-size:17px}
 .sect .more{font-family:'JetBrains Mono';font-size:11px;color:var(--accent);cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-.pcard{overflow:hidden;cursor:pointer}
-.pcard .im{aspect-ratio:1}
+.pcard{overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
+.pcard .in{display:block;padding:12px 14px;max-width:none;margin:0;overflow:visible}
+.pcard .im{aspect-ratio:1;position:relative;flex-shrink:0}
 .pcard .in{padding:10px 12px 14px}
 .pcard .rt{font-family:'JetBrains Mono';font-size:10px;color:#888}
 .pcard h3{font-size:13px;font-weight:600;margin:4px 0 6px;line-height:1.35}
@@ -285,6 +286,8 @@ footer{border-top:2px solid var(--ink);background:#fff;margin-top:50px}
           <input id="coAlamat" placeholder="Alamat lengkap pengiriman">
           <select id="coKirim"><option value="Reguler">Reguler (2-3 hari)</option><option value="Kilat">Kilat (1-2 hari)</option><option value="Instant">Instant (hari ini)</option></select>
           <select id="coBayar" onchange="drawPayCust()"><option value="QRIS">QRIS</option><option value="Transfer Bank">Transfer Bank</option><option value="Payment Gateway">Payment Gateway (Midtrans)</option><option value="COD">COD</option></select>
+          <div style="display:flex;gap:8px"><input id="coKupon" placeholder="Kode kupon (mis. MUSIMHUJAN30)" style="flex:1"><button class="btn" style="height:auto;padding:0 14px" onclick="applyKupon()">PAKAI</button></div>
+          <div id="kuponMsg" style="font-size:12px"></div>
           <div id="payDetail" style="font-size:12px;color:#555"></div>
         </div>
         <button class="btn pri" style="margin-top:8px" onclick="submitCo()">✅ KIRIM PESANAN</button>
@@ -461,6 +464,21 @@ function drawPayCust(){
     }
     else pd.textContent='💵 Bayar tunai saat paket tiba (COD).';
   });
+}
+let KUPON_AKTIF=null;
+function applyKupon(){
+  const kode=(document.getElementById('coKupon').value||'').trim().toUpperCase();
+  const msg=document.getElementById('kuponMsg');
+  const ks=(window.__CONTENT&&window.__CONTENT.coupons)||[];
+  const k=ks.find(x=>x.kode===kode);
+  if(!k){msg.style.color='#c0392b';msg.textContent='❌ Kode kupon tidak ditemukan';KUPON_AKTIF=null;return;}
+  if(!k.on){msg.style.color='#c0392b';msg.textContent='⛔ Kupon tidak aktif';KUPON_AKTIF=null;return;}
+  const tot=467600*cart;
+  if(k.min&&tot<k.min){msg.style.color='#c0392b';msg.textContent='⚠️ Min. belanja '+rp(k.min)+' untuk kupon ini';KUPON_AKTIF=null;return;}
+  KUPON_AKTIF=k;
+  const pot=Math.round(tot*k.diskon/100);
+  msg.style.color='#1d7a4f';
+  msg.textContent='✅ '+k.kode+' dipakai: −'+rp(pot)+(k.ongkir?' + gratis ongkir':'');
 }
 function submitCo(){
   const nama=document.getElementById('coNama').value.trim(),wa=document.getElementById('coWa').value.trim(),alamat=document.getElementById('coAlamat').value.trim();
