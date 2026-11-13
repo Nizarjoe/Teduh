@@ -8,6 +8,65 @@ function body(req,cb){let d=[];let n=0;req.on('data',c=>{n+=c.length;if(n>MAXB+1
 function json(res,code,obj){res.writeHead(code,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(obj));}
 const server=http.createServer((req,res)=>{
   const u=req.url.split('?')[0].toLowerCase();
+// === DATA STORE (produksi sederhana: data.json) ===
+const DATAF=path.join(__dirname,'data','store.json');
+if(!fs.existsSync(path.join(__dirname,'data')))fs.mkdirSync(path.join(__dirname,'data'));
+if(!fs.existsSync(DATAF))fs.writeFileSync(DATAF,JSON.stringify({orders:[],products:[],settings:{waOwner:'6285165859837',waAdmin:'6285165859837',payment:{gateway:'midtrans',mode:'sandbox',qris:null,bank:{nama:'BCA',no:'1234567890',an:'TEDUH STORE'}}}}));
+function readData(){return JSON.parse(fs.readFileSync(DATAF,'utf8'))}
+function writeData(d){fs.writeFileSync(DATAF,JSON.stringify(d,null,1))}
+if(req.method==='POST'&&u==='/api/order'){
+  body(req,buf=>{
+    try{
+      const o=JSON.parse(buf.toString());
+      if(!o.nama||!o.wa||!o.item)return json(res,400,{ok:false,err:'Data tidak lengkap'});
+      const d=readData();
+      o.id='EXT-'+(1000+d.orders.length+1);
+      o.tgl=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+      o.st='Baru';
+      d.orders.unshift(o);
+      writeData(d);
+      json(res,200,{ok:true,id:o.id});
+    }catch(e){json(res,400,{ok:false,err:'Payload invalid'})}
+  });
+  return;
+}
+if(req.method==='GET'&&u==='/api/data'){
+  const d=readData();
+  return json(res,200,{ok:true,orders:d.orders,products:d.products,settings:{waOwner:d.settings.waOwner,waAdmin:d.settings.waAdmin,payment:{gateway:d.settings.payment.gateway,mode:d.settings.payment.mode,bank:d.settings.payment.bank}}});
+}
+if(req.method==='POST'&&u==='/api/data'){
+  body(req,buf=>{
+    try{
+      const patch=JSON.parse(buf.toString());
+      const d=readData();
+      if(patch.orders)d.orders=patch.orders;
+      if(patch.products)d.products=patch.products;
+      if(patch.settings)Object.assign(d.settings,patch.settings);
+      writeData(d);
+      json(res,200,{ok:true});
+    }catch(e){json(res,400,{ok:false,err:'Payload invalid'})}
+  });
+  return;
+}
+// Midtrans Snap token (sandbox) — server-side
+if(req.method==='POST'&&u==='/api/pay/token'){
+  body(req,buf=>{
+    try{
+      const {amount,orderId}=JSON.parse(buf.toString());
+      const d=readData();
+      const key=d.settings.payment.midtransServerKey||'';
+      if(!key)return json(res,200,{ok:false,mode:'manual',msg:'Gateway belum diisi server key — fallback transfer manual/QRIS'});
+      const auth=Buffer.from(key+':').toString('base64');
+      const opt={method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','Authorization':'Basic '+auth},
+        body:JSON.stringify({transaction_details:{order_id:orderId||('EXT-'+Date.now()),gross_amount:Math.max(1,Math.round(amount))}})};
+      fetch('https://app.sandbox.midtrans.com/snap/v1/transactions',opt)
+        .then(r=>r.json()).then(j=>json(res,200,{ok:true,...j}))
+        .catch(e=>json(res,502,{ok:false,err:String(e)}));
+    }catch(e){json(res,400,{ok:false,err:'Payload invalid'})}
+  });
+  return;
+}
+
   const ext=path.extname(u);
   // === UPLOAD endpoint (POST /api/upload) ===
   if(req.method==='POST'&&u==='/api/upload'){

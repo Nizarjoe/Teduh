@@ -286,6 +286,16 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 
   <!-- ===== REPORTS ===== -->
   <div class="page" id="p-reports">
+    <div class="panel" style="margin-bottom:14px"><h3>📤 Laporan Harian ke Owner (WhatsApp)</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button class="pbtn grn" onclick="sendReport()">📝 Buat Laporan</button>
+        <button class="pbtn" onclick="waReport()">💬 Kirim ke Owner via WA</button>
+        <span style="font-size:12px;color:var(--mut)">Tujuan: <b id="ownerWa">+62 851-6585-9837</b></span>
+      </div>
+      <div id="repBox" style="display:none">
+        <pre id="repPrev" style="background:#f7f7f9;border:1px solid #e3e3e8;border-radius:10px;padding:12px;font-size:12px;white-space:pre-wrap;margin-top:10px"></pre>
+      </div>
+    </div>
     <div class="kpis">
       <div class="kpi"><small>Omzet Bulan Ini</small><b>Rp 58.4jt</b><span class="d up">▲ 8%</span></div>
       <div class="kpi"><small>Produk Terlaris</small><b>Teduh Plus</b><span class="d">38 terjual</span></div>
@@ -320,6 +330,22 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
         <div><label>Slot Foto Lokasi Toko</label><div class="wx" style="height:46px;border-radius:8px">PETA / FOTO</div></div>
       </div>
       <button class="pbtn grn" style="margin-top:14px" onclick="toast('Pengaturan tersimpan (demo)')">💾 Simpan</button>
+    </div>
+    <div class="panel"><h3>💳 Payment Gateway</h3>
+      <div class="frm">
+        <div><label>Gateway</label><select id="payGw" onchange="drawPayInfo()"><option>Midtrans</option><option>Manual Transfer / QRIS</option></select></div>
+        <div><label>Mode</label><select id="payMode"><option>Sandbox (uji coba)</option><option>Production (live)</option></select></div>
+        <div class="full"><label>Midtrans Server Key (production/sandbox)</label><input id="payKey" type="password" placeholder="Mid-server-key-… (disimpan di server, tidak tampil utuh)"></div>
+        <div><label>Bank Transfer</label><input id="payBank" placeholder="BCA"></div>
+        <div><label>No. Rekening</label><input id="payBankNo" placeholder="1234567890"></div>
+        <div><label>a.n.</label><input id="payBankAn" placeholder="TEDUH STORE"></div>
+        <div class="full"><label>WhatsApp Owner (laporan)</label><input id="setOwner" placeholder="6285165859837"></div>
+        <div class="full"><label>WhatsApp Admin (notifikasi order)</label><input id="setAdmin" placeholder="6285165859837"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center">
+        <button class="pbtn grn" onclick="savePay()">💾 Simpan Pembayaran</button>
+        <span id="payInfo" style="font-size:12px;color:var(--mut)"></span>
+      </div>
     </div>
     <div class="panel"><h3>🔐 Pengguna Admin</h3>
       <table class="tbl"><tr><th>Username</th><th>Role</th><th>Akses</th></tr>
@@ -366,7 +392,7 @@ function doLogin(){
     document.getElementById('ava').textContent=u.n[0].toUpperCase();
     ['promos','settings','custs','media'].forEach(k=>{const el=document.querySelector('[data-p="'+k+'"]');if(el)el.style.display='';});document.getElementById('pfFile').disabled=false;
     if(u.role==='Staff'){['promos','settings','custs','media'].forEach(k=>{const el=document.querySelector('[data-p="'+k+'"]');if(el)el.style.display='none';});document.getElementById('pfFile').disabled=true;}
-    toast('Selamat datang, '+u.n+'! 👋');
+    syncFromServer();toast('Selamat datang, '+u.n+'! 👋');
   }else{document.getElementById('lErr').style.display='block';}
 }
 document.getElementById('lgPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
@@ -465,10 +491,69 @@ function saveProd(){
   const obj={t:nama,kat:document.getElementById('pfKat').value,p:h,w:+document.getElementById('pfWas').value||h,stok:+document.getElementById('pfStok').value||0,st:document.getElementById('pfStatus').value,d:document.getElementById('pfDesc').value.trim(),img:pfImg||''};
   if(editIdx>=0){PRODS[editIdx]=obj;toast('Produk diupdate ✓');}
   else{PRODS.push(obj);toast('Produk ditambahkan ✓');}
+  pushToServer({products:PRODS});
   editIdx=-1;document.getElementById('pform').style.display='none';drawProds();
 }
 function delProd(i){if(confirm('Hapus '+PRODS[i].t+'?')){PRODS.splice(i,1);drawProds();toast('Produk dihapus');}}
 drawProds();
+
+
+/* ===== SINKRONISASI SERVER (produksi) ===== */
+function syncFromServer(){
+  fetch('/api/data').then(r=>r.json()).then(j=>{
+    if(!j.ok)return;
+    if(j.orders&&j.orders.length){ORD.length=0;j.orders.forEach(o=>ORD.push(o));drawOrders();}
+    if(j.products&&j.products.length){PRODS.length=0;j.products.forEach(p=>PRODS.push(p));drawProds();}
+    if(j.settings){if(j.settings.payment)PAY=j.settings.payment;if(j.settings.waOwner){OWNER=j.settings.waOwner;const ow=document.getElementById('ownerWa');if(ow)ow.textContent='+'+OWNER.replace(/^62/,'62 ');}}
+    if(typeof drawPay==='function')drawPay();
+  }).catch(()=>{});
+}
+function pushToServer(patch){
+  fetch('/api/data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)}).catch(()=>{});
+}
+let PAY={gateway:'midtrans',mode:'sandbox',bank:{nama:'BCA',no:'1234567890',an:'TEDUH STORE'}};
+function drawPay(){
+  const el=document.getElementById('payInfo');
+  if(el)el.textContent=PAY.gateway+' ('+PAY.mode+') · Transfer '+PAY.bank.nama+' '+PAY.bank.no+' a.n. '+PAY.bank.an;
+}
+function drawPayInfo(){
+  const el=document.getElementById('payInfo');
+  if(el)el.textContent=PAY.gateway+' ('+PAY.mode+') · Transfer '+PAY.bank.nama+' '+PAY.bank.no+' a.n. '+PAY.bank.an;
+}
+function savePay(){
+  PAY.gateway=document.getElementById('payGw').value;
+  PAY.mode=document.getElementById('payMode').value.startsWith('Production')?'production':'sandbox';
+  PAY.midtransServerKey=document.getElementById('payKey').value||PAY.midtransServerKey||'';
+  PAY.bank={nama:document.getElementById('payBank').value||PAY.bank.nama,no:document.getElementById('payBankNo').value||PAY.bank.no,an:document.getElementById('payBankAn').value||PAY.bank.an};
+  const st={};
+  if(document.getElementById('setOwner').value)st.waOwner=document.getElementById('setOwner').value.replace(/\D/g,'');
+  if(document.getElementById('setAdmin').value)st.waAdmin=document.getElementById('setAdmin').value.replace(/\D/g,'');
+  pushToServer({settings:Object.assign({payment:PAY},st)});
+  drawPayInfo();toast('Pengaturan pembayaran tersimpan ✓');
+}
+/* ===== LAPORAN KE OWNER VIA WA ===== */
+function buildReport(){
+  const rev=ORD.filter(o=>o.st==='Selesai').reduce((s,o)=>s+o.total,0);
+  const revAll=ORD.reduce((s,o)=>s+o.total,0);
+  const c1=ORD.filter(o=>o.st==='Baru').length,c2=ORD.filter(o=>o.st==='Diproses').length,c3=ORD.filter(o=>o.st==='Dikirim').length;
+  const low=PRODS.filter(p=>p.stok<10);
+  const tgl=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  return '*📊 LAPORAN HARIAN TEDUH*\n'+tgl+'\n\n'+
+  '*Omzet:*\n• Selesai: '+rp(rev)+'\n• Total (semua status): '+rp(revAll)+'\n\n'+
+  '*Pesanan ('+ORD.length+'):*\n• Baru: '+c1+'\n• Diproses: '+c2+'\n• Dikirim: '+c3+'\n• Selesai: '+(ORD.length-c1-c2-c3)+'\n\n'+
+  (low.length?'*⚠️ Stok menipis (<10):*\n'+low.map(p=>'• '+p.t+' — sisa '+p.stok).join('\n')+'\n\n':'')+
+  '*Produk aktif:* '+PRODS.filter(p=>p.st==='Aktif').length+'/'+PRODS.length+'\n'+
+  (PAY?'*Pembayaran:* '+PAY.gateway+' ('+PAY.mode+')':'')+'\n\n_Laporan otomatis dari TEDUH Admin_';
+}
+function sendReport(){
+  const txt=buildReport();
+  document.getElementById('repPrev').textContent=txt.replace(/\*/g,'').replace(/_/g,'');
+  document.getElementById('repBox').style.display='block';
+}
+let OWNER='6285165859837';
+function waReport(){
+  window.open('https://wa.me/'+OWNER+'?text='+encodeURIComponent(buildReport()),'_blank');
+}
 
 /* ===== UPLOAD FOTO (superadmin/admin) ===== */
 const CAN_UPLOAD = ME!=='staff'; // dihitung saat login juga

@@ -277,7 +277,18 @@ footer{border-top:2px solid var(--ink);background:#fff;margin-top:50px}
     <div class="sumrow"><span class="lbl" id="freeHint">+Rp 500.000 lagi untuk gratis ongkir</span></div>
     <div class="sumrow g"><span>TOTAL (sebelum ongkir)</span><span id="cTot2">Rp 0</span></div>
     <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-      <button class="btn pri" onclick="toast('→ buka modal checkout (nama, WA, alamat, kirim, bayar) → kirim ke WA admin')">LANJUT KE CHECKOUT</button>
+      <button class="btn pri" onclick="openCo()">LANJUT KE CHECKOUT</button>
+      <div id="coBox" style="display:none;width:100%;margin-top:6px">
+        <div class="frm" style="display:grid;gap:8px">
+          <input id="coNama" placeholder="Nama lengkap">
+          <input id="coWa" placeholder="No. WhatsApp (08xx)">
+          <input id="coAlamat" placeholder="Alamat lengkap pengiriman">
+          <select id="coKirim"><option value="Reguler">Reguler (2-3 hari)</option><option value="Kilat">Kilat (1-2 hari)</option><option value="Instant">Instant (hari ini)</option></select>
+          <select id="coBayar" onchange="drawPayCust()"><option value="QRIS">QRIS</option><option value="Transfer Bank">Transfer Bank</option><option value="Payment Gateway">Payment Gateway (Midtrans)</option><option value="COD">COD</option></select>
+          <div id="payDetail" style="font-size:12px;color:#555"></div>
+        </div>
+        <button class="btn pri" style="margin-top:8px" onclick="submitCo()">✅ KIRIM PESANAN</button>
+      </div>
       <button class="btn" onclick="nav('collection')">← LANJUT BELANJA</button>
     </div>
   </div>
@@ -322,7 +333,7 @@ const P=[
  {t:'Teduh Moto Poncho',tag:'new',cat:'pvc',p:96500,w:135000,r:'4.6',sold:'600+'},
  {t:'Teduh Touring Pro',tag:'best',cat:'pvc',p:598000,w:812000,r:'4.9',sold:'190+'}];
 const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
-let cart=0;
+let cart=0;let WA_ADMIN='6285165859837';
 
 function nav(p){
   document.querySelectorAll('.page').forEach(e=>e.classList.remove('on'));
@@ -340,11 +351,22 @@ function card(p){
   const off=Math.round((p.w-p.p)/p.w*100);
   return `<div class="wb pcard" onclick="${p.main?`nav('product')`:`toast('wireframe — ${p.t}')`}">
    ${p.tag==='sale'?`<span class="badge">-${off}%</span>`:''}
-   <div class="im wx">${p.tag==='sale'?'':'FOTO PRODUK'}</div>
+   <div class="im wx">${p.img?`<img src="${p.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:(p.tag==='sale'?'':'FOTO PRODUK')}</div>
    <div class="in"><div class="rt">★ ${p.r} · ${p.sold} terjual</div><h3>${p.t}</h3>
    <div class="pr"><b>${rp(p.p)}</b><s>${rp(p.w)}</s></div></div></div>`;
 }
 function draw(id,list){const el=document.getElementById(id);if(el)el.innerHTML=list.map(card).join('');}
+fetch('/api/data').then(r=>r.json()).then(j=>{
+  if(j.ok&&j.products&&j.products.length){
+    j.products.forEach((p,i)=>{
+      const ex=P.find(x=>x.t===p.t)||(P[i]||P[0]);
+      ex.t=p.t;ex.p=p.p;ex.w=p.w||p.p;ex.img=p.img||'';
+    });
+    draw('g-best',P.filter(p=>p.tag==='best'));draw('g-new',P.filter(p=>p.tag==='new'));
+    draw('g-sale',P.filter(p=>p.tag==='sale'));draw('g-col',P);draw('g-best2',P.filter(p=>p.tag==='best'));draw('g-new2',P.filter(p=>p.tag==='new'));draw('g-rel',P.slice(1,5));
+  }
+  WA_ADMIN=(j.settings&&j.settings.waAdmin)||WA_ADMIN;
+}).catch(()=>{});
 draw('g-best',P.filter(p=>p.tag==='best'));
 draw('g-new',P.filter(p=>p.tag==='new'));
 draw('g-sale',P.filter(p=>p.tag==='sale'));
@@ -379,6 +401,42 @@ function chCart(d){cart=Math.max(1,cart+d);drawCart();}
 /* add from product demo */
 document.querySelectorAll('.buyrow .btn')[0]?.addEventListener('click',()=>{cart=Math.max(1,cart+1);drawCart();});
 drawCart();
+
+function openCo(){const b=document.getElementById('coBox');b.style.display=b.style.display==='none'?'block':'none';drawPayCust();}
+function drawPayCust(){
+  const v=document.getElementById('coBayar').value;
+  fetch('/api/data').then(r=>r.json()).then(j=>{
+    let d='';
+    if(v==='QRIS')d='📷 QRIS statis toko (dikirim admin setelah pesanan masuk).';
+    else if(v==='Transfer Bank')d='🏦 Transfer '+(j.settings?.payment?.bank?.nama||'BCA')+' '+(j.settings?.payment?.bank?.no||'')+' a.n. '+(j.settings?.payment?.bank?.an||'TEDUH STORE');
+    else if(v==='Payment Gateway')d='💳 Midtrans ('+(j.settings?.payment?.mode||'sandbox')+') — link bayar dibuat saat checkout.';
+    else d='💵 Bayar tunai saat paket tiba.';
+    document.getElementById('payDetail').textContent=d;
+  });
+}
+function submitCo(){
+  const nama=document.getElementById('coNama').value.trim(),wa=document.getElementById('coWa').value.trim(),alamat=document.getElementById('coAlamat').value.trim();
+  if(!nama||!wa||!alamat){toast('⚠️ Lengkapi nama, WA & alamat');return;}
+  if(!cart){toast('⚠️ Keranjang kosong');return;}
+  const item=cart+'× Jas Hujan Teduh Plus';
+  const tot=467600*cart;
+  const bayar=document.getElementById('coBayar').value,kirim=document.getElementById('coKirim').value;
+  fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({nama,wa,alamat,item,total:tot,bayar,kirim})})
+  .then(r=>r.json()).then(async j=>{
+    if(!j.ok){toast('❌ '+(j.err||'Gagal'));return;}
+    let payMsg='';
+    if(bayar==='Payment Gateway'){
+      const tk=await (await fetch('/api/pay/token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:tot,orderId:j.id})})).json();
+      payMsg=tk.ok&&tk.redirect_url?'\n💳 Bayar: '+tk.redirect_url:'\n💳 Link gateway belum aktif — transfer manual/QRIS.';
+      if(tk.ok&&tk.redirect_url)window.open(tk.redirect_url,'_blank');
+    }else payMsg='\n💰 Metode: '+bayar;
+    const msg='*PESANAN BARU '+j.id+'*\nNama: '+nama+'\nWA: '+wa+'\nAlamat: '+alamat+'\nItem: '+item+'\nTotal: '+rp(tot)+'\nKirim: '+kirim+payMsg;
+    window.open('https://wa.me/'+WA_ADMIN+'?text='+encodeURIComponent(msg),'_blank');
+    toast('✅ Pesanan '+j.id+' masuk! Admin akan hubungi kamu.');
+    cart=0;drawCart();document.getElementById('coBox').style.display='none';
+  });
+}
 </script>
 </body>
 </html>
