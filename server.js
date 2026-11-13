@@ -11,7 +11,7 @@ const server=http.createServer((req,res)=>{
 // === DATA STORE (produksi sederhana: data.json) ===
 const DATAF=path.join(__dirname,'data','store.json');
 if(!fs.existsSync(path.join(__dirname,'data')))fs.mkdirSync(path.join(__dirname,'data'));
-if(!fs.existsSync(DATAF))fs.writeFileSync(DATAF,JSON.stringify({orders:[],products:[],settings:{waOwner:'6285165859837',waAdmin:'6285165859837',payment:{gateway:'midtrans',mode:'sandbox',qris:null,bank:{nama:'BCA',no:'1234567890',an:'TEDUH STORE'}}}}));
+if(!fs.existsSync(DATAF))fs.writeFileSync(DATAF,JSON.stringify({orders:[],products:[],content:{ann:'Gratis ongkir setiap pembelian minimal Rp 500.000',annOn:true,coupons:[],heroImg:'',bannerImg:'',qrisImg:''},settings:{waOwner:'6285165859837',waAdmin:'6285165859837',payment:{gateway:'midtrans',mode:'sandbox',qris:null,clientKey:'',merchantId:'',clientFallback:true,bank:{nama:'BCA',no:'1234567890',an:'TEDUH STORE'}}}}));
 function readData(){return JSON.parse(fs.readFileSync(DATAF,'utf8'))}
 function writeData(d){fs.writeFileSync(DATAF,JSON.stringify(d,null,1))}
 if(req.method==='POST'&&u==='/api/order'){
@@ -32,7 +32,7 @@ if(req.method==='POST'&&u==='/api/order'){
 }
 if(req.method==='GET'&&u==='/api/data'){
   const d=readData();
-  return json(res,200,{ok:true,orders:d.orders,products:d.products,settings:{waOwner:d.settings.waOwner,waAdmin:d.settings.waAdmin,payment:{gateway:d.settings.payment.gateway,mode:d.settings.payment.mode,bank:d.settings.payment.bank}}});
+  return json(res,200,{ok:true,orders:d.orders,products:d.products,content:d.content,settings:{waOwner:d.settings.waOwner,waAdmin:d.settings.waAdmin,payment:{gateway:d.settings.payment.gateway,mode:d.settings.payment.mode,clientFallback:d.settings.payment.clientFallback,bank:d.settings.payment.bank}}});
 }
 if(req.method==='POST'&&u==='/api/data'){
   body(req,buf=>{
@@ -42,6 +42,7 @@ if(req.method==='POST'&&u==='/api/data'){
       if(patch.orders)d.orders=patch.orders;
       if(patch.products)d.products=patch.products;
       if(patch.settings)Object.assign(d.settings,patch.settings);
+      if(patch.content)Object.assign(d.content,patch.content);
       writeData(d);
       json(res,200,{ok:true});
     }catch(e){json(res,400,{ok:false,err:'Payload invalid'})}
@@ -54,8 +55,15 @@ if(req.method==='POST'&&u==='/api/pay/token'){
     try{
       const {amount,orderId}=JSON.parse(buf.toString());
       const d=readData();
-      const key=d.settings.payment.midtransServerKey||'';
-      if(!key)return json(res,200,{ok:false,mode:'manual',msg:'Gateway belum diisi server key — fallback transfer manual/QRIS'});
+      const d0=readData();
+      const key=d0.settings.payment.midtransServerKey||'';
+      if(!key){
+        const fb={mode:'fallback',reason:'server_key_kosong'};
+        if(d0.content&&d0.content.qrisImg)fb.qris=d0.content.qrisImg;
+        if(d0.settings.payment.bank)fb.bank=d0.settings.payment.bank;
+        fb.msg='Midtrans belum aktif — fallback: '+(fb.qris?'QRIS':'Transfer Bank')+' / COD';
+        return json(res,200,{ok:false,...fb});
+      }
       const auth=Buffer.from(key+':').toString('base64');
       const opt={method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','Authorization':'Basic '+auth},
         body:JSON.stringify({transaction_details:{order_id:orderId||('EXT-'+Date.now()),gross_amount:Math.max(1,Math.round(amount))}})};

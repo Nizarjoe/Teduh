@@ -7,11 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1c1d1d;--mut:#6a6d70;--bg:#f6f7f8;--line:#e5e7e9;--pri:#111;--grn:#1d7a4f;--red:#c0392b;--amb:#b7791f;--blu:#2563a8}
+/* ===== WIREFRAME CONCEPT (sama dengan halaman customer) ===== */
+.wb{border:1.5px dashed #9aa0a6;border-radius:8px;background:#fafbfc}
+.wx{display:flex;align-items:center;justify-content:center;color:#98a0a8;font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.5px;background:repeating-linear-gradient(45deg,#f2f3f4,#f2f3f4 8px,#e9eaec 8px,#e9eaec 16px);position:relative;min-height:40px}
+.lbl{font-family:'JetBrains Mono';font-size:10px;color:#9aa0a6;text-transform:uppercase;letter-spacing:1px}
+.kpi,.panel,.padm{border-style:dashed;border-color:#b7bcc2}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
 /* login */
-#login{position:fixed;inset:0;background:linear-gradient(135deg,#16202a,#2b3d4e);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
-.lbox{background:#fff;border-radius:14px;padding:34px;max-width:380px;width:100%}
+#login{position:fixed;inset:0;background:#eceef0;display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+.lbox{background:#fff;border:2px dashed #9aa0a6;border-radius:14px;padding:34px;max-width:380px;width:100%}
 .lbox h1{font-family:'Poppins';font-size:21px;margin-bottom:4px}
 .lbox p{color:var(--mut);font-size:13px;margin-bottom:18px}
 .lbox label{display:block;font-size:12px;font-weight:600;margin:12px 0 5px}
@@ -122,7 +127,7 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 <!-- LOGIN -->
 <div id="login">
   <div class="lbox">
-    <h1>🛡️ Admin TEDUH</h1>
+    <h1>[ LOGO ] Admin TEDUH</h1>
     <p>Masuk untuk mengelola toko</p>
     <label>Username</label><input id="lgUser" placeholder="admin">
     <label>Password</label><input id="lgPass" type="password" placeholder="••••••••">
@@ -236,12 +241,12 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
         <div><label>Stok</label><input id="pfStok" type="number" placeholder="50"></div>
         <div><label>Status</label><select id="pfStatus"><option>Aktif</option><option>Draf</option></select></div>
         <div class="full"><label>Deskripsi Singkat</label><textarea id="pfDesc" rows="2" placeholder="Deskripsi produk…"></textarea></div>
-        <div class="full"><label>Foto Produk (superadmin/admin)</label>
-          <div style="display:flex;gap:12px;align-items:center">
-            <label class="pbtn" style="cursor:pointer">📤 Upload Foto<input type="file" id="pfFile" accept="image/*" style="display:none"></label>
-            <img id="pfPrev" style="display:none;width:74px;height:74px;object-fit:cover;border-radius:8px;border:1px solid #ddd">
-            <span id="pfFileStat" style="font-size:12px;color:var(--mut)"></span>
+        <div class="full"><label>Foto Produk — bisa beberapa (urutan = urutan tampil di customer)</label>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <label class="pbtn" style="cursor:pointer">📤 Tambah Foto<input type="file" id="pfFile" accept="image/*" style="display:none"></label>
+            <span id="pfFileStat" style="font-size:12px;color:var(--mut)">foto pertama = foto utama</span>
           </div>
+          <div id="pfGal" style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap"></div>
         </div>
       </div>
       <div style="display:flex;gap:10px;margin-top:14px">
@@ -335,7 +340,10 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
       <div class="frm">
         <div><label>Gateway</label><select id="payGw" onchange="drawPayInfo()"><option>Midtrans</option><option>Manual Transfer / QRIS</option></select></div>
         <div><label>Mode</label><select id="payMode"><option>Sandbox (uji coba)</option><option>Production (live)</option></select></div>
-        <div class="full"><label>Midtrans Server Key (production/sandbox)</label><input id="payKey" type="password" placeholder="Mid-server-key-… (disimpan di server, tidak tampil utuh)"></div>
+        <div class="full"><label>Midtrans Server Key (wajib untuk token Snap)</label><input id="payKey" type="password" placeholder="Mid-server-… (disimpan di server)"></div>
+        <div class="full"><label>Midtrans Client Key</label><input id="payClientKey" placeholder="Mid-client-…"></div>
+        <div class="full"><label>Merchant ID</label><input id="payMerch" placeholder="G…"></div>
+        <div class="full toggle">Fallback otomatis bila Midtrans gagal: QRIS → Transfer Bank → COD <span class="switch on" id="payFallback" onclick="this.classList.toggle('on')"></span></div>
         <div><label>Bank Transfer</label><input id="payBank" placeholder="BCA"></div>
         <div><label>No. Rekening</label><input id="payBankNo" placeholder="1234567890"></div>
         <div><label>a.n.</label><input id="payBankAn" placeholder="TEDUH STORE"></div>
@@ -355,6 +363,25 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
       <button class="pbtn" style="margin-top:14px" onclick="toast('Demo — tambah user')">+ Tambah User</button>
     </div>
         <div class="page" id="p-media">
+    <div class="panel"><h3>🎨 Konten Halaman Customer (edit langsung tampil di toko)</h3>
+      <div class="frm">
+        <div class="full"><label>Teks Announcement Bar (atas toko)</label><input id="ctAnn" placeholder="Gratis ongkir …"></div>
+        <div class="full"><label class="toggle" style="margin:4px 0">Tampilkan announcement <span class="switch on" id="ctAnnOn" onclick="this.classList.toggle('on')"></span></label></div>
+        <div><label>Hero Banner — Upload Foto</label>
+          <div class="wx" id="ctHeroPrev" style="height:70px">[ HERO BANNER ]</div>
+          <label class="sbtn" style="cursor:pointer;display:inline-block;margin-top:6px">📤 Ganti Foto<input type="file" id="ctHeroFile" accept="image/*" style="display:none"></label>
+        </div>
+        <div><label>Banner Promo — Upload Foto</label>
+          <div class="wx" id="ctBannerPrev" style="height:70px">[ BANNER PROMO ]</div>
+          <label class="sbtn" style="cursor:pointer;display:inline-block;margin-top:6px">📤 Ganti Foto<input type="file" id="ctBannerFile" accept="image/*" style="display:none"></label>
+        </div>
+        <div><label>Foto QRIS (fallback pembayaran)</label>
+          <div class="wx" id="ctQrisPrev" style="height:70px">[ QRIS ]</div>
+          <label class="sbtn" style="cursor:pointer;display:inline-block;margin-top:6px">📤 Ganti Foto<input type="file" id="ctQrisFile" accept="image/*" style="display:none"></label>
+        </div>
+        <div style="display:flex;align-items:flex-end"><button class="pbtn grn" onclick="saveContent()">💾 Terapkan ke Toko</button></div>
+      </div>
+    </div>
     <div class="panel"><h3>🖼️ Upload Foto (Produk & Halaman Customer)</h3>
       <p style="font-size:12px;color:var(--mut);margin:6px 0 12px">Upload gambar maksimal 5 MB (PNG / JPG / WEBP / GIF / SVG). Foto bisa dipakai untuk kartu produk, banner promo, maupun halaman customer.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
@@ -456,7 +483,7 @@ const rp=n=>'Rp '+Number(n).toLocaleString('id-ID');
 function drawProds(){
   document.getElementById('pCount').textContent=PRODS.length;
   document.getElementById('pGrid').innerHTML=PRODS.map((p,i)=>`
-   <div class="padm"><div class="thumb">${p.img?`<img src="${p.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:'FOTO PRODUK'}<span class="badge" style="position:absolute;top:8px;left:8px;background:${p.st==='Aktif'?'var(--grn)':'#999'};color:#fff">${p.st}</span></div>
+   <div class="padm"><div class="thumb">${p.img?`<img src="${p.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">${(p.imgs&&p.imgs.length>1)?`<span class="badge b-blu" style="position:absolute;bottom:8px;right:8px">${p.imgs.length} foto</span>`:''}`:'<span class="lbl">FOTO PRODUK</span>'}<span class="badge" style="position:absolute;top:8px;left:8px;background:${p.st==='Aktif'?'var(--grn)':'#999'};color:#fff">${p.st}</span></div>
    <div class="in"><h4>${p.t}</h4>
    <div style="font-size:11.5px;color:var(--mut);margin:3px 0">${p.kat} · stok <b style="color:${p.stok<10?'var(--red)':'inherit'}">${p.stok}</b></div>
    <div style="font-weight:700;color:var(--red)">${rp(p.p)} <s style="color:#aaa;font-weight:400">${rp(p.w)}</s></div>
@@ -483,12 +510,13 @@ function editProd(i){
   document.getElementById('pfStok').value=p.stok;document.getElementById('pfStatus').value=p.st;
   document.getElementById('pfDesc').value=p.d;
   setPfImg(p.img||'');
+  if(p.imgs&&p.imgs.length){pfImgs=p.imgs.slice();pfImg=pfImgs[0];drawPfGal();}
   document.getElementById('pform').scrollIntoView({behavior:'smooth'});
 }
 function saveProd(){
   const nama=document.getElementById('pfNama').value.trim(),h=+document.getElementById('pfHarga').value;
   if(!nama||!h){toast('⚠️ Nama & harga wajib diisi');return;}
-  const obj={t:nama,kat:document.getElementById('pfKat').value,p:h,w:+document.getElementById('pfWas').value||h,stok:+document.getElementById('pfStok').value||0,st:document.getElementById('pfStatus').value,d:document.getElementById('pfDesc').value.trim(),img:pfImg||''};
+  const obj={t:nama,kat:document.getElementById('pfKat').value,p:h,w:+document.getElementById('pfWas').value||h,stok:+document.getElementById('pfStok').value||0,st:document.getElementById('pfStatus').value,d:document.getElementById('pfDesc').value.trim(),img:pfImgs[0]||'',imgs:pfImgs.slice()};
   if(editIdx>=0){PRODS[editIdx]=obj;toast('Produk diupdate ✓');}
   else{PRODS.push(obj);toast('Produk ditambahkan ✓');}
   pushToServer({products:PRODS});
@@ -504,6 +532,7 @@ function syncFromServer(){
     if(!j.ok)return;
     if(j.orders&&j.orders.length){ORD.length=0;j.orders.forEach(o=>ORD.push(o));drawOrders();}
     if(j.products&&j.products.length){PRODS.length=0;j.products.forEach(p=>PRODS.push(p));drawProds();}
+    if(j.content){CONTENT=Object.assign(CONTENT,j.content);fillContentForm();}
     if(j.settings){if(j.settings.payment)PAY=j.settings.payment;if(j.settings.waOwner){OWNER=j.settings.waOwner;const ow=document.getElementById('ownerWa');if(ow)ow.textContent='+'+OWNER.replace(/^62/,'62 ');}}
     if(typeof drawPay==='function')drawPay();
   }).catch(()=>{});
@@ -520,10 +549,37 @@ function drawPayInfo(){
   const el=document.getElementById('payInfo');
   if(el)el.textContent=PAY.gateway+' ('+PAY.mode+') · Transfer '+PAY.bank.nama+' '+PAY.bank.no+' a.n. '+PAY.bank.an;
 }
+/* ===== KONTEN HALAMAN CUSTOMER ===== */
+let CONTENT={ann:'',annOn:true,heroImg:'',bannerImg:'',qrisImg:''};
+function fillContentForm(){
+  const f=id=>document.getElementById(id);
+  if(!f('ctAnn'))return;
+  f('ctAnn').value=CONTENT.ann||'';
+  f('ctAnnOn').classList.toggle('on',CONTENT.annOn!==false);
+  const setPrev=(id,img)=>{const el=f(id);if(!el)return;if(img){el.innerHTML='<img src="'+img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">';}else{el.textContent='[ '+id.replace('ct','').replace('Prev','').toUpperCase()+' ]';}};
+  setPrev('ctHeroPrev',CONTENT.heroImg);setPrev('ctBannerPrev',CONTENT.bannerImg);setPrev('ctQrisPrev',CONTENT.qrisImg);
+}
+function saveContent(){
+  CONTENT.ann=document.getElementById('ctAnn').value.trim();
+  CONTENT.annOn=document.getElementById('ctAnnOn').classList.contains('on');
+  pushToServer({content:CONTENT});
+  toast('Konten toko diperbarui — langsung tampil di halaman customer ✓');
+}
+function hookContentUpload(fid,key){
+  const el=document.getElementById(fid);if(!el)return;
+  el.addEventListener('change',e=>{
+    const f=e.target.files[0];if(!f)return;
+    uploadImage(f,'customer',u=>{CONTENT[key]=u;fillContentForm();toast('Foto diperbarui — jangan lupa "Terapkan ke Toko"');e.target.value='';});
+  });
+}
+hookContentUpload('ctHeroFile','heroImg');hookContentUpload('ctBannerFile','bannerImg');hookContentUpload('ctQrisFile','qrisImg');
 function savePay(){
   PAY.gateway=document.getElementById('payGw').value;
   PAY.mode=document.getElementById('payMode').value.startsWith('Production')?'production':'sandbox';
   PAY.midtransServerKey=document.getElementById('payKey').value||PAY.midtransServerKey||'';
+  PAY.clientKey=document.getElementById('payClientKey').value||PAY.clientKey||'';
+  PAY.merchantId=document.getElementById('payMerch').value||PAY.merchantId||'';
+  PAY.clientFallback=document.getElementById('payFallback').classList.contains('on');
   PAY.bank={nama:document.getElementById('payBank').value||PAY.bank.nama,no:document.getElementById('payBankNo').value||PAY.bank.no,an:document.getElementById('payBankAn').value||PAY.bank.an};
   const st={};
   if(document.getElementById('setOwner').value)st.waOwner=document.getElementById('setOwner').value.replace(/\D/g,'');
@@ -557,10 +613,16 @@ function waReport(){
 
 /* ===== UPLOAD FOTO (superadmin/admin) ===== */
 const CAN_UPLOAD = ME!=='staff'; // dihitung saat login juga
-let pfImg='';
+let pfImg='';let pfImgs=[];
 function canUpload(){return ME && ME!=='staff';}
-function pfResetImg(){pfImg='';document.getElementById('pfPrev').style.display='none';document.getElementById('pfFileStat').textContent='';}
-function setPfImg(u){pfImg=u||'';const im=document.getElementById('pfPrev');if(u){im.src=u;im.style.display='block';document.getElementById('pfFileStat').textContent='✓ foto terpasang';}else{im.style.display='none';document.getElementById('pfFileStat').textContent='';}}
+function pfResetImg(){pfImg='';pfImgs=[];drawPfGal();}
+function setPfImg(u){pfImgs=u?[u]:[];pfImg=pfImgs[0]||'';drawPfGal();}
+function drawPfGal(){
+  const g=document.getElementById('pfGal');if(!g)return;
+  g.innerHTML=pfImgs.map((u,i)=>`<div class="wx" style="width:74px;height:74px;padding:0">${`<img src="${u}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`}${i===0?'<span class="badge b-grn" style="position:absolute;top:2px;left:2px;font-size:9px">UTAMA</span>':''}<button class="sbtn danger" style="position:absolute;bottom:2px;right:2px;font-size:10px;padding:2px 6px" onclick="pfDelImg(${i})">✕</button></div>`).join('')||'<span class="lbl">Belum ada foto</span>';
+  document.getElementById('pfFileStat').textContent=pfImgs.length?pfImgs.length+' foto terpasang':'foto pertama = foto utama';
+}
+function pfDelImg(i){pfImgs.splice(i,1);pfImg=pfImgs[0]||'';drawPfGal();}
 function guardUpload(el){if(!canUpload()){toast('⛔ Hanya superadmin & admin yang bisa upload foto');if(el&&el.tagName==='INPUT')el.value='';return false;}return true;}
 function uploadImage(file,where,cb){
   if(!guardUpload())return;
@@ -576,7 +638,7 @@ function uploadImage(file,where,cb){
 }
 document.getElementById('pfFile').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;
-  uploadImage(f,'produk',u=>{setPfImg(u);toast('Foto produk terupload ✓');e.target.value='';});
+  uploadImage(f,'produk',u=>{pfImgs.push(u);pfImg=pfImgs[0];drawPfGal();toast('Foto terupload ✓');e.target.value='';});
 });
 /* ===== HALAMAN MEDIA ===== */
 function drawMedia(){
