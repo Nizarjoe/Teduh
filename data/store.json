@@ -38,10 +38,11 @@
    "stok": 42,
    "st": "Aktif",
    "d": "Flagship — press seal full, ramah ransel",
-   "img": "/uploads/up_mwelrmi9lpkvb.jpg",
+   "img": "/uploads/up_mweq3hvildmut.png",
    "imgs": [
-    "/uploads/up_mwelrmi9lpkvb.jpg",
-    "/uploads/up_mwelryoynxj6o.png"
+    "/uploads/up_mweq3hvildmut.png",
+    "/uploads/up_mweq4ekge3pzv.jpg",
+    "/uploads/up_mweq50j91k7rd.jpg"
    ]
   },
   {
@@ -111,7 +112,9 @@
    "w": 812000,
    "stok": 4,
    "st": "Draf",
-   "d": "Untuk perjalanan jauh"
+   "d": "Untuk perjalanan jauh",
+   "img": "",
+   "imgs": []
   }
  ],
  "settings": {
