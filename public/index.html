@@ -50,9 +50,9 @@ nav a.on{color:var(--ink);border-color:var(--accent)}
 .sect h2{font-size:17px}
 .sect .more{font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:11px;color:var(--accent);cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-.pcard{overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
+.pcard{overflow:hidden;cursor:pointer;display:flex;flex-direction:column;min-width:0}
 .pcard .in{display:block;padding:12px 14px;max-width:none;margin:0;overflow:visible}
-.pcard .im{aspect-ratio:1;position:relative;flex-shrink:0}
+.pcard .im{aspect-ratio:4/3;position:relative;flex-shrink:0;overflow:hidden}
 .pcard .in{padding:10px 12px 14px}
 .pcard .rt{font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:10px;color:#888}
 .pcard h3{font-size:13px;font-weight:600;margin:4px 0 6px;line-height:1.35}
@@ -373,7 +373,7 @@ function card(p){
   const idx=P.indexOf(p);
   return `<div class="wb pcard" onclick="CURP=${idx};nav('product')">
    ${p.tag==='sale'?`<span class="badge">-${off}%</span>`:''}
-   <div class="im wx">${p.img?`<img src="${p.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">${(p.imgs&&p.imgs.length>1)?`<span class="badge" style="position:absolute;bottom:6px;right:6px">${p.imgs.length} foto</span>`:''}`:(p.tag==='sale'?'FOTO PRODUK':'FOTO PRODUK')}</div>
+   <div class="im wx">${p.img?`<img src="${p.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">${(p.imgs&&p.imgs.length>1)?`<span style="position:absolute;bottom:8px;right:8px;background:#000a;color:#fff;font-size:10px;padding:3px 9px;border-radius:10px;font-family:Montserrat,sans-serif">${p.imgs.length} FOTO</span>`:''}`:(p.tag==='sale'?'FOTO PRODUK':'FOTO PRODUK')}</div>
    <div class="in"><div class="rt">★ ${p.r} · ${p.sold} terjual</div><h3>${p.t}</h3>
    <div class="pr"><b>${rp(p.p)}</b><s>${rp(p.w)}</s></div></div></div>`;
 }
