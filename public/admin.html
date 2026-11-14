@@ -4,30 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Admin — TEDUH Store</title>
-<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1c1d1d;--mut:#6a6d70;--bg:#f6f7f8;--line:#e5e7e9;--pri:#111;--grn:#1d7a4f;--red:#c0392b;--amb:#b7791f;--blu:#2563a8}
 /* ===== WIREFRAME CONCEPT (sama dengan halaman customer) ===== */
 .wb{border:1.5px dashed #9aa0a6;border-radius:8px;background:#fafbfc}
-.wx{display:flex;align-items:center;justify-content:center;color:#98a0a8;font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.5px;background:repeating-linear-gradient(45deg,#f2f3f4,#f2f3f4 8px,#e9eaec 8px,#e9eaec 16px);position:relative;min-height:40px}
-.lbl{font-family:'JetBrains Mono';font-size:10px;color:#9aa0a6;text-transform:uppercase;letter-spacing:1px}
+.wx{display:flex;align-items:center;justify-content:center;color:#98a0a8;font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:10.5px;letter-spacing:.5px;background:repeating-linear-gradient(45deg,#f2f3f4,#f2f3f4 8px,#e9eaec 8px,#e9eaec 16px);position:relative;min-height:40px}
+.lbl{font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:10px;color:#9aa0a6;text-transform:uppercase;letter-spacing:1px}
 .kpi,.panel,.padm{border-style:dashed;border-color:#b7bcc2}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+body{font-family:Montserrat,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
 /* login */
 #login{position:fixed;inset:0;background:#eceef0;display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
 .lbox{background:#fff;border:2px dashed #9aa0a6;border-radius:14px;padding:34px;max-width:380px;width:100%}
-.lbox h1{font-family:'Poppins';font-size:21px;margin-bottom:4px}
+.lbox h1{font-family:Montserrat;font-size:21px;margin-bottom:4px}
 .lbox p{color:var(--mut);font-size:13px;margin-bottom:18px}
 .lbox label{display:block;font-size:12px;font-weight:600;margin:12px 0 5px}
 .lbox input{width:100%;padding:11px 13px;border:1px solid #ccc;border-radius:8px;font-family:inherit;font-size:14px;background:var(--bg)}
 .lbox .btn{width:100%;margin-top:18px;background:var(--pri);color:#fff;border:none;height:48px;border-radius:8px;font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit}
 .lerr{color:var(--red);font-size:12.5px;margin-top:10px;display:none}
-.lhint{margin-top:14px;background:var(--bg);border-radius:8px;padding:10px 12px;font-size:11.5px;color:var(--mut);font-family:'JetBrains Mono'}
+.lhint{margin-top:14px;background:var(--bg);border-radius:8px;padding:10px 12px;font-size:11.5px;color:var(--mut);font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'}
 /* shell */
 #app{display:none}
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:236px;background:var(--pri);color:#cfd2d4;display:flex;flex-direction:column;z-index:40;transition:transform .25s}
-.sb-brand{padding:20px 22px;border-bottom:1px solid #2c2c2c;font-family:'Poppins';font-weight:700;font-size:17px;color:#fff;display:flex;align-items:center;gap:10px}
+.sb-brand{padding:20px 22px;border-bottom:1px solid #2c2c2c;font-family:Montserrat;font-weight:700;font-size:17px;color:#fff;display:flex;align-items:center;gap:10px}
 .sb-brand .dot{width:26px;height:26px;background:#ffd60a;color:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
 .sb-nav{flex:1;overflow:auto;padding:12px 10px}
 .sb-nav a{display:flex;gap:12px;align-items:center;padding:11px 14px;border-radius:8px;color:#b9bcbe;cursor:pointer;font-size:13.5px;font-weight:500;margin-bottom:2px}
@@ -37,7 +37,7 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 .main{margin-left:236px;min-height:100vh;display:flex;flex-direction:column}
 .topbar{background:#fff;border-bottom:1px solid var(--line);padding:0 26px;height:60px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:30}
 .burger{display:none;background:none;border:none;font-size:20px;cursor:pointer}
-.tb-title{font-family:'Poppins';font-weight:600;font-size:16px}
+.tb-title{font-family:Montserrat;font-weight:600;font-size:16px}
 .tb-right{margin-left:auto;display:flex;gap:12px;align-items:center}
 .avatar{width:34px;height:34px;border-radius:50%;background:var(--blu);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
 .content{padding:24px 26px;flex:1}
@@ -55,12 +55,12 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
 .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
 .kpi small{color:var(--mut);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.kpi b{display:block;font-family:'Poppins';font-size:23px;margin-top:6px}
+.kpi b{display:block;font-family:Montserrat;font-size:23px;margin-top:6px}
 .kpi .d{font-size:11.5px;font-weight:600;margin-top:4px}
 .kpi .up{color:var(--grn)}.kpi .dn{color:var(--red)}
 /* panels */
 .panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:18px}
-.panel h3{font-family:'Poppins';font-size:14.5px;margin-bottom:14px}
+.panel h3{font-family:Montserrat;font-size:14.5px;margin-bottom:14px}
 .row2{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
 .row2e{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:900px){.row2,.row2e{grid-template-columns:1fr}}
@@ -68,12 +68,12 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 .bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:10px}
 .bars .g{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:0;height:100%}
 .bars .b{background:linear-gradient(180deg,#ffd60a,#e0b400);border-radius:5px 5px 0 0;position:relative;min-height:4px}
-.bars .b span{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9.5px;font-weight:600;font-family:'JetBrains Mono'}
-.bars .xl{text-align:center;font-size:10px;color:var(--mut);margin-top:6px;font-family:'JetBrains Mono'}
+.bars .b span{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9.5px;font-weight:600;font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'}
+.bars .xl{text-align:center;font-size:10px;color:var(--mut);margin-top:6px;font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'}
 /* donut */
 .donutwrap{display:flex;gap:18px;align-items:center}
 .donut{width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--grn) 0 55%,var(--amb) 55% 75%,var(--blu) 75% 90%,var(--red) 90% 100%);position:relative;flex-shrink:0}
-.donut::after{content:'112\A pesanan';white-space:pre;position:absolute;inset:26px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Poppins';font-weight:700;font-size:13px}
+.donut::after{content:'112\A pesanan';white-space:pre;position:absolute;inset:26px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:Montserrat;font-weight:700;font-size:13px}
 .dleg{font-size:12px;line-height:2}
 .dleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:7px}
 /* tables */
@@ -81,7 +81,7 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 .tbl th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--line);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mut)}
 .tbl td{padding:11px 12px;border-bottom:1px solid var(--line)}
 .tbl tr:hover td{background:var(--bg)}
-.tbl .mono{font-family:'JetBrains Mono';font-size:12px}
+.tbl .mono{font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:12px}
 .badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
 .b-grn{background:#e2f3e9;color:var(--grn)}.b-red{background:#fbe9e7;color:var(--red)}
 .b-amb{background:#fbf0da;color:var(--amb)}.b-blu{background:#e3edf7;color:var(--blu)}
@@ -92,9 +92,9 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 /* products grid admin */
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
 .padm{border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.padm .thumb{height:110px;display:flex;align-items:center;justify-content:center;background:var(--bg);font-family:'JetBrains Mono';font-size:10px;color:#999;position:relative}
+.padm .thumb{height:110px;display:flex;align-items:center;justify-content:center;background:var(--bg);font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:10px;color:#999;position:relative}
 .padm .in{padding:12px 14px}
-.padm h4{font-size:13.5px;font-family:'Poppins'}
+.padm h4{font-size:13.5px;font-family:Montserrat}
 .padm .st{margin:8px 0}
 .padm .rw{display:flex;gap:6px;flex-wrap:wrap}
 /* forms */
@@ -119,7 +119,7 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
 .act{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
 .act:last-child{border:none}
 .act .ic{width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.act small{display:block;color:var(--mut);font-family:'JetBrains Mono';font-size:10px}
+.act small{display:block;color:var(--mut);font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-size:10px}
 </style>
 </head>
 <body>
@@ -246,7 +246,7 @@ body{font-family:'Work Sans',sans-serif;background:var(--bg);color:var(--ink);fo
     <div class="panel"><h3>🏷️ Kode Kupon</h3>
       <table class="tbl" id="tKupon"></table>
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-        <input id="kpKode" placeholder="KODE-BARU" style="padding:10px 14px;border:1px solid #ccc;border-radius:8px;font-family:'JetBrains Mono'">
+        <input id="kpKode" placeholder="KODE-BARU" style="padding:10px 14px;border:1px solid #ccc;border-radius:8px;font-family:'SF Mono',Menlo,Consolas,Monaco,'Liberation Mono','Lucida Console',monospace,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'">
         <input id="kpDiskon" type="number" placeholder="Diskon %" style="width:110px;padding:10px 14px;border:1px solid #ccc;border-radius:8px">
         <input id="kpMin" type="number" placeholder="Min. belanja (Rp)" style="width:150px;padding:10px 14px;border:1px solid #ccc;border-radius:8px">
         <button class="pbtn" onclick="addKupon()">+ Buat Kupon</button>
